@@ -54,6 +54,18 @@ install {
             project {
                 packaging 'aar'
                 name 'OkSocket'
+                groupId "com.tonystark.android"
+                artifactId 'socket'
+
+                // Add your description here
+                description 'An block socket client for Android applications.'
+//                url siteUrl
+//                scm {
+//                    connection gitUrl
+//                    developerConnection gitUrl
+//                    url siteUrl
+//
+//                }
                 // Set your license
                 licenses {
                     license {
