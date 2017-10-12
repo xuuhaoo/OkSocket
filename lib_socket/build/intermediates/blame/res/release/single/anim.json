@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "/Users/xuhao/Documents/publish_project/oksocket/lib_socket/build/intermediates/res/merged/release/anim/abc_fade_out.xml",
+        "source": "/Users/xuhao/.android/build-cache/77071a48d5be31e517d6e8d43feb5b04b42f39cc/output/res/anim/abc_fade_out.xml"
+    },
+    {
+        "merged": "/Users/xuhao/Documents/publish_project/oksocket/lib_socket/build/intermediates/res/merged/release/anim/abc_slide_out_top.xml",
+        "source": "/Users/xuhao/.android/build-cache/77071a48d5be31e517d6e8d43feb5b04b42f39cc/output/res/anim/abc_slide_out_top.xml"
+    },
+    {
+        "merged": "/Users/xuhao/Documents/publish_project/oksocket/lib_socket/build/intermediates/res/merged/release/anim/abc_fade_in.xml",
+        "source": "/Users/xuhao/.android/build-cache/77071a48d5be31e517d6e8d43feb5b04b42f39cc/output/res/anim/abc_fade_in.xml"
+    },
+    {
+        "merged": "/Users/xuhao/Documents/publish_project/oksocket/lib_socket/build/intermediates/res/merged/release/anim/abc_slide_in_top.xml",
+        "source": "/Users/xuhao/.android/build-cache/77071a48d5be31e517d6e8d43feb5b04b42f39cc/output/res/anim/abc_slide_in_top.xml"
+    },
+    {
+        "merged": "/Users/xuhao/Documents/publish_project/oksocket/lib_socket/build/intermediates/res/merged/release/anim/abc_grow_fade_in_from_bottom.xml",
+        "source": "/Users/xuhao/.android/build-cache/77071a48d5be31e517d6e8d43feb5b04b42f39cc/output/res/anim/abc_grow_fade_in_from_bottom.xml"
+    },
+    {
+        "merged": "/Users/xuhao/Documents/publish_project/oksocket/lib_socket/build/intermediates/res/merged/release/anim/abc_popup_exit.xml",
+        "source": "/Users/xuhao/.android/build-cache/77071a48d5be31e517d6e8d43feb5b04b42f39cc/output/res/anim/abc_popup_exit.xml"
+    },
+    {
+        "merged": "/Users/xuhao/Documents/publish_project/oksocket/lib_socket/build/intermediates/res/merged/release/anim/abc_popup_enter.xml",
+        "source": "/Users/xuhao/.android/build-cache/77071a48d5be31e517d6e8d43feb5b04b42f39cc/output/res/anim/abc_popup_enter.xml"
+    },
+    {
+        "merged": "/Users/xuhao/Documents/publish_project/oksocket/lib_socket/build/intermediates/res/merged/release/anim/abc_shrink_fade_out_from_bottom.xml",
+        "source": "/Users/xuhao/.android/build-cache/77071a48d5be31e517d6e8d43feb5b04b42f39cc/output/res/anim/abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "/Users/xuhao/Documents/publish_project/oksocket/lib_socket/build/intermediates/res/merged/release/anim/abc_slide_in_bottom.xml",
+        "source": "/Users/xuhao/.android/build-cache/77071a48d5be31e517d6e8d43feb5b04b42f39cc/output/res/anim/abc_slide_in_bottom.xml"
+    },
+    {
+        "merged": "/Users/xuhao/Documents/publish_project/oksocket/lib_socket/build/intermediates/res/merged/release/anim/abc_slide_out_bottom.xml",
+        "source": "/Users/xuhao/.android/build-cache/77071a48d5be31e517d6e8d43feb5b04b42f39cc/output/res/anim/abc_slide_out_bottom.xml"
+    }
+]

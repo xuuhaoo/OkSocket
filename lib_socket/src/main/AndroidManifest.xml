@@ -1,0 +1,13 @@
+<manifest package="com.xuhao.android.libsocket"
+
+          xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <application
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        >
+
+    </application>
+
+</manifest>
