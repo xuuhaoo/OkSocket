@@ -2,7 +2,7 @@
 一个Android轻量级Socket通讯框架
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Download](https://api.bintray.com/packages/javendev/maven/JPay/images/download.svg)](https://dl.bintray.com/javendev/maven/OkSocket/_latestVersion)
+[![Download](https://api.bintray.com/packages/javendev/maven/JPay/images/download.svg)](https://dl.bintray.com/xuuhaoo/maven/OkSocket/_latestVersion)
 
 > * [<font size=3>1. OkSocket简介</font>](#1)
 > * [<font size=3>2. Maven配置</font>](#2)
