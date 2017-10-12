@@ -4,19 +4,6 @@
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Download](https://api.bintray.com/packages/xuuhaoo/maven/OkSocket/images/download.svg)](https://dl.bintray.com/xuuhaoo/maven/OkSocket/_latestVersion)
 
-> * [<font size=3>1. OkSocket简介</font>](#1)
-> * [<font size=3>2. Maven配置</font>](#2)
-> 	* [<font size=2>2.1 自动导入(推荐)</font>](#2.1)
-> 	* [<font size=2>2.2 手动集成</font>](#2.2)
-> * [<font size=3>3. 参数配置</font>](#3)
-> * [<font size=3>4. 混淆配置</font>](#4)
-> * [<font size=3>5. 简单的初始化</font>](#5)
-> * [<font size=3>6. 调用演示</font>](#6)
->   * [<font size=2>6.1 简单的长连接</font>](#6.1)
->   * [<font size=2>6.2 有回调的长连接</font>](#6.2)
->   * [<font size=2>6.3 可配置的长连接</font>](#6.3)
-> * [<font size=3>7 高级调用使用说明</font>](#7)
-
 ### <font id="1">OkSocket简介</font>
 <font size=2>Android OkSocket是一款基于JavaNIO和传统Socket的一款Socket客户端整体解决方案.您可以使用它进行简单的基于Tcp协议的Socket通讯,当然,也可以进行大数据量复杂的Socket通讯,支持单工,双工通讯.</font>
 
