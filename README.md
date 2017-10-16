@@ -167,7 +167,7 @@ public void onSocketConnectionSuccess(Context context, ConnectionInfo info, Stri
      //连接成功其他操作...
      //链式编程调用
      OkSocket.open(info)
-     		.send(new TestSendData());
+     	.send(new TestSendData());
      
      //此处也可将ConnectManager保存成成员变量使用.
      mManager = OkSocket.open(info);
@@ -204,9 +204,9 @@ public void onSocketConnectionSuccess(Context context, ConnectionInfo info, Stri
      //连接成功其他操作...
      //链式编程调用,给心跳管理器设置心跳数据,一个连接只有一个心跳管理器,因此数据只用设置一次,如果断开请再次设置.
      OkSocket.open(info)
-     		.getPulseManager()
-     		.setPulseSendable(mPulseData)
-     		.pulse();//开始心跳,开始心跳后,心跳管理器会自动进行心跳触发
+     	.getPulseManager()
+     	.setPulseSendable(mPulseData)
+     	.pulse();//开始心跳,开始心跳后,心跳管理器会自动进行心跳触发
      			
      //此处也可将ConnectManager保存成成员变量使用.
      mManager = OkSocket.open(info);
@@ -258,8 +258,8 @@ if(mManager != null){
 	* 头字节协议`mHeaderProtocol`
 	* 发送单个数据包的总长度`mSendSinglePackageBytes`
 	* 单次读取的缓存字节长度`mReadSingleTimeBufferBytes`
-	* 脉搏频率间隔多少毫秒一次`mPulseFrequency`
-	* 脉搏最大丢失次数`mPulseFeedLoseTimes`
+	* 脉搏频率间隔毫秒数`mPulseFrequency`
+	* 脉搏最大丢失次数(狗的失喂次数)`mPulseFeedLoseTimes`
 	* 后台存活时间(分钟)`mBackgroundLiveMinute`
 	* 连接超时时间(秒)`mConnectTimeoutSecond`
 	* 最大读取数据的兆数(MB)`mMaxReadDataMB`
