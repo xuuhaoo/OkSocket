@@ -150,6 +150,7 @@ public class TestSendData implements ISendable {
 
     @Override
     public byte[] parse() {
+        //根据服务器的解析规则,构建byte数组
         byte[] body = str.getBytes(Charset.defaultCharset());
         ByteBuffer bb = ByteBuffer.allocate(4 + body.length);
         bb.order(ByteOrder.BIG_ENDIAN);
