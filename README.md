@@ -167,7 +167,7 @@ public void onSocketConnectionSuccess(Context context, ConnectionInfo info, Stri
      //连接成功其他操作...
      //链式编程调用
      OkSocket.open(info)
-     			.send(new TestSendData());
+     		.send(new TestSendData());
      
      //此处也可将ConnectManager保存成成员变量使用.
      mManager = OkSocket.open(info);
@@ -204,9 +204,9 @@ public void onSocketConnectionSuccess(Context context, ConnectionInfo info, Stri
      //连接成功其他操作...
      //链式编程调用,给心跳管理器设置心跳数据,一个连接只有一个心跳管理器,因此数据只用设置一次,如果断开请再次设置.
      OkSocket.open(info)
-     			.getPulseManager()
-     			.setPulseSendable(mPulseData)
-     			.pulse();//开始心跳,开始心跳后,心跳管理器会自动进行心跳触发
+     		.getPulseManager()
+     		.setPulseSendable(mPulseData)
+     		.pulse();//开始心跳,开始心跳后,心跳管理器会自动进行心跳触发
      			
      //此处也可将ConnectManager保存成成员变量使用.
      mManager = OkSocket.open(info);
