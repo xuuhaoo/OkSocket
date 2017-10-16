@@ -17,6 +17,7 @@ import com.xuhao.android.libsocket.interfaces.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
+import com.xuhao.android.libsocket.sdk.bean.IHeaderProtocol;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
@@ -26,6 +27,7 @@ import com.xuhao.android.oksocket.data.LogBean;
 import com.xuhao.android.oksocket.data.NearCarRegisterRq;
 import com.xuhao.android.oksocket.data.PulseBean;
 
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -227,7 +229,17 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     size = Integer.parseInt(sizestr);
                     mOkOptions = new OkSocketOptions.Builder(mOkOptions)
-                            .setSinglePackageBytes(size).build();
+                            .setHeaderProtocol(new IHeaderProtocol() {
+                                @Override
+                                public int getHeaderLength() {
+                                    return 0;
+                                }
+
+                                @Override
+                                public int getBodyLength(byte[] header, ByteOrder byteOrder) {
+                                    return 0;
+                                }
+                            }).build();
                     mManager.option(mOkOptions);
                 } catch (NumberFormatException e) {
                 }

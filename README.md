@@ -177,6 +177,38 @@ public void onSocketConnectionSuccess(Context context, ConnectionInfo info, Stri
      //以上两种方法选择其一,成员变量的方式请注意判空
 }
 ```
+##### <font id="6.4">如何接收数据</font>
+* OkSocket客户端接收服务器数据是要求一定格式的,客户端的OkSocketOptions提供了接口来修改默认的服务器返回的包头解析规则.请看下图为默认的包头包体解析规则
+![img](https://github.com/xuuhaoo/OkSocket/blob/master/package.png?raw=true)
+* 如上图包头中的内容为4个字节长度的int型,该int值标识了包体数据区的长度,这就是默认的头解析,如果需要自定义头请按照如下方法.
+
+```java
+//设置自定义解析头
+OkSocketOptions.Builder okOptionsBuilder = new OkSocketOptions.Builder(mOkOptions);
+okOptionsBuilder.setHeaderProtocol(new IHeaderProtocol() {
+    @Override
+    public int getHeaderLength() {
+    	//返回自定义的包头长度,框架会解析该长度的包头
+        return 0;
+    }
+
+    @Override
+    public int getBodyLength(byte[] header, ByteOrder byteOrder) {
+    	//从header(包头数据)中解析出包体的长度,byteOrder是你在参配中配置的字节序,可以使用ByteBuffer比较方便解析
+        return 0;
+    }
+});
+//将新的修改后的参配设置给连接管理器
+mManager.option(okOptionsBuilder.build());
+
+
+//...正确设置解析头之后...
+@Override
+public void onSocketReadResponse(Context context, ConnectionInfo info, String action, OriginalData data) {
+    //遵循以上规则,这个回调才可以正常收到服务器返回的数据,数据在OriginalData中,为byte[]数组,该数组数据已经处理过字节序问题,直接放入ByteBuffer中即可使用
+}
+```
+
 ##### <font id="6.4">如何保持心跳</font>
 ```java
 //类A:
