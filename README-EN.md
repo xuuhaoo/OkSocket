@@ -1,17 +1,19 @@
-# OkSocket 简介
-一个Android轻量级Socket通讯框架
+# OkSocket Document
+An blocking socket client for Android applications.
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Download](https://api.bintray.com/packages/xuuhaoo/maven/OkSocket/images/download.svg)](https://dl.bintray.com/xuuhaoo/maven/OkSocket/_latestVersion)
 
-### <font id="1">OkSocket简介</font>
-<font size=2>Android OkSocket是一款基于阻塞式传统Socket的一款Socket客户端整体解决方案.您可以使用它进行简单的基于Tcp协议的Socket通讯,当然,也可以进行大数据量复杂的Socket通讯,
-支持单工,双工通讯.</font>
+### <font id="1">OkSocket Introduce</font>
+<font size=2>
+Android Oksocket Library is socket client solution base on java blocking socket.You can use it to develop line chat 
+rooms or data transmission etc.
+</font>
 
 
-### <font id="2">Maven配置</font>
-##### <font id="2.1">自动导入(推荐)</font>
-* <font size=2>OkSocket 支持 JCenter 直接导入</font>
+### <font id="2">Maven Configuration</font>
+##### <font id="2.1">Automatic Import(Recommend)</font>
+* <font size=2>OkSocket Library is uploaded in JCenter,please add the code into your project gradle file</font>
     
 ```groovy
 allprojects {
@@ -20,7 +22,8 @@ allprojects {
     }
 }
 ```
-* <font size=2>在Module的build.gradle文件中添加依赖配置</font>
+* <font size=2>Make sure you already done with put JCenter into repositories blocking in project gradle 
+files than you need put this into Module build.gradle file</font>
 
 ```groovy
 dependencies {
@@ -28,8 +31,8 @@ dependencies {
 }
 ```
 
-### <font id="3">参数配置</font>
-* <font size=2>在AndroidManifest.xml中添加权限：</font>
+### <font id="3">Manifest Configuration</font>
+* <font size=2>Put the Permissions into AndroidManifest.xml file：</font>
 
 ```java
 <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -40,8 +43,8 @@ dependencies {
 ```
 
 
-### <font id="4">混淆配置</font>
-* <font size=2>请避免混淆OkSocket，在Proguard混淆文件中增加以下配置：</font>
+### <font id="4">Proguard Configuration</font>
+* <font size=2>Put this code into your Proguard file：</font>
 
 ```
 -dontwarn com.xuhao.android.libsocket.**
@@ -55,7 +58,6 @@ dependencies {
 -keep class com.xuhao.android.socket.impl.ManagerHolder { *; }
 -keep class com.xuhao.android.socket.interfaces.** { *; }
 -keep class com.xuhao.android.socket.sdk.** { *; }
- # 枚举类不能被混淆
 -keepclassmembers enum * {
     public static **[] values();
     public static ** valueOf(java.lang.String);
@@ -66,7 +68,7 @@ dependencies {
 
 ```
 
-### <font id="5">OkSocket初始化</font>
+### <font id="5">OkSocket Initialization</font>
 * <font size=2>将以下代码复制到项目Application类onCreate()中，OkSocket会为自动检测环境并完成配置：</font>
 
 ```java
@@ -130,126 +132,8 @@ manager.option(builder.build());
 manager.connect();
 ```
 
-##### <font id="6.4">如何进行数据发送</font>
-```java
-//类A:
-//...定义将要发送的数据结构体...
-public class TestSendData implements ISendable {
-	private String str = "";
+### <font id="7">高级调用使用说明</font>
 
-    public TestSendData() {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("cmd", 14);
-            jsonObject.put("data", "{x:2,y:1}");
-            str = jsonObject.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public byte[] parse() {
-        byte[] body = str.getBytes(Charset.defaultCharset());
-        ByteBuffer bb = ByteBuffer.allocate(4 + body.length);
-        bb.order(ByteOrder.BIG_ENDIAN);
-        bb.putInt(body.length);
-        bb.put(body);
-        return bb.array();
-    }
-}
-
-//类B:
-private IConnectionManager mManager;
-//...省略连接及设置回调的代码...
-@Override
-public void onSocketConnectionSuccess(Context context, ConnectionInfo info, String action) {
-     //连接成功其他操作...
-     //链式编程调用
-     OkSocket.open(info)
-     			.send(new TestSendData());
-     
-     //此处也可将ConnectManager保存成成员变量使用.
-     mManager = OkSocket.open(info);
-     if(mManager != null){
-        mManager.send(new TestSendData());
-     }
-     //以上两种方法选择其一,成员变量的方式请注意判空
-}
-```
-##### <font id="6.4">如何保持心跳</font>
-```java
-//类A:
-//...定义心跳管理器需要的心跳数据类型...
-public class PulseData implements IPulseSendable {
-	private String str = "pulse";
-
-    @Override
-    public byte[] parse() {
-        byte[] body = str.getBytes(Charset.defaultCharset());
-        ByteBuffer bb = ByteBuffer.allocate(4 + body.length);
-        bb.order(ByteOrder.BIG_ENDIAN);
-        bb.putInt(body.length);
-        bb.put(body);
-        return bb.array();
-    }
-}
-
-//类B:
-private IConnectionManager mManager;
-private PulseData mPulseData = new PulseData;
-//...省略连接及设置回调的代码...
-@Override
-public void onSocketConnectionSuccess(Context context, ConnectionInfo info, String action) {
-     //连接成功其他操作...
-     //链式编程调用,给心跳管理器设置心跳数据,一个连接只有一个心跳管理器,因此数据只用设置一次,如果断开请再次设置.
-     OkSocket.open(info)
-     			.getPulseManager()
-     			.setPulseSendable(mPulseData)
-     			.pulse();//开始心跳,开始心跳后,心跳管理器会自动进行心跳触发
-     			
-     //此处也可将ConnectManager保存成成员变量使用.
-     mManager = OkSocket.open(info);
-     if(mManager != null){
-        PulseManager pulseManager = mManager.getPulseManager();
-        //给心跳管理器设置心跳数据,一个连接只有一个心跳管理器,因此数据只用设置一次,如果断开请再次设置.
-        pulseManager.setPulseSendable(mPulseData);
-        //开始心跳,开始心跳后,心跳管理器会自动进行心跳触发
-        pulseManager.pulse();
-     }
-     //以上两种方法选择其一,成员变量的方式请注意判空
-}
-```
-##### <font id="6.4">心跳接收到了之后需要进行喂狗</font>
-* 因为我们的客户端需要知道服务器收到了此次心跳,因此服务器在收到心跳后需要进行应答,我们收到此次心跳应答后,需要进行本地的喂狗操作,否则当超过一定次数的心跳发送,未得到喂狗操作后,狗将会将此次连接断开重连.
-
-```java
-//定义成员变量
-private IConnectionManager mManager;
-//当客户端收到消息后
-@Override
-public void onSocketReadResponse(Context context, ConnectionInfo info, String action, OriginalData data) {
-	if(mManager != null && 是心跳返回包){//是否是心跳返回包,需要解析服务器返回的数据才可知道
-		//喂狗操作
-	    mManager.getPulseManager().feed();
-	}
-}
-```
-
-
-##### <font id="6.4">如何手动触发一次心跳,在任何时间</font>
-```java
-//定义成员变量
-private IConnectionManager mManager;
-//...在任意地方...
-mManager = OkSocket.open(info);
-if(mManager != null){
-	PulseManager pulseManager = mManager.getPulseManager();
-	//手动触发一次心跳(主要用于一些需要手动控制触发时机的场景)
-	pulseManager.trigger();
-}
-```
-### <font id="7">OkSocket参配选项及回调说明</font>
 * OkSocketOptions
 	* Socket通讯模式`mIOThreadMode`
 	* 连接是否管理保存`isConnectionHolden`
@@ -258,7 +142,7 @@ if(mManager != null){
 	* 头字节协议`mHeaderProtocol`
 	* 发送单个数据包的总长度`mSendSinglePackageBytes`
 	* 单次读取的缓存字节长度`mReadSingleTimeBufferBytes`
-	* 脉搏频率间隔多少毫秒一次`mPulseFrequency`
+	* 脉搏频率,每分钟多少次`mPulseFrequency`
 	* 脉搏最大丢失次数`mPulseFeedLoseTimes`
 	* 后台存活时间(分钟)`mBackgroundLiveMinute`
 	* 连接超时时间(秒)`mConnectTimeoutSecond`
