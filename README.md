@@ -302,7 +302,7 @@ if(mManager != null){
 
 
 
-===
+----
 
 MIT License
 
