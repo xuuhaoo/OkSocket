@@ -2,7 +2,7 @@
 一个Android轻量级Socket通讯框架
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Download](https://api.bintray.com/packages/xuuhaoo/maven/OkSocket/images/download.svg)](https://dl.bintray.com/xuuhaoo/maven/OkSocket/_latestVersion)
+[![Download](https://api.bintray.com/packages/xuuhaoo/maven/OkSocket/images/download.svg)](https://bintray.com/xuuhaoo/maven/OkSocket/_latestVersion)
 
 其他语言支持: [English](https://github.com/xuuhaoo/OkSocket/blob/master/README.md)
 
