@@ -34,9 +34,6 @@ dependencies {
 * <font size=2>在AndroidManifest.xml中添加权限：</font>
 
 ```java
-<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-<uses-permission android:name="android.permission.READ_PROFILE"/>
-<uses-permission android:name="android.permission.READ_CONTACTS"/>
 <uses-permission android:name="android.permission.INTERNET"/>
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 ```
