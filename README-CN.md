@@ -82,10 +82,15 @@ public class MyApplication extends Application {
 ```
 ### <font id="6">调用演示</font>
 #### 测试服务器
-该服务器是专门为初学者调试 OkSocket 库部属的一台测试服务器,初学者可以将项目中的 app 安装到手机上,点击 Connect 按钮即可,该服务器仅为熟悉通讯方式和解析方式使用.该服务器不支持心跳返回,不能作为商用服务器.服务器代码在 `SocketServerDemo` 文件夹中,请注意参考阅读.
+<font size=2> 该服务器是专门为初学者调试 OkSocket 库部属的一台测试服务器,初学者可以将项目中的 app 安装到手机上,点击 `Connect` 按钮即可,该服务器仅为熟悉通讯方式和解析方式使用.该服务器不支持心跳返回,不能作为商用服务器.服务器代码在 `SocketServerDemo` 文件夹中,请注意参考阅读. </font>
 
 * 公网IP:`104.238.184.237`
 * 公网Port:`8080`
+
+<font size=2>您也可以选择下载 JAR 文件到本地,运行在您的本地进行调试
+[Download JAR](https://github.com/xuuhaoo/OkSocket/blob/master/SocketServerDemo/out/artifacts/SocketServer_jar/SocketServerDemo.jar "download jar file")</font>
+
+* <font size=2>您可以使用下面的代码将其运行起来`java -jar SocketServerDemo.jar`</font>
 
 ##### <font id="6.1">简单的长连接</font>
 * <font size=2> OkSocket 会默认对每一个 Open 的新通道做缓存管理,仅在第一次调用 Open 方法时创建 ConnectionManager 管理器,之后调用者可以通过获取到该ConnectionManager的引用,继续调用相关方法 </font>

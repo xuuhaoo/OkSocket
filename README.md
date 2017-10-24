@@ -90,6 +90,10 @@ public class MyApplication extends Application {
 * IP:`104.238.184.237`
 * Port:`8080`
 
+<font size=2>You can also choose to download the JAR file to local and run it locally for debugging [Download JAR](https://github.com/xuuhaoo/OkSocket/blob/master/SocketServerDemo/out/artifacts/SocketServer_jar/SocketServerDemo.jar "download jar file")</font>
+
+* <font size=2>You can use the following code to run it`java -jar SocketServerDemo.jar`</font>
+
 ##### <font id="6.1">Simple connections</font>
 * <font size=2> OkSocket will default to each Open new channels for cache management, only in the first call to the Open method is created when the ConnectionManager manager, after the caller can pass retrieves a reference to the ConnectionManager, continue to call the related method</font>
 * <font size=2> ConnectionManager is mainly responsible for the Socket connection, disconnect, send message, heartbeat management, etc.</font>
