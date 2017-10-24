@@ -83,17 +83,6 @@ public class MainSimpleActivity extends AppCompatActivity {
             super.onSocketReadResponse(context, info, action, data);
             String str = new String(data.getBodyBytes(), Charset.forName("utf-8"));
             logRece(str);
-            //打印日志
-            byte[] body = data.getBodyBytes();
-            String bodyStr = new String(body);
-            JsonObject jsonObject = new JsonParser().parse(bodyStr).getAsJsonObject();
-            //业务定义的 cmd 值
-            int cmd = jsonObject.get("cmd").getAsInt();
-            if (cmd == 54) {//登陆成功回报
-                mManager.getPulseManager().setPulseSendable(new PulseBean()).pulse();
-            } else if (cmd == 14) {//收到心跳ACK 确认
-                mManager.getPulseManager().feed();
-            }
         }
 
         @Override
