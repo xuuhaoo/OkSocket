@@ -83,13 +83,20 @@ public class MyApplication extends Application {
 }
 ```
 ### <font id="6">Call The Demonstration</font>
+
+##### Demo Connection Server
+<font size=2>The server is designed for beginners affiliated OkSocket library, beginners can install the project of the app to mobile phones, click the `Connect` button, the server is only familiar with communication methods and analytical way. The server does not support the heart back, not a commercial server. The server code in ` SocketServerDemo ` folder, please note that the reference reading.</font>
+
+* IP:`104.238.184.237`
+* Port:`8080`
+
 ##### <font id="6.1">Simple connections</font>
 * <font size=2> OkSocket will default to each Open new channels for cache management, only in the first call to the Open method is created when the ConnectionManager manager, after the caller can pass retrieves a reference to the ConnectionManager, continue to call the related method</font>
 * <font size=2> ConnectionManager is mainly responsible for the Socket connection, disconnect, send message, heartbeat management, etc.</font>
 
 ```java
 //Connection parameter Settings (IP, port number), which is also a unique identifier for a connection, with different connections, at least one of the two values in this parameter
-ConnectionInfo info = new ConnectionInfo("127.0.0.1", 8088);
+ConnectionInfo info = new ConnectionInfo("104.238.184.237", 8080);
 //Call OkSocket, open the channel for this connection, and call the channel's connection method for physical connections.
 OkSocket.open(info).connect();
 ```
@@ -111,7 +118,7 @@ manager.connect();
 * <font size=2> Obtain OkSocketOptions behavior belongs to the more advanced behavior, each Socket connection will correspond to a OkSocketOptions, if call Open for the first time is not specified OkSocketOptions, OkSocket library will use a default configuration object, the default configuration, please see the class documentation</font>
 
 ```java
-ConnectionInfo info = new ConnectionInfo("127.0.0.1", 8088);
+ConnectionInfo info = new ConnectionInfo("104.238.184.237", 8080);
 IConnectionManager manager = OkSocket.open(info);
 //Gets the reference object for the current connection channel
 OkSocketOptions options= manager.getOption();

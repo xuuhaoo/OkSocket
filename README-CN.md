@@ -81,13 +81,19 @@ public class MyApplication extends Application {
 }
 ```
 ### <font id="6">调用演示</font>
+#### 测试服务器
+该服务器是专门为初学者调试 OkSocket 库部属的一台测试服务器,初学者可以将项目中的 app 安装到手机上,点击 Connect 按钮即可,该服务器仅为熟悉通讯方式和解析方式使用.该服务器不支持心跳返回,不能作为商用服务器.服务器代码在 `SocketServerDemo` 文件夹中,请注意参考阅读.
+
+* 公网IP:`104.238.184.237`
+* 公网Port:`8080`
+
 ##### <font id="6.1">简单的长连接</font>
 * <font size=2> OkSocket 会默认对每一个 Open 的新通道做缓存管理,仅在第一次调用 Open 方法时创建 ConnectionManager 管理器,之后调用者可以通过获取到该ConnectionManager的引用,继续调用相关方法 </font>
 * <font size=2> ConnectionManager 主要负责该地址的套接字连接断开发送消息等操作.</font>
 
 ```java
 //连接参数设置(IP,端口号),这也是一个连接的唯一标识,不同连接,该参数中的两个值至少有其一不一样
-ConnectionInfo info = new ConnectionInfo("127.0.0.1", 8088);
+ConnectionInfo info = new ConnectionInfo("104.238.184.237", 8080);
 //调用OkSocket,开启这次连接的通道,调用通道的连接方法进行连接.
 OkSocket.open(info).connect();
 ```
@@ -96,7 +102,7 @@ OkSocket.open(info).connect();
 
 ```java
 //连接参数设置(IP,端口号),这也是一个连接的唯一标识,不同连接,该参数中的两个值至少有其一不一样
-ConnectionInfo info = new ConnectionInfo("127.0.0.1", 8088);
+ConnectionInfo info = new ConnectionInfo("104.238.184.237", 8080);
 //调用OkSocket,开启这次连接的通道,拿到通道Manager
 IConnectionManager manager = OkSocket.open(info);
 //注册Socket行为监听器,SocketActionAdapter是回调的Simple类,其他回调方法请参阅类文档
@@ -114,7 +120,7 @@ manager.connect();
 
 ```java
 //连接参数设置(IP,端口号),这也是一个连接的唯一标识,不同连接,该参数中的两个值至少有其一不一样
-ConnectionInfo info = new ConnectionInfo("127.0.0.1", 8088);
+ConnectionInfo info = new ConnectionInfo("104.238.184.237", 8080);
 //调用OkSocket,开启这次连接的通道,拿到通道Manager
 IConnectionManager manager = OkSocket.open(info);
 //获得当前连接通道的参配对象
