@@ -7,14 +7,14 @@ import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 
 /**
- * Created by xuhao on 2017/5/22.
+ * Created by Tony on 2017/10/24.
  */
 
-public class HandShake implements ISendable {
+public class MsgDataBean implements ISendable {
     private String content = "";
 
-    public HandShake() {
-        content = "Hello I'm a OkSocket demo";
+    public MsgDataBean(String content) {
+        this.content = content;
     }
 
     @Override
