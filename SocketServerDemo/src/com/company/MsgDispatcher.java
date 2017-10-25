@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -20,7 +21,7 @@ public class MsgDispatcher {
 
     public static final ExecutorService writeThreadPool = Executors.newCachedThreadPool();
 
-    private static final Map<String, OutputStream> outerStream = new TreeMap<>();
+    private static final ConcurrentHashMap<String, OutputStream> outerStream = new ConcurrentHashMap<>();
 
     private Socket mSocket;
 
