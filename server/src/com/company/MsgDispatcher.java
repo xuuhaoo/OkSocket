@@ -71,17 +71,20 @@ public class MsgDispatcher {
                     }
                 }
             } catch (Exception e) {
-
+                Log.e(e.getMessage());
             } finally {
                 outerStream.remove(mSocket.getInetAddress().getHostAddress());
                 try {
+                    Log.e(mSocket.getInetAddress().getHostAddress() + " client is disconnect");
                     if (mOutputStream != null) {
                         mOutputStream.close();
                     }
+                    if(mInputStream != null){
+                        mInputStream.close();
+                    }
                     mSocket.close();
-                    Log.e("client is disconnect");
                 } catch (IOException e) {
-                    Log.e("client is disconnect with exception");
+                    Log.e(mSocket.getInetAddress().getHostAddress() + "client is disconnect with exception");
                 }
                 mWriteFuture.cancel(true);
             }
@@ -160,9 +163,9 @@ public class MsgDispatcher {
                         throw e;
                     }
 
-                    if(totalBuf != null){
-                        Log.bytes("read from:"+mSocket.getInetAddress().getHostAddress()+" data:", totalBuf.array());
-                        Log.i("read from:"+mSocket.getInetAddress().getHostAddress()+" data:"
+                    if (totalBuf != null) {
+                        Log.bytes("read from:" + mSocket.getInetAddress().getHostAddress() + " data:", totalBuf.array());
+                        Log.i("read from:" + mSocket.getInetAddress().getHostAddress() + " data:"
                                 + new String(totalBuf.array(), Charset.forName("utf-8")));
                         MsgBean msgBean = new MsgBean(mSocket.getInetAddress().getHostAddress(), null, totalBuf.array());
                         MessageQueue.getIns().offer(msgBean);
