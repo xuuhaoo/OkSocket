@@ -20,10 +20,10 @@ public class Main {
     public static void main(String[] args) {
         Log.i("server is running...");
         preparePort(args);
-        prepareSocketServer();
+        prepareSocketServer(args);
     }
 
-    private static void prepareSocketServer() {
+    private static void prepareSocketServer(String[] args) {
         try {
             serverSocket = new ServerSocket(port);
             serverSocket.setReuseAddress(true);
@@ -31,7 +31,15 @@ public class Main {
             while (true) {
                 Socket socket = serverSocket.accept();
                 Log.i("client accept:" + socket.getInetAddress().getHostAddress());
-                new MsgDispatcher(socket);
+                boolean isHex = false;
+                if(args != null){
+                    for(String str : args){
+                        if("-hex".equalsIgnoreCase(str)){
+                            isHex = true;
+                        }
+                    }
+                }
+                new MsgDispatcher(socket,isHex);
             }
         } catch (IOException e) {
             e.printStackTrace();

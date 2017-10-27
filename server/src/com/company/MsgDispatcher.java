@@ -35,7 +35,10 @@ public class MsgDispatcher {
 
     private ByteBuffer mRemainingBuf;
 
-    public MsgDispatcher(Socket socket) {
+    private boolean mIsHex;
+
+    public MsgDispatcher(Socket socket, boolean isHex) {
+        this.mIsHex = isHex;
         this.mSocket = socket;
         try {
             this.mInputStream = socket.getInputStream();
@@ -53,13 +56,16 @@ public class MsgDispatcher {
         @Override
         public void run() {
             try {
-                while (true) {
+                while (!mSocket.isClosed()) {
                     MsgBean msgBean = MessageQueue.getIns().take();
 
                     if (msgBean != null) {
-                        Log.bytes("write from:" + msgBean.getFromWho() + " to all data:", msgBean.getBytes());
-                        Log.i("write from:" + msgBean.getFromWho() + " to all data:"
-                                + new String(msgBean.getBytes(), Charset.forName("utf-8")));
+                        if(mIsHex){
+                            Log.bytes("write from:" + msgBean.getFromWho() + " to all data:", msgBean.getBytes());
+                        }else{
+                            Log.i("write from:" + msgBean.getFromWho() + " to all data:"
+                                    + new String(msgBean.getBytes(), Charset.forName("utf-8")));
+                        }
 
                         Iterator<String> it = outerStream.keySet().iterator();
                         while (it.hasNext()) {
@@ -87,6 +93,7 @@ public class MsgDispatcher {
                     Log.e(mSocket.getInetAddress().getHostAddress() + "client is disconnect with exception");
                 }
                 mWriteFuture.cancel(true);
+                mReadFuture.cancel(true);
             }
         }
     }
@@ -95,7 +102,7 @@ public class MsgDispatcher {
         @Override
         public void run() {
             try {
-                while (true) {
+                while (!mSocket.isClosed()) {
                     ByteBuffer totalBuf = null;
                     try {
                         ByteBuffer headBuf = ByteBuffer.allocate(4);
@@ -121,7 +128,7 @@ public class MsgDispatcher {
                         int bodyLength = headBuf.getInt();
                         byte[] bodyArray = new byte[0];
                         if (bodyLength > 0) {
-                            if (bodyLength > 10 * 1024 * 1024) {//大于最大的读取容量,说明数据有问题
+                            if (bodyLength > 10 * 1024 * 1024) {
                                 throw new IllegalArgumentException("we can't read data bigger than " + 10 + "Mb");
                             }
                             ByteBuffer byteBuffer = ByteBuffer.allocate(bodyLength);
@@ -164,22 +171,30 @@ public class MsgDispatcher {
                     }
 
                     if (totalBuf != null) {
-                        Log.bytes("read from:" + mSocket.getInetAddress().getHostAddress() + " data:", totalBuf.array());
-                        Log.i("read from:" + mSocket.getInetAddress().getHostAddress() + " data:"
-                                + new String(totalBuf.array(), Charset.forName("utf-8")));
+                        if(mIsHex) {
+                            Log.bytes("read from:" + mSocket.getInetAddress().getHostAddress() + " data:", totalBuf.array());
+                        }else{
+                            Log.i("read from:" + mSocket.getInetAddress().getHostAddress() + " data:"
+                                    + new String(totalBuf.array(), Charset.forName("utf-8")));
+                        }
                         MsgBean msgBean = new MsgBean(mSocket.getInetAddress().getHostAddress(), null, totalBuf.array());
                         MessageQueue.getIns().offer(msgBean);
                     }
                 }
             } catch (Exception e) {
+                Log.e(e.getMessage());
             } finally {
                 try {
-                    if (mInputStream != null) {
+                    if (mOutputStream != null) {
+                        mOutputStream.close();
+                    }
+                    if(mInputStream != null){
                         mInputStream.close();
                     }
-
+                    mSocket.close();
                 } catch (IOException e) {
                 }
+                mWriteFuture.cancel(true);
                 mReadFuture.cancel(true);
             }
         }
