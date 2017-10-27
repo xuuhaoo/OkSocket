@@ -101,6 +101,6 @@ bintray {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(include: ['*.jar'], dir: 'libs')//13901072469
     compile 'com.android.support:appcompat-v7:25.3.1'
 }

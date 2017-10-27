@@ -155,6 +155,8 @@ public class BlockConnectionManager extends AbsConnectionManager {
                 isConnectTimeout = false;
                 SL.i("开始连接 " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " Socket服务器");
                 mSocket.connect(new InetSocketAddress(mConnectionInfo.getIp(), mConnectionInfo.getPort()));
+                //关闭Nagle算法,无论TCP数据报大小,立即发送
+                mSocket.setTcpNoDelay(true);
                 mConnectionTimeout.removeCallbacksAndMessages(null);
                 sendBroadcast(IAction.ACTION_CONNECTION_SUCCESS);
                 resolveManager();

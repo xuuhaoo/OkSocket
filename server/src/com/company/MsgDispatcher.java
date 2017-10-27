@@ -71,6 +71,7 @@ public class MsgDispatcher {
                     }
                 }
             } catch (Exception e) {
+
             } finally {
                 outerStream.remove(mSocket.getInetAddress().getHostAddress());
                 try {
