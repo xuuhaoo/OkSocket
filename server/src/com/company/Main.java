@@ -32,14 +32,14 @@ public class Main {
                 Socket socket = serverSocket.accept();
                 Log.i("client accept:" + socket.getInetAddress().getHostAddress());
                 boolean isHex = false;
-                if(args != null){
-                    for(String str : args){
-                        if("-hex".equalsIgnoreCase(str)){
+                if (args != null) {
+                    for (String str : args) {
+                        if ("-hex".equalsIgnoreCase(str)) {
                             isHex = true;
                         }
                     }
                 }
-                new MsgDispatcher(socket,isHex);
+                new MsgDispatcher(socket, isHex);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,8 +52,14 @@ public class Main {
             port = DEFAULT_PORT;
         } else {
             try {
-                port = Integer.parseInt(args[0]);
-            } catch (NumberFormatException e) {
+                for (int i = 0; i < args.length; i++) {
+                    if ("-port".equalsIgnoreCase(args[i])) {
+                        if (i < args.length - 1) {
+                            port = Integer.parseInt(args[i + 1]);
+                        }
+                    }
+                }
+            } catch (Exception e) {
                 port = DEFAULT_PORT;
             }
         }
