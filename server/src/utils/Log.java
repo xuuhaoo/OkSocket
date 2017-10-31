@@ -1,4 +1,4 @@
-package com.company.utils;
+package utils;
 
 public class Log {
     public static void i(String msg) {

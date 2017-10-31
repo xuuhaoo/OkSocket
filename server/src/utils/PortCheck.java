@@ -1,4 +1,4 @@
-package com.company.utils;
+package utils;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -15,7 +15,7 @@ public class PortCheck {
     public static boolean isPortAvailable(int port) {
         try {
             bindPort("0.0.0.0", port);
-            bindPort(InetAddress.getLocalHost().getHostAddress(), port);
+            bindPort("127.0.0.1", port);
             return true;
         } catch (Exception e) {
             return false;

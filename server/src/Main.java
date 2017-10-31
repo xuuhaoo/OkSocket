@@ -1,7 +1,6 @@
-package com.company;
 
-import com.company.utils.Log;
-import com.company.utils.PortCheck;
+import utils.Log;
+import utils.PortCheck;
 
 import java.io.IOException;
 import java.net.InetAddress;

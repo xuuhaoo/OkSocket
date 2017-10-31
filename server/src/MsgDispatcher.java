@@ -1,7 +1,6 @@
-package com.company;
 
-import com.company.bean.MsgBean;
-import com.company.utils.Log;
+import bean.MsgBean;
+import utils.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,19 +59,25 @@ public class MsgDispatcher {
                     MsgBean msgBean = MessageQueue.getIns().take();
 
                     if (msgBean != null) {
-                        if(mIsHex){
-                            Log.bytes("write from:" + msgBean.getFromWho() + " to all data:", msgBean.getBytes());
-                        }else{
-                            Log.i("write from:" + msgBean.getFromWho() + " to all data:"
-                                    + new String(msgBean.getBytes(), Charset.forName("utf-8")));
-                        }
 
                         Iterator<String> it = outerStream.keySet().iterator();
                         while (it.hasNext()) {
                             String key = it.next();
-                            OutputStream os = outerStream.get(key);
-                            os.write(msgBean.getBytes());
-                            os.flush();
+                            try {
+                                OutputStream os = outerStream.get(key);
+                                os.write(msgBean.getBytes());
+                                os.flush();
+                            } catch (IOException e) {
+                                Log.e("ip:" + key + " " + e.getMessage());
+                                outerStream.remove(key);
+                            }
+                        }
+
+                        if (mIsHex) {
+                            Log.bytes("write from:" + msgBean.getFromWho() + " to all data:", msgBean.getBytes());
+                        } else {
+                            Log.i("write from:" + msgBean.getFromWho() + " to all data:"
+                                    + new String(msgBean.getBytes(), Charset.forName("utf-8")));
                         }
                     }
                 }
@@ -85,7 +90,7 @@ public class MsgDispatcher {
                     if (mOutputStream != null) {
                         mOutputStream.close();
                     }
-                    if(mInputStream != null){
+                    if (mInputStream != null) {
                         mInputStream.close();
                     }
                     mSocket.close();
@@ -171,9 +176,9 @@ public class MsgDispatcher {
                     }
 
                     if (totalBuf != null) {
-                        if(mIsHex) {
+                        if (mIsHex) {
                             Log.bytes("read from:" + mSocket.getInetAddress().getHostAddress() + " data:", totalBuf.array());
-                        }else{
+                        } else {
                             Log.i("read from:" + mSocket.getInetAddress().getHostAddress() + " data:"
                                     + new String(totalBuf.array(), Charset.forName("utf-8")));
                         }
@@ -188,7 +193,7 @@ public class MsgDispatcher {
                     if (mOutputStream != null) {
                         mOutputStream.close();
                     }
-                    if(mInputStream != null){
+                    if (mInputStream != null) {
                         mInputStream.close();
                     }
                     mSocket.close();

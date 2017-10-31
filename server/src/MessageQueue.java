@@ -1,6 +1,5 @@
-package com.company;
 
-import com.company.bean.MsgBean;
+import bean.MsgBean;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
