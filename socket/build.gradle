@@ -44,7 +44,7 @@ artifacts {
 }
 
 group = "com.tonystark.android"
-version = "1.0.0"
+version = "1.0.1"
 
 // 根节点添加
 install {
