@@ -83,7 +83,6 @@ public class OkSocketOptions {
     private boolean isBlockSocket;
     /**
      * 重新连接管理器
-     * TODO: 目前仅有阻塞式支持重连管理器逻辑,非阻塞式还未支持
      */
     private AbsReconnectionManager mReconnectionManager;
 
@@ -91,10 +90,6 @@ public class OkSocketOptions {
     }
 
     public static class Builder {
-        /**
-         * 是否使用阻塞Socket(不可修改,暂不提供修改方法)
-         */
-        private boolean isBlockSocket;
         /**
          * Socket通讯模式
          * <p>
@@ -158,7 +153,6 @@ public class OkSocketOptions {
         private int mPulseFeedLoseTimes;
         /**
          * 重新连接管理器
-         * TODO: 目前仅有阻塞式支持重连管理器逻辑,非阻塞式还未支持
          */
         private AbsReconnectionManager mReconnectionManager;
 
@@ -166,7 +160,6 @@ public class OkSocketOptions {
         }
 
         public Builder(OkSocketOptions okOptions) {
-            isBlockSocket = okOptions.isBlockSocket;
 
             mIOThreadMode = okOptions.mIOThreadMode;
             mPulseFrequency = okOptions.mPulseFrequency;
@@ -252,7 +245,6 @@ public class OkSocketOptions {
         public OkSocketOptions build() {
             OkSocketOptions okOptions = new OkSocketOptions();
 
-            okOptions.isDebug = isDebug;
             okOptions.mIOThreadMode = mIOThreadMode;
             okOptions.mPulseFrequency = mPulseFrequency;
             okOptions.mMaxReadDataMB = mMaxReadDataMB;
@@ -263,7 +255,6 @@ public class OkSocketOptions {
             okOptions.mReadSingleTimeBufferBytes = mReadSingleTimeBufferBytes;
             okOptions.mWriteOrder = mWriteOrder;
             okOptions.mReadByteOrder = mReadByteOrder;
-            okOptions.isBlockSocket = isBlockSocket;
             okOptions.isConnectionHolden = isConnectionHolde;
             okOptions.mPulseFeedLoseTimes = mPulseFeedLoseTimes;
             okOptions.mReconnectionManager = mReconnectionManager;

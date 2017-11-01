@@ -106,12 +106,12 @@ public class MainSimpleActivity extends AppCompatActivity {
     }
 
     private void findViews() {
-        mSendList = (RecyclerView) findViewById(R.id.send_list);
-        mReceList = (RecyclerView) findViewById(R.id.rece_list);
-        mClearLog = (Button) findViewById(R.id.clear_log);
-        mConnect = (Button) findViewById(R.id.connect);
-        mSendET = (EditText) findViewById(R.id.send_et);
-        mSendBtn = (Button) findViewById(R.id.send_btn);
+        mSendList = findViewById(R.id.send_list);
+        mReceList = findViewById(R.id.rece_list);
+        mClearLog = findViewById(R.id.clear_log);
+        mConnect = findViewById(R.id.connect);
+        mSendET = findViewById(R.id.send_et);
+        mSendBtn = findViewById(R.id.send_btn);
     }
 
     private void initData() {
