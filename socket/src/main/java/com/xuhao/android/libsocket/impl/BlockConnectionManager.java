@@ -158,8 +158,8 @@ public class BlockConnectionManager extends AbsConnectionManager {
                 //关闭Nagle算法,无论TCP数据报大小,立即发送
                 mSocket.setTcpNoDelay(true);
                 mConnectionTimeout.removeCallbacksAndMessages(null);
-                sendBroadcast(IAction.ACTION_CONNECTION_SUCCESS);
                 resolveManager();
+                sendBroadcast(IAction.ACTION_CONNECTION_SUCCESS);
                 SL.i("Socket服务器连接成功 " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort());
             } catch (Exception e) {
                 if (isConnectTimeout) {//超时后不处理Socket异常
@@ -285,6 +285,7 @@ public class BlockConnectionManager extends AbsConnectionManager {
         if (mSocket == null) {
             return false;
         }
+
         return mSocket.isConnected() && !mSocket.isClosed() && netIsAvailable();
     }
 

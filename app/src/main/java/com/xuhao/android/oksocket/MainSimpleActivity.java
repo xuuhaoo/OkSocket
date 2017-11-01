@@ -11,8 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.xuhao.android.libsocket.interfaces.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
@@ -24,8 +22,6 @@ import com.xuhao.android.oksocket.adapter.LogAdapter;
 import com.xuhao.android.oksocket.data.HandShake;
 import com.xuhao.android.oksocket.data.LogBean;
 import com.xuhao.android.oksocket.data.MsgDataBean;
-import com.xuhao.android.oksocket.data.NearCarRegisterRq;
-import com.xuhao.android.oksocket.data.PulseBean;
 
 import java.nio.charset.Charset;
 
@@ -127,7 +123,7 @@ public class MainSimpleActivity extends AppCompatActivity {
         mReceList.setLayoutManager(manager2);
         mReceList.setAdapter(mReceLogAdapter);
 
-        mInfo = new ConnectionInfo("172.21.123.170", 8080);
+        mInfo = new ConnectionInfo("104.238.184.237", 8080);
         mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault())
                 .setReconnectionManager(new NoneReconnect()).build();
         mManager = open(mInfo, mOkOptions);

@@ -53,12 +53,7 @@ public class ManagerHolder {
     @NonNull
     private IConnectionManager createNewManagerAndCache(ConnectionInfo info, Context context,
             OkSocketOptions okOptions) {
-        AbsConnectionManager manager;
-        if (okOptions.isBlockSocket()) {
-            manager = new BlockConnectionManager(context, info, okOptions);
-        } else {
-            manager = new UnBlockConnectionManager(context, info, okOptions);
-        }
+        AbsConnectionManager manager = new BlockConnectionManager(context, info, okOptions);
         manager.setOnConnectionSwitchListener(new IConnectionSwitchListener() {
             @Override
             public void onSwitchConnectionInfo(IConnectionManager manager, ConnectionInfo oldInfo,
