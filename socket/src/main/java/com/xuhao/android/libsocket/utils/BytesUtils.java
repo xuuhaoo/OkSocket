@@ -66,17 +66,14 @@ public class BytesUtils {
         return value;
     }
 
-    public static String toHexStringForLog(byte[] data) {
+    public static String toHexStringForLogBak(byte[] data) {
         String debugSendBytes = "";
         if (data != null) {
-            long st = System.currentTimeMillis();
             for (int i = 0; i < data.length; i++) {
                 String tempHexStr = Integer.toHexString(data[i] & 0xff) + " ";
                 tempHexStr = tempHexStr.length() == 2 ? "0" + tempHexStr : tempHexStr;
                 debugSendBytes += tempHexStr;
             }
-            long et = System.currentTimeMillis();
-            System.out.println("=============cost time:"+(et-st));
         }
         return debugSendBytes;
     }
