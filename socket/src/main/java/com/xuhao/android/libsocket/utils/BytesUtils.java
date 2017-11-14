@@ -66,6 +66,20 @@ public class BytesUtils {
         return value;
     }
 
+    public static String toHexStringForLog(byte[] data) {
+        String debugSendBytes = "";
+        if (data != null) {
+            long st = System.currentTimeMillis();
+            for (int i = 0; i < data.length; i++) {
+                String tempHexStr = Integer.toHexString(data[i] & 0xff) + " ";
+                tempHexStr = tempHexStr.length() == 2 ? "0" + tempHexStr : tempHexStr;
+                debugSendBytes += tempHexStr;
+            }
+            long et = System.currentTimeMillis();
+            System.out.println("=============cost time:"+(et-st));
+        }
+        return debugSendBytes;
+    }
     /**
      * @Function: 将byte数组转为String，用于Log打印
      * @Author: hiperion
@@ -73,7 +87,7 @@ public class BytesUtils {
      * @version 1.0
      */
     final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
-    public static String toHexStringForLog(byte[] data) {
+    public static String toHexStringForLog(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 3];
         for ( int j = 0; j < bytes.length; j++ ) {
             int v = bytes[j] & 0xFF;
