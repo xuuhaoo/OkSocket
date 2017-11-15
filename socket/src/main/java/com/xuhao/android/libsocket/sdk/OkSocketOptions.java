@@ -144,7 +144,7 @@ public class OkSocketOptions {
          * false:不会保存在管理器中,对于已经保存的会进行删除,将不进行性能优化和断线重连.
          * </p>
          */
-        private boolean isConnectionHolde;
+        private boolean isConnectionHolden;
         /**
          * 脉搏丢失次数<br>
          * 大于或等于丢失次数时将断开该通道的连接<br>
@@ -171,7 +171,7 @@ public class OkSocketOptions {
             mReadSingleTimeBufferBytes = okOptions.mReadSingleTimeBufferBytes;
             mWriteOrder = okOptions.mWriteOrder;
             mReadByteOrder = okOptions.mReadByteOrder;
-            isConnectionHolde = okOptions.isConnectionHolden;
+            isConnectionHolden = okOptions.isConnectionHolden;
             mPulseFeedLoseTimes = okOptions.mPulseFeedLoseTimes;
             mReconnectionManager = okOptions.mReconnectionManager;
         }
@@ -196,8 +196,8 @@ public class OkSocketOptions {
             return this;
         }
 
-        public Builder setConnectionHolde(boolean connectionHolde) {
-            isConnectionHolde = connectionHolde;
+        public Builder setConnectionHolden(boolean connectionHolden) {
+            isConnectionHolden = connectionHolden;
             return this;
         }
 
@@ -255,7 +255,7 @@ public class OkSocketOptions {
             okOptions.mReadSingleTimeBufferBytes = mReadSingleTimeBufferBytes;
             okOptions.mWriteOrder = mWriteOrder;
             okOptions.mReadByteOrder = mReadByteOrder;
-            okOptions.isConnectionHolden = isConnectionHolde;
+            okOptions.isConnectionHolden = isConnectionHolden;
             okOptions.mPulseFeedLoseTimes = mPulseFeedLoseTimes;
             okOptions.mReconnectionManager = mReconnectionManager;
             return okOptions;

@@ -40,7 +40,7 @@ public class BytesUtils {
      * 小字节序
      * byte数组中取int数值，本方法适用于(低位在前，高位在后)的顺序，和和intToBytes（）配套使用
      *
-     * @param src byte数组
+     * @param src    byte数组
      * @param offset 从数组的第offset位开始
      * @return int数值
      */
@@ -66,6 +66,12 @@ public class BytesUtils {
         return value;
     }
 
+    /**
+     * 生成打印16进制日志所需的字符串
+     *
+     * @param data 数据源
+     * @return 字符串给日志使用
+     */
     public static String toHexStringForLog(byte[] data) {
         StringBuilder sb = new StringBuilder();
         if (data != null) {

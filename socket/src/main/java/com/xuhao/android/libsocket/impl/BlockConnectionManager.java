@@ -296,7 +296,7 @@ public class BlockConnectionManager extends AbsConnectionManager {
 
     @Override
     public void setIsConnectionHolder(boolean isHold) {
-        mOptions = new OkSocketOptions.Builder(mOptions).setConnectionHolde(isHold).build();
+        mOptions = new OkSocketOptions.Builder(mOptions).setConnectionHolden(isHold).build();
     }
 
     @Override
