@@ -15,6 +15,7 @@ import com.xuhao.android.libsocket.interfaces.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
+import com.xuhao.android.libsocket.sdk.bean.IHeaderProtocol;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
@@ -23,6 +24,7 @@ import com.xuhao.android.oksocket.data.HandShake;
 import com.xuhao.android.oksocket.data.LogBean;
 import com.xuhao.android.oksocket.data.MsgDataBean;
 
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -105,6 +107,11 @@ public class MainSimpleActivity extends AppCompatActivity {
         setListener();
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+    }
+
     private void findViews() {
         mSendList = findViewById(R.id.send_list);
         mReceList = findViewById(R.id.rece_list);
@@ -125,7 +132,19 @@ public class MainSimpleActivity extends AppCompatActivity {
 
         mInfo = new ConnectionInfo("104.238.184.237", 8080);
         mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault())
-                .setReconnectionManager(new NoneReconnect()).build();
+                .setReconnectionManager(new NoneReconnect())
+                .setHeaderProtocol(new IHeaderProtocol() {
+                    @Override
+                    public int getHeaderLength() {
+                        return 0;
+                    }
+
+                    @Override
+                    public int getBodyLength(byte[] header, ByteOrder byteOrder) {
+                        return 0;
+                    }
+                })
+                .build();
         mManager = open(mInfo, mOkOptions);
     }
 
@@ -155,9 +174,9 @@ public class MainSimpleActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "未连接,请先连接", LENGTH_SHORT).show();
                 } else {
                     String msg = mSendET.getText().toString();
-                    if (TextUtils.isEmpty(msg.trim())) {
-                        return;
-                    }
+//                    if (TextUtils.isEmpty(msg.trim())) {
+//                        return;
+//                    }
                     MsgDataBean msgDataBean = new MsgDataBean(msg);
                     mManager.send(msgDataBean);
                     mSendET.setText("");
