@@ -133,17 +133,6 @@ public class MainSimpleActivity extends AppCompatActivity {
         mInfo = new ConnectionInfo("104.238.184.237", 8080);
         mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault())
                 .setReconnectionManager(new NoneReconnect())
-                .setHeaderProtocol(new IHeaderProtocol() {
-                    @Override
-                    public int getHeaderLength() {
-                        return 0;
-                    }
-
-                    @Override
-                    public int getBodyLength(byte[] header, ByteOrder byteOrder) {
-                        return 0;
-                    }
-                })
                 .build();
         mManager = open(mInfo, mOkOptions);
     }
@@ -174,9 +163,9 @@ public class MainSimpleActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "未连接,请先连接", LENGTH_SHORT).show();
                 } else {
                     String msg = mSendET.getText().toString();
-//                    if (TextUtils.isEmpty(msg.trim())) {
-//                        return;
-//                    }
+                    if (TextUtils.isEmpty(msg.trim())) {
+                        return;
+                    }
                     MsgDataBean msgDataBean = new MsgDataBean(msg);
                     mManager.send(msgDataBean);
                     mSendET.setText("");

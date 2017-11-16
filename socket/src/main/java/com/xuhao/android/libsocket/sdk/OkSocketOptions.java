@@ -160,7 +160,6 @@ public class OkSocketOptions {
         }
 
         public Builder(OkSocketOptions okOptions) {
-
             mIOThreadMode = okOptions.mIOThreadMode;
             mPulseFrequency = okOptions.mPulseFrequency;
             mMaxReadDataMB = okOptions.mMaxReadDataMB;

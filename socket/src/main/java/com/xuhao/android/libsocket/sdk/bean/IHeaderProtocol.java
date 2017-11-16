@@ -23,5 +23,4 @@ public interface IHeaderProtocol {
      */
     int getBodyLength(byte[] header, ByteOrder byteOrder);
 
-
 }
