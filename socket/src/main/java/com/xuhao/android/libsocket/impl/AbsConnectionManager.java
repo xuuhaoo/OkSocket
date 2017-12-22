@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.xuhao.android.libsocket.impl.abilities.IConnectionSwitchListener;
-import com.xuhao.android.libsocket.interfaces.IPulseSendable;
+import com.xuhao.android.libsocket.sdk.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;

@@ -2,7 +2,7 @@ package com.xuhao.android.libsocket.sdk;
 
 import android.content.Context;
 
-import com.xuhao.android.libsocket.interfaces.IPulseSendable;
+import com.xuhao.android.libsocket.sdk.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.interfacies.ISocketActionListener;
