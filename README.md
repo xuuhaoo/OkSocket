@@ -29,7 +29,7 @@ files than you need put this into Module build.gradle file</font>
 
 ```groovy
 dependencies {
-        compile 'com.tonystark.android:socket:1.0.1'
+        compile 'com.tonystark.android:socket:1.2.0'
 }
 ```
 
@@ -64,7 +64,9 @@ dependencies {
 -keep class com.xuhao.android.socket.sdk.OkSocketOptions$* {
     *;
 }
-
+-keep class com.xuhao.android.libsocket.sdk.OkSocketSSLConfig$* {
+    *;
+}
 ```
 
 ### <font id="5">OkSocket Initialization</font>
