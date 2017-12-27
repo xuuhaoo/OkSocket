@@ -43,4 +43,7 @@
 -keep class com.xuhao.android.libsocket.sdk.OkSocketOptions$* {
     *;
 }
+-keep class com.xuhao.android.libsocket.sdk.OkSocketSSLConfig$* {
+    *;
+}
 -keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod
