@@ -59,9 +59,13 @@ public class Reader implements IReader {
                 }
             }
             originalData.setHeadBytes(headBuf.array());
-            SL.i("read head: " + BytesUtils.toHexStringForLog(headBuf.array()));
+            if (OkSocketOptions.isDebug()) {
+                SL.i("read head: " + BytesUtils.toHexStringForLog(headBuf.array()));
+            }
             int bodyLength = headerProtocol.getBodyLength(originalData.getHeadBytes(), mOkOptions.getReadByteOrder());
-            SL.i("need read body length: " + bodyLength);
+            if (OkSocketOptions.isDebug()) {
+                SL.i("need read body length: " + bodyLength);
+            }
             if (bodyLength > 0) {
                 if (bodyLength > mOkOptions.getMaxReadDataMB() * 1024 * 1024) {//大于最大的读取容量,说明数据有问题
                     throw new ReadException("we can't read data bigger than " + mOkOptions.getMaxReadDataMB() + "Mb");
@@ -127,8 +131,10 @@ public class Reader implements IReader {
                 throw e;
             }
         }
-        SL.i("read total bytes: " + BytesUtils.toHexStringForLog(byteBuffer.array()));
-        SL.i("read total length:" + (byteBuffer.capacity() - byteBuffer.remaining()));
+        if (OkSocketOptions.isDebug()) {
+            SL.i("read total bytes: " + BytesUtils.toHexStringForLog(byteBuffer.array()));
+            SL.i("read total length:" + (byteBuffer.capacity() - byteBuffer.remaining()));
+        }
     }
 
     @Override

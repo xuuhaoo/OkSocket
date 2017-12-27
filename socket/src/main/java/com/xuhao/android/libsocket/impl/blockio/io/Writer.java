@@ -63,8 +63,10 @@ public class Writer implements IWriter {
                     mOutputStream.flush();
 
                     byte[] forLogBytes = Arrays.copyOfRange(sendBytes, index, index + realWriteLength);
-                    SL.i("write bytes: " + BytesUtils.toHexStringForLog(forLogBytes));
-                    SL.i("bytes write length:" + realWriteLength);
+                    if (OkSocketOptions.isDebug()) {
+                        SL.i("write bytes: " + BytesUtils.toHexStringForLog(forLogBytes));
+                        SL.i("bytes write length:" + realWriteLength);
+                    }
 
                     index += realWriteLength;
                     remainingCount -= realWriteLength;
