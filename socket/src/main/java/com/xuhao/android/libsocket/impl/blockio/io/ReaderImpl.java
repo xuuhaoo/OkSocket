@@ -1,9 +1,8 @@
 package com.xuhao.android.libsocket.impl.blockio.io;
 
-import com.xuhao.android.libsocket.impl.abilities.IReader;
 import com.xuhao.android.libsocket.impl.exceptions.ReadException;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
-import com.xuhao.android.libsocket.sdk.bean.IHeaderProtocol;
+import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.abilities.IStateSender;
 import com.xuhao.android.libsocket.sdk.connection.interfacies.IAction;
@@ -18,19 +17,12 @@ import java.nio.ByteBuffer;
  * Created by xuhao on 2017/5/31.
  */
 
-public class Reader implements IReader {
-
-    private OkSocketOptions mOkOptions;
-
-    private IStateSender mStateSender;
-
-    private InputStream mInputStream;
+public class ReaderImpl extends AbsReader {
 
     private ByteBuffer mRemainingBuf;
 
-    public Reader(InputStream inputStream, IStateSender stateSender) {
-        mStateSender = stateSender;
-        mInputStream = inputStream;
+    public ReaderImpl(InputStream inputStream, IStateSender stateSender) {
+        super(inputStream, stateSender);
     }
 
     @Override
@@ -67,7 +59,7 @@ public class Reader implements IReader {
                 SL.i("need read body length: " + bodyLength);
             }
             if (bodyLength > 0) {
-                if (bodyLength > mOkOptions.getMaxReadDataMB() * 1024 * 1024) {//大于最大的读取容量,说明数据有问题
+                if (bodyLength > mOkOptions.getMaxReadDataMB() * 1024 * 1024) {
                     throw new ReadException("we can't read data bigger than " + mOkOptions.getMaxReadDataMB() + "Mb");
                 }
                 ByteBuffer byteBuffer = ByteBuffer.allocate(bodyLength);
@@ -137,8 +129,4 @@ public class Reader implements IReader {
         }
     }
 
-    @Override
-    public void setOption(OkSocketOptions option) {
-        mOkOptions = option;
-    }
 }

@@ -1,11 +1,10 @@
 package com.xuhao.android.libsocket.sdk.protocol;
 
-import com.xuhao.android.libsocket.sdk.bean.IHeaderProtocol;
 import com.xuhao.android.libsocket.utils.BytesUtils;
 
 import java.nio.ByteOrder;
 
-public class DefaultHeaderProtocol implements IHeaderProtocol {
+public class DefaultNormalHeaderProtocol implements IHeaderProtocol {
 
     @Override
     public int getHeaderLength() {

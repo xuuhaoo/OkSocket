@@ -19,7 +19,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Created by xuhao on 2017/5/31.
  */
 
-public class Writer implements IWriter {
+public class WriterImpl implements IWriter {
 
     private OkSocketOptions mOkOptions;
 
@@ -29,7 +29,7 @@ public class Writer implements IWriter {
 
     private LinkedBlockingQueue<ISendable> mQueue = new LinkedBlockingQueue<>();
 
-    public Writer(OutputStream outputStream, IStateSender stateSender) {
+    public WriterImpl(OutputStream outputStream, IStateSender stateSender) {
         mStateSender = stateSender;
         mOutputStream = outputStream;
     }

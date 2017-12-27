@@ -1,11 +1,9 @@
 package com.xuhao.android.libsocket.sdk;
 
-import com.xuhao.android.libsocket.impl.PulseManager;
-import com.xuhao.android.libsocket.sdk.bean.IPulse;
-import com.xuhao.android.libsocket.sdk.bean.IHeaderProtocol;
+import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
 import com.xuhao.android.libsocket.sdk.connection.AbsReconnectionManager;
 import com.xuhao.android.libsocket.sdk.connection.DefaultReconnectManager;
-import com.xuhao.android.libsocket.sdk.protocol.DefaultHeaderProtocol;
+import com.xuhao.android.libsocket.sdk.protocol.DefaultNormalHeaderProtocol;
 
 import java.nio.ByteOrder;
 
@@ -80,14 +78,13 @@ public class OkSocketOptions {
      */
     private int mMaxReadDataMB;
     /**
-     * 心跳(脉搏)管理器
-     * 默认会使用{@link PulseManager}
-     */
-    private IPulse mPulseManager;
-    /**
      * 重新连接管理器
      */
     private AbsReconnectionManager mReconnectionManager;
+    /**
+     * 安全套接字层配置
+     */
+    private OkSocketSSLConfig mSSLConfig;
 
     private OkSocketOptions() {
     }
@@ -158,6 +155,10 @@ public class OkSocketOptions {
          * 重新连接管理器
          */
         private AbsReconnectionManager mReconnectionManager;
+        /**
+         * 安全套接字层配置
+         */
+        private OkSocketSSLConfig mSSLConfig;
 
         public Builder() {
         }
@@ -176,6 +177,7 @@ public class OkSocketOptions {
             isConnectionHolden = okOptions.isConnectionHolden;
             mPulseFeedLoseTimes = okOptions.mPulseFeedLoseTimes;
             mReconnectionManager = okOptions.mReconnectionManager;
+            mSSLConfig = okOptions.mSSLConfig;
         }
 
         public Builder setIOThreadMode(IOThreadMode IOThreadMode) {
@@ -185,6 +187,11 @@ public class OkSocketOptions {
 
         public Builder setMaxReadDataMB(int maxReadDataMB) {
             mMaxReadDataMB = maxReadDataMB;
+            return this;
+        }
+
+        public Builder setSSLConfig(OkSocketSSLConfig SSLConfig) {
+            mSSLConfig = SSLConfig;
             return this;
         }
 
@@ -260,6 +267,8 @@ public class OkSocketOptions {
             okOptions.isConnectionHolden = isConnectionHolden;
             okOptions.mPulseFeedLoseTimes = mPulseFeedLoseTimes;
             okOptions.mReconnectionManager = mReconnectionManager;
+            okOptions.mSSLConfig = mSSLConfig;
+
             return okOptions;
         }
     }
@@ -274,6 +283,10 @@ public class OkSocketOptions {
 
     public int getBackgroundLiveMinute() {
         return mBackgroundLiveMinute;
+    }
+
+    public OkSocketSSLConfig getSSLConfig() {
+        return mSSLConfig;
     }
 
     public int getSendSinglePackageBytes() {
@@ -326,7 +339,7 @@ public class OkSocketOptions {
         okOptions.mBackgroundLiveMinute = 1;
         okOptions.mPulseFrequency = 5 * 1000;
         okOptions.mIOThreadMode = IOThreadMode.DUPLEX;
-        okOptions.mHeaderProtocol = new DefaultHeaderProtocol();
+        okOptions.mHeaderProtocol = new DefaultNormalHeaderProtocol();
         okOptions.mMaxReadDataMB = 10;
         okOptions.mConnectTimeoutSecond = 3;
         okOptions.mSendSinglePackageBytes = 50;
@@ -336,6 +349,7 @@ public class OkSocketOptions {
         okOptions.isConnectionHolden = true;
         okOptions.mPulseFeedLoseTimes = 5;
         okOptions.mReconnectionManager = new DefaultReconnectManager();
+        okOptions.mSSLConfig = null;
         return okOptions;
     }
 

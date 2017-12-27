@@ -7,12 +7,13 @@ import com.xuhao.android.libsocket.impl.LoopThread;
 import com.xuhao.android.libsocket.impl.abilities.IIOManager;
 import com.xuhao.android.libsocket.impl.abilities.IReader;
 import com.xuhao.android.libsocket.impl.abilities.IWriter;
-import com.xuhao.android.libsocket.impl.blockio.io.Reader;
-import com.xuhao.android.libsocket.impl.blockio.io.Writer;
+import com.xuhao.android.libsocket.impl.blockio.io.ReaderImpl;
+import com.xuhao.android.libsocket.impl.blockio.io.WriterImpl;
 import com.xuhao.android.libsocket.impl.blockio.threads.DuplexReadThread;
 import com.xuhao.android.libsocket.impl.blockio.threads.DuplexWriteThread;
 import com.xuhao.android.libsocket.impl.blockio.threads.SimplexIOThread;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
+import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.abilities.IStateSender;
 import com.xuhao.android.libsocket.utils.SL;
@@ -49,10 +50,10 @@ public class IOManager implements IIOManager {
     private OkSocketOptions.IOThreadMode mCurrentThreadMode;
 
     public IOManager(@NonNull Context context,
-            @NonNull InputStream inputStream,
-            @NonNull OutputStream outputStream,
-            @NonNull OkSocketOptions okOptions,
-            @NonNull IStateSender stateSender) {
+                     @NonNull InputStream inputStream,
+                     @NonNull OutputStream outputStream,
+                     @NonNull OkSocketOptions okOptions,
+                     @NonNull IStateSender stateSender) {
         mContext = context;
         mInputStream = inputStream;
         mOutputStream = outputStream;
@@ -62,8 +63,9 @@ public class IOManager implements IIOManager {
     }
 
     private void initIO() {
-        mReader = new Reader(mInputStream, mSender);
-        mWriter = new Writer(mOutputStream, mSender);
+        assertHeaderProtocolNotEmpty();
+        mReader = new ReaderImpl(mInputStream, mSender);
+        mWriter = new WriterImpl(mOutputStream, mSender);
     }
 
     @Override
@@ -121,13 +123,11 @@ public class IOManager implements IIOManager {
         if (mCurrentThreadMode == null) {
             mCurrentThreadMode = mOkOptions.getIOThreadMode();
         }
-        if (mOkOptions.getIOThreadMode() != mCurrentThreadMode) {
-            throw new IllegalArgumentException("can't hot change iothread mode from " + mCurrentThreadMode + " to "
-                    + mOkOptions.getIOThreadMode() + " in blocking io manager");
-        } else {
-            mWriter.setOption(mOkOptions);
-            mReader.setOption(mOkOptions);
-        }
+        assertTheThreadModeNotChanged();
+        assertHeaderProtocolNotEmpty();
+
+        mWriter.setOption(mOkOptions);
+        mReader.setOption(mOkOptions);
     }
 
     @Override
@@ -140,4 +140,23 @@ public class IOManager implements IIOManager {
         shutdownAllThread();
         mCurrentThreadMode = null;
     }
+
+    private void assertHeaderProtocolNotEmpty() {
+        IHeaderProtocol protocol = mOkOptions.getHeaderProtocol();
+        if (protocol == null) {
+            throw new IllegalArgumentException("The header protocol can not be Null.");
+        }
+
+        if (protocol.getHeaderLength() == 0) {
+            throw new IllegalArgumentException("The header length can not be zero.");
+        }
+    }
+
+    private void assertTheThreadModeNotChanged() {
+        if (mOkOptions.getIOThreadMode() != mCurrentThreadMode) {
+            throw new IllegalArgumentException("can't hot change iothread mode from " + mCurrentThreadMode + " to "
+                    + mOkOptions.getIOThreadMode() + " in blocking io manager");
+        }
+    }
+
 }

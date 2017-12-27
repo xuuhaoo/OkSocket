@@ -5,22 +5,37 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
+import android.text.TextUtils;
 
 import com.xuhao.android.libsocket.impl.abilities.IIOManager;
 import com.xuhao.android.libsocket.impl.blockio.IOManager;
 import com.xuhao.android.libsocket.impl.exceptions.UnconnectException;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
+import com.xuhao.android.libsocket.sdk.OkSocketSSLConfig;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.AbsReconnectionManager;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 import com.xuhao.android.libsocket.sdk.connection.interfacies.IAction;
+import com.xuhao.android.libsocket.sdk.protocol.DefaultX509ProtocolTrustManager;
 import com.xuhao.android.libsocket.utils.SL;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * Created by xuhao on 2017/5/16.
@@ -129,13 +144,52 @@ public class BlockConnectionManager extends AbsConnectionManager {
         if (mReconnectionManager != null) {
             mReconnectionManager.attach(mContext, this);
         }
-        mSocket = new Socket();
+        mSocket = getSocketByConfig();
         mConnectionTimeout
                 .sendMessageDelayed(mConnectionTimeout.obtainMessage(0), mOptions.getConnectTimeoutSecond() * 1000);
         mConnectThread = new ConnectionThread(
                 mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " connect thread");
         mConnectThread.setDaemon(true);
         mConnectThread.start();
+    }
+
+    @NonNull
+    private Socket getSocketByConfig() {
+        OkSocketSSLConfig config = mOptions.getSSLConfig();
+        if (config == null) {
+            return new Socket();
+        }
+
+        SSLSocketFactory factory = config.getCustomSSLFactory();
+        if (factory == null) {
+            String protocol = "SSL";
+            if (!TextUtils.isEmpty(config.getProtocol())) {
+                protocol = config.getProtocol();
+            }
+
+            TrustManager[] trustManagers = config.getTrustManagers();
+            if (trustManagers == null || trustManagers.length == 0) {
+                //缺省信任所有证书
+                trustManagers = new TrustManager[]{new DefaultX509ProtocolTrustManager()};
+            }
+
+            try {
+                SSLContext sslContext = SSLContext.getInstance(protocol);
+                sslContext.init(config.getKeyManagers(), trustManagers, new SecureRandom());
+                return sslContext.getSocketFactory().createSocket();
+            } catch (Exception e) {
+                SL.e(e.getMessage());
+                return new Socket();
+            }
+
+        } else {
+            try {
+                return factory.createSocket();
+            } catch (IOException e) {
+                SL.e(e.getMessage());
+                return new Socket();
+            }
+        }
     }
 
     private class ConnectionThread extends Thread {
