@@ -44,7 +44,7 @@ artifacts {
 }
 
 group = "com.tonystark.android"
-version = "1.0.1"
+version = "1.2.0"
 
 // 根节点添加
 install {
@@ -59,13 +59,6 @@ install {
 
                 // Add your description here
                 description 'An block socket client for Android applications.'
-//                url siteUrl
-//                scm {
-//                    connection gitUrl
-//                    developerConnection gitUrl
-//                    url siteUrl
-//
-//                }
                 // Set your license
                 licenses {
                     license {
