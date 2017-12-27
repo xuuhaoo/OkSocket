@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.sdk.bean;
+package com.xuhao.android.libsocket.interfaces;
 
 /**
  * Created by xuhao on 2017/5/18.

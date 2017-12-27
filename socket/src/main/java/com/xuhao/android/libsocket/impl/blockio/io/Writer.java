@@ -2,7 +2,7 @@ package com.xuhao.android.libsocket.impl.blockio.io;
 
 import com.xuhao.android.libsocket.impl.abilities.IWriter;
 import com.xuhao.android.libsocket.impl.exceptions.WriteException;
-import com.xuhao.android.libsocket.sdk.bean.IPulseSendable;
+import com.xuhao.android.libsocket.interfaces.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.abilities.IStateSender;

@@ -1,4 +1,6 @@
-package com.xuhao.android.libsocket.sdk.bean;
+package com.xuhao.android.libsocket.interfaces;
+
+import com.xuhao.android.libsocket.sdk.bean.ISendable;
 
 /**
  * 心跳标记接口

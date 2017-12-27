@@ -1,11 +1,9 @@
 package com.xuhao.android.libsocket.sdk;
 
-import com.xuhao.android.libsocket.impl.PulseManager;
-import com.xuhao.android.libsocket.sdk.bean.IPulse;
 import com.xuhao.android.libsocket.sdk.bean.IHeaderProtocol;
 import com.xuhao.android.libsocket.sdk.connection.AbsReconnectionManager;
 import com.xuhao.android.libsocket.sdk.connection.DefaultReconnectManager;
-import com.xuhao.android.libsocket.sdk.protocol.DefaultHeaderProtocol;
+import com.xuhao.android.libsocket.utils.BytesUtils;
 
 import java.nio.ByteOrder;
 
@@ -80,10 +78,9 @@ public class OkSocketOptions {
      */
     private int mMaxReadDataMB;
     /**
-     * 心跳(脉搏)管理器
-     * 默认会使用{@link PulseManager}
+     * 是否使用阻塞Socket(不可修改,暂不提供修改方法)
      */
-    private IPulse mPulseManager;
+    private boolean isBlockSocket;
     /**
      * 重新连接管理器
      */
@@ -308,6 +305,9 @@ public class OkSocketOptions {
         return mReadByteOrder;
     }
 
+    public boolean isBlockSocket() {
+        return isBlockSocket;
+    }
 
     public int getPulseFeedLoseTimes() {
         return mPulseFeedLoseTimes;
@@ -333,6 +333,7 @@ public class OkSocketOptions {
         okOptions.mReadSingleTimeBufferBytes = 50;
         okOptions.mReadByteOrder = ByteOrder.BIG_ENDIAN;
         okOptions.mWriteOrder = ByteOrder.BIG_ENDIAN;
+        okOptions.isBlockSocket = true;
         okOptions.isConnectionHolden = true;
         okOptions.mPulseFeedLoseTimes = 5;
         okOptions.mReconnectionManager = new DefaultReconnectManager();
@@ -351,5 +352,25 @@ public class OkSocketOptions {
          * 双工通讯
          */
         DUPLEX;
+    }
+
+    private static class DefaultHeaderProtocol implements IHeaderProtocol {
+
+        @Override
+        public int getHeaderLength() {
+            return 4;
+        }
+
+        @Override
+        public int getBodyLength(byte[] header, ByteOrder byteOrder) {
+            if (header == null || header.length == 0) {
+                return 0;
+            }
+            if (ByteOrder.BIG_ENDIAN.toString().equals(byteOrder.toString())) {
+                return BytesUtils.bytesToInt2(header, 0);
+            } else {
+                return BytesUtils.bytesToInt(header, 0);
+            }
+        }
     }
 }
