@@ -41,6 +41,9 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+group = project.GROUP_ID
+version = project.VERSION
+
 artifacts {
     archives javadocJar
     archives sourcesJar
