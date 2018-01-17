@@ -2,10 +2,10 @@ package com.xuhao.android.libsocket.impl.blockio.io;
 
 import com.xuhao.android.libsocket.impl.exceptions.ReadException;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
-import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.abilities.IStateSender;
 import com.xuhao.android.libsocket.sdk.connection.interfacies.IAction;
+import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
 import com.xuhao.android.libsocket.utils.BytesUtils;
 import com.xuhao.android.libsocket.utils.SL;
 
@@ -90,6 +90,8 @@ public class ReaderImpl extends AbsReader {
                 originalData.setBodyBytes(byteBuffer.array());
             } else if (bodyLength == 0) {
                 originalData.setBodyBytes(new byte[0]);
+                //the body is empty so header remaining buf need set null
+                mRemainingBuf = null;
             } else if (bodyLength < 0) {
                 throw new ReadException(
                         "this socket input stream has some problem,wrong body length " + bodyLength
