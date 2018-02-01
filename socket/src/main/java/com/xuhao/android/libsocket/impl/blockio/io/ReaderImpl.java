@@ -71,10 +71,12 @@ public class ReaderImpl extends AbsReader {
                     mRemainingBuf.position(bodyStartPosition + length);
                     if (length == bodyLength) {
                         if (mRemainingBuf.remaining() > 0) {//there are data left
+                            ByteBuffer tempBuffer = ByteBuffer.allocate(mRemainingBuf.remaining());
+                            tempBuffer.put(mRemainingBuf.array(), bodyStartPosition + length, mRemainingBuf.remaining());
                             mRemainingBuf = ByteBuffer.allocate(mRemainingBuf.remaining());
                             mRemainingBuf.order(mOkOptions.getReadByteOrder());
                             mRemainingBuf
-                                    .put(mRemainingBuf.array(), mRemainingBuf.position(), mRemainingBuf.remaining());
+                                    .put(tempBuffer.array(), 0, mRemainingBuf.remaining());
                         } else {//there are no data left
                             mRemainingBuf = null;
                         }
