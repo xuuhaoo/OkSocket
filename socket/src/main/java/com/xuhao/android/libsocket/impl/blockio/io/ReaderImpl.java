@@ -71,10 +71,11 @@ public class ReaderImpl extends AbsReader {
                     mRemainingBuf.position(bodyStartPosition + length);
                     if (length == bodyLength) {
                         if (mRemainingBuf.remaining() > 0) {//there are data left
-                            mRemainingBuf = ByteBuffer.allocate(mRemainingBuf.remaining());
-                            mRemainingBuf.order(mOkOptions.getReadByteOrder());
-                            mRemainingBuf
-                                    .put(mRemainingBuf.array(), mRemainingBuf.position(), mRemainingBuf.remaining());
+                            //TODO GitHub上代码bug,需要用临时对象存储数据后替换
+                            ByteBuffer temp = ByteBuffer.allocate(mRemainingBuf.remaining());
+                            temp.order(mOkOptions.getReadByteOrder());
+                            temp.put(mRemainingBuf.array(), mRemainingBuf.position(), mRemainingBuf.remaining());
+                            mRemainingBuf = temp;
                         } else {//there are no data left
                             mRemainingBuf = null;
                         }
@@ -89,9 +90,19 @@ public class ReaderImpl extends AbsReader {
                 readBodyFromChannel(byteBuffer);
                 originalData.setBodyBytes(byteBuffer.array());
             } else if (bodyLength == 0) {
+                //TODO 如果body长度为零，需要从缓存中剪掉已读取的头部数据
+                if(null != mRemainingBuf){
+                    if(mRemainingBuf.hasRemaining()){
+                        ByteBuffer temp = ByteBuffer.allocate(mRemainingBuf.remaining());
+                        temp.order(mOkOptions.getReadByteOrder());
+                        temp.put(mRemainingBuf.array(), mRemainingBuf.position(), mRemainingBuf.remaining());
+                        mRemainingBuf = temp;
+                    }else{
+                        mRemainingBuf = null;
+                    }
+                }
+
                 originalData.setBodyBytes(new byte[0]);
-                //the body is empty so header remaining buf need set null
-                mRemainingBuf = null;
             } else if (bodyLength < 0) {
                 throw new ReadException(
                         "this socket input stream has some problem,wrong body length " + bodyLength
