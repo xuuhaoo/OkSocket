@@ -71,10 +71,10 @@ public class ReaderImpl extends AbsReader {
                     mRemainingBuf.position(bodyStartPosition + length);
                     if (length == bodyLength) {
                         if (mRemainingBuf.remaining() > 0) {//there are data left
-                            mRemainingBuf = ByteBuffer.allocate(mRemainingBuf.remaining());
-                            mRemainingBuf.order(mOkOptions.getReadByteOrder());
-                            mRemainingBuf
-                                    .put(mRemainingBuf.array(), mRemainingBuf.position(), mRemainingBuf.remaining());
+                            ByteBuffer temp = ByteBuffer.allocate(mRemainingBuf.remaining());
+                            temp.order(mOkOptions.getReadByteOrder());
+                            temp.put(mRemainingBuf.array(), mRemainingBuf.position(), mRemainingBuf.remaining());
+                            mRemainingBuf = temp;
                         } else {//there are no data left
                             mRemainingBuf = null;
                         }
@@ -90,8 +90,17 @@ public class ReaderImpl extends AbsReader {
                 originalData.setBodyBytes(byteBuffer.array());
             } else if (bodyLength == 0) {
                 originalData.setBodyBytes(new byte[0]);
-                //the body is empty so header remaining buf need set null
-                mRemainingBuf = null;
+                if (mRemainingBuf != null) {
+                    //the body is empty so header remaining buf need set null
+                    if (mRemainingBuf.hasRemaining()) {
+                        ByteBuffer temp = ByteBuffer.allocate(mRemainingBuf.remaining());
+                        temp.order(mOkOptions.getReadByteOrder());
+                        temp.put(mRemainingBuf.array(), mRemainingBuf.position(), mRemainingBuf.remaining());
+                        mRemainingBuf = temp;
+                    } else {
+                        mRemainingBuf = null;
+                    }
+                }
             } else if (bodyLength < 0) {
                 throw new ReadException(
                         "this socket input stream has some problem,wrong body length " + bodyLength
