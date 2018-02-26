@@ -1,6 +1,8 @@
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
+//gradle clean build bintrayUpload
+
 publishing {
     publications {
         Production(MavenPublication) {
