@@ -144,14 +144,27 @@ public class MsgDispatcher {
                                 mRemainingBuf.position(bodyStartPosition + length);
                                 if (length == bodyLength) {
                                     if (mRemainingBuf.remaining() > 0) {//there are data left
-                                        mRemainingBuf = ByteBuffer.allocate(mRemainingBuf.remaining());
-                                        mRemainingBuf
-                                                .put(mRemainingBuf.array(), mRemainingBuf.position(), mRemainingBuf.remaining());
+                                        ByteBuffer temp = ByteBuffer.allocate(mRemainingBuf.remaining());
+                                        temp.put(mRemainingBuf.array(), mRemainingBuf.position(), mRemainingBuf.remaining());
+                                        mRemainingBuf = temp;
                                     } else {//there are no data left
                                         mRemainingBuf = null;
                                     }
                                     //cause this time data from remaining buffer not from channel.
                                     bodyArray = byteBuffer.array();
+                                    totalBuf = ByteBuffer.allocate(4 + bodyArray.length);
+                                    headBuf.flip();
+                                    totalBuf.put(headBuf);
+                                    totalBuf.put(bodyArray);
+                                    totalBuf.flip();
+                                    if (mIsHex) {
+                                        Log.bytes("read from:" + mSocket.getInetAddress().getHostAddress() + " data:", totalBuf.array());
+                                    } else {
+                                        Log.i("read from:" + mSocket.getInetAddress().getHostAddress() + " data:"
+                                                + new String(totalBuf.array(), Charset.forName("utf-8")));
+                                    }
+                                    MsgBean msgBean = new MsgBean(mSocket.getInetAddress().getHostAddress(), null, totalBuf.array());
+                                    MessageQueue.getIns().offer(msgBean);
                                     return;
                                 } else {//there are no data left in buffer and some data pieces in channel
                                     mRemainingBuf = null;
@@ -161,6 +174,16 @@ public class MsgDispatcher {
                             bodyArray = byteBuffer.array();
                         } else if (bodyLength == 0) {
                             bodyArray = new byte[0];
+                            if (mRemainingBuf != null) {
+                                //the body is empty so header remaining buf need set null
+                                if (mRemainingBuf.hasRemaining()) {
+                                    ByteBuffer temp = ByteBuffer.allocate(mRemainingBuf.remaining());
+                                    temp.put(mRemainingBuf.array(), mRemainingBuf.position(), mRemainingBuf.remaining());
+                                    mRemainingBuf = temp;
+                                } else {
+                                    mRemainingBuf = null;
+                                }
+                            }
                         } else if (bodyLength < 0) {
                             throw new IllegalArgumentException(
                                     "this socket input stream has some problem,wrong body length " + bodyLength
