@@ -49,36 +49,12 @@ public class OkSocket {
      * 开启一个socket通讯通道
      *
      * @param connectInfo 连接信息{@link ConnectionInfo}
-     * @return 该参数的连接管理器 {@link IConnectionManager}
-     */
-    public static IConnectionManager open(ConnectionInfo connectInfo) {
-        assertIsInit();
-        return holder.get(connectInfo, app, OkSocketOptions.getDefault());
-    }
-
-    /**
-     * 开启一个socket通讯通道
-     *
-     * @param connectInfo 连接信息{@link ConnectionInfo}
      * @param okOptions 连接参配{@link OkSocketOptions}
      * @return 该参数的连接管理器 {@link IConnectionManager} 连接参数仅作为配置该通道的参配,不影响全局参配
      */
     public static IConnectionManager open(ConnectionInfo connectInfo, OkSocketOptions okOptions) {
         assertIsInit();
         return holder.get(connectInfo, app, okOptions);
-    }
-
-    /**
-     * 开启一个socket通讯通道
-     *
-     * @param ip 需要连接的主机IPV4地址
-     * @param port 需要连接的主机开放的Socket端口号
-     * @return 该参数的连接管理器 {@link IConnectionManager}
-     */
-    public static IConnectionManager open(String ip, int port) {
-        assertIsInit();
-        ConnectionInfo info = new ConnectionInfo(ip, port);
-        return holder.get(info, app, OkSocketOptions.getDefault());
     }
 
     /**

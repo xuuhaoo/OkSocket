@@ -51,13 +51,13 @@ public class ManagerHolder {
     }
 
     @NonNull
-    private IConnectionManager createNewManagerAndCache(ConnectionInfo info, Context context,
-            OkSocketOptions okOptions) {
-        AbsConnectionManager manager = new BlockConnectionManager(context, info, okOptions);
+    private IConnectionManager createNewManagerAndCache(ConnectionInfo info, Context context, OkSocketOptions okOptions) {
+        AbsConnectionManager manager = new BlockConnectionManager(context, info);
+        manager.option(okOptions);
         manager.setOnConnectionSwitchListener(new IConnectionSwitchListener() {
             @Override
             public void onSwitchConnectionInfo(IConnectionManager manager, ConnectionInfo oldInfo,
-                    ConnectionInfo newInfo) {
+                                               ConnectionInfo newInfo) {
                 synchronized (mConnectionManagerMap) {
                     mConnectionManagerMap.remove(oldInfo);
                     mConnectionManagerMap.put(newInfo, manager);
