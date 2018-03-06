@@ -25,17 +25,11 @@ import com.xuhao.android.libsocket.utils.SL;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 
-import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
 
 /**
  * Created by xuhao on 2017/5/16.
@@ -109,10 +103,9 @@ public class BlockConnectionManager extends AbsConnectionManager {
         }
     };
 
-    protected BlockConnectionManager(Context context, ConnectionInfo info, OkSocketOptions okOptions) {
+    protected BlockConnectionManager(Context context, ConnectionInfo info) {
         super(context, info);
         SL.i("block connection init");
-        mOptions = okOptions;
     }
 
     @Override
@@ -315,7 +308,7 @@ public class BlockConnectionManager extends AbsConnectionManager {
 
     @Override
     public IConnectionManager option(OkSocketOptions okOptions) {
-        if (mOptions == null) {
+        if (okOptions == null) {
             return this;
         }
         mOptions = okOptions;

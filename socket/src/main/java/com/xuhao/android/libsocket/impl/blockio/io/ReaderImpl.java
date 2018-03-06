@@ -2,10 +2,10 @@ package com.xuhao.android.libsocket.impl.blockio.io;
 
 import com.xuhao.android.libsocket.impl.exceptions.ReadException;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
-import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.abilities.IStateSender;
 import com.xuhao.android.libsocket.sdk.connection.interfacies.IAction;
+import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
 import com.xuhao.android.libsocket.utils.BytesUtils;
 import com.xuhao.android.libsocket.utils.SL;
 
@@ -71,10 +71,10 @@ public class ReaderImpl extends AbsReader {
                     mRemainingBuf.position(bodyStartPosition + length);
                     if (length == bodyLength) {
                         if (mRemainingBuf.remaining() > 0) {//there are data left
-                            mRemainingBuf = ByteBuffer.allocate(mRemainingBuf.remaining());
-                            mRemainingBuf.order(mOkOptions.getReadByteOrder());
-                            mRemainingBuf
-                                    .put(mRemainingBuf.array(), mRemainingBuf.position(), mRemainingBuf.remaining());
+                            ByteBuffer temp = ByteBuffer.allocate(mRemainingBuf.remaining());
+                            temp.order(mOkOptions.getReadByteOrder());
+                            temp.put(mRemainingBuf.array(), mRemainingBuf.position(), mRemainingBuf.remaining());
+                            mRemainingBuf = temp;
                         } else {//there are no data left
                             mRemainingBuf = null;
                         }
@@ -90,6 +90,17 @@ public class ReaderImpl extends AbsReader {
                 originalData.setBodyBytes(byteBuffer.array());
             } else if (bodyLength == 0) {
                 originalData.setBodyBytes(new byte[0]);
+                if (mRemainingBuf != null) {
+                    //the body is empty so header remaining buf need set null
+                    if (mRemainingBuf.hasRemaining()) {
+                        ByteBuffer temp = ByteBuffer.allocate(mRemainingBuf.remaining());
+                        temp.order(mOkOptions.getReadByteOrder());
+                        temp.put(mRemainingBuf.array(), mRemainingBuf.position(), mRemainingBuf.remaining());
+                        mRemainingBuf = temp;
+                    } else {
+                        mRemainingBuf = null;
+                    }
+                }
             } else if (bodyLength < 0) {
                 throw new ReadException(
                         "this socket input stream has some problem,wrong body length " + bodyLength

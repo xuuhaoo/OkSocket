@@ -26,7 +26,7 @@ allprojects {
 
 ```groovy
 dependencies {
-        compile 'com.tonystark.android:socket:1.2.2'
+        compile 'com.tonystark.android:socket:1.2.3'
 }
 ```
 
