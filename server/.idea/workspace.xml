@@ -1,473 +1,708 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ArtifactsWorkspaceSettings">
-    <artifacts-to-build>
-      <artifact name="socketserver:jar" />
-    </artifacts-to-build>
-  </component>
-  <component name="ChangeListManager">
-    <list default="true" id="ad4452af-0817-4862-9ffe-87cf848531ce" name="Default" comment="" />
-    <ignored path="$PROJECT_DIR$/out/" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
-    <option name="SHOW_DIALOG" value="false" />
-    <option name="HIGHLIGHT_CONFLICTS" value="true" />
-    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
-    <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+    <component name="ArtifactsWorkspaceSettings">
+        <artifacts-to-build>
+            <artifact name="socketserver:jar" />
+        </artifacts-to-build>
+    </component>
+    <component name="ChangeListManager">
+        <list name="Default" comment="" default="true" id="ad4452af-0817-4862-9ffe-87cf848531ce" />
+        <ignored path="$PROJECT_DIR$/out/" />
+        <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+        <option name="TRACKING_ENABLED" value="true" />
+        <option name="SHOW_DIALOG" value="false" />
+        <option name="HIGHLIGHT_CONFLICTS" value="true" />
+        <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+        <option name="LAST_RESOLUTION" value="IGNORE" />
+    </component>
+    <component name="FileEditorManager">
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+            <file current-in-tab="false" leaf-file-name="Main.java" pinned="false">
+                <entry file="file://$PROJECT_DIR$/src/Main.java">
+                    <provider editor-type-id="text-editor" selected="true">
+                        <state relative-caret-position="988">
+                            <caret column="0" lean-forward="false" line="67"
+                                selection-end-column="0" selection-end-line="67"
+                                selection-start-column="0" selection-start-line="67" />
+                            <folding>
+                                <element expanded="true" signature="imports" />
+                            </folding>
+                        </state>
+                    </provider>
+                </entry>
+            </file>
+            <file current-in-tab="true" leaf-file-name="MsgDispatcher.java" pinned="false">
+                <entry file="file://$PROJECT_DIR$/src/MsgDispatcher.java">
+                    <provider editor-type-id="text-editor" selected="true">
+                        <state relative-caret-position="210">
+                            <caret column="0" lean-forward="true" line="27"
+                                selection-end-column="0" selection-end-line="27"
+                                selection-start-column="0" selection-start-line="27" />
+                            <folding>
+                                <marker date="1520309171000" expanded="true" ph="{...}"
+                                    signature="9198:9935" />
+                            </folding>
+                        </state>
+                    </provider>
+                </entry>
+            </file>
+        </leaf>
+    </component>
+    <component name="GradleLocalSettings">
+        <option name="externalProjectsViewState">
+            <projects_view />
+        </option>
+    </component>
+    <component name="IdeDocumentHistory">
+        <option name="CHANGED_PATHS">
+            <list>
+                <option value="$PROJECT_DIR$/src/bean/MsgBean.java" />
+                <option value="$PROJECT_DIR$/src/MessageQueue.java" />
+                <option value="$PROJECT_DIR$/src/utils/PortCheck.java" />
+                <option value="$PROJECT_DIR$/src/Main.java" />
+                <option value="$PROJECT_DIR$/src/MsgDispatcher.java" />
+            </list>
+        </option>
+    </component>
+    <component name="ProjectFrameBounds">
+        <option name="x" value="34" />
+        <option name="y" value="57" />
+        <option name="width" value="1406" />
+        <option name="height" value="806" />
+    </component>
+    <component name="ProjectView">
+        <navigator currentView="ProjectPane" proportions="" version="1">
+            <flattenPackages />
+            <showMembers />
+            <showModules />
+            <showLibraryContents />
+            <hideEmptyPackages />
+            <abbreviatePackageNames />
+            <autoscrollToSource />
+            <autoscrollFromSource />
+            <sortByType />
+            <manualOrder />
+            <foldersAlwaysOnTop value="true" />
+        </navigator>
+        <panes>
+            <pane id="AndroidView" />
+            <pane id="PackagesPane" />
+            <pane id="Scratches" />
+            <pane id="Scope" />
+            <pane id="ProjectPane">
+                <subPane>
+                    <expand>
+                        <path>
+                            <item name="socketserver" type="b2602c69:ProjectViewProjectNode" />
+                            <item name="server" type="462c0819:PsiDirectoryNode" />
+                        </path>
+                        <path>
+                            <item name="socketserver" type="b2602c69:ProjectViewProjectNode" />
+                            <item name="server" type="462c0819:PsiDirectoryNode" />
+                            <item name="out" type="462c0819:PsiDirectoryNode" />
+                        </path>
+                        <path>
+                            <item name="socketserver" type="b2602c69:ProjectViewProjectNode" />
+                            <item name="server" type="462c0819:PsiDirectoryNode" />
+                            <item name="out" type="462c0819:PsiDirectoryNode" />
+                            <item name="artifacts" type="462c0819:PsiDirectoryNode" />
+                        </path>
+                        <path>
+                            <item name="socketserver" type="b2602c69:ProjectViewProjectNode" />
+                            <item name="server" type="462c0819:PsiDirectoryNode" />
+                            <item name="out" type="462c0819:PsiDirectoryNode" />
+                            <item name="artifacts" type="462c0819:PsiDirectoryNode" />
+                            <item name="socketserver_jar" type="462c0819:PsiDirectoryNode" />
+                        </path>
+                        <path>
+                            <item name="socketserver" type="b2602c69:ProjectViewProjectNode" />
+                            <item name="server" type="462c0819:PsiDirectoryNode" />
+                            <item name="src" type="462c0819:PsiDirectoryNode" />
+                        </path>
+                        <path>
+                            <item name="socketserver" type="b2602c69:ProjectViewProjectNode" />
+                            <item name="server" type="462c0819:PsiDirectoryNode" />
+                            <item name="src" type="462c0819:PsiDirectoryNode" />
+                            <item name="bean" type="462c0819:PsiDirectoryNode" />
+                        </path>
+                        <path>
+                            <item name="socketserver" type="b2602c69:ProjectViewProjectNode" />
+                            <item name="server" type="462c0819:PsiDirectoryNode" />
+                            <item name="src" type="462c0819:PsiDirectoryNode" />
+                            <item name="utils" type="462c0819:PsiDirectoryNode" />
+                        </path>
+                    </expand>
+                    <select />
+                </subPane>
+            </pane>
+        </panes>
+    </component>
+    <component name="PropertiesComponent">
+        <property name="project.structure.last.edited" value="Artifacts" />
+        <property name="project.structure.proportion" value="0.0" />
+        <property name="project.structure.side.proportion" value="0.0" />
+        <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    </component>
+    <component name="RecentsManager">
+        <key name="CopyFile.RECENT_KEYS">
+            <recent name="$PROJECT_DIR$/src" />
+        </key>
+    </component>
+    <component name="RunDashboard">
+        <option name="ruleStates">
+            <list>
+                <RuleState>
+                    <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+                </RuleState>
+                <RuleState>
+                    <option name="name" value="StatusDashboardGroupingRule" />
+                </RuleState>
+            </list>
+        </option>
+    </component>
+    <component name="RunManager" selected="Application.Main">
+        <configuration name="Main" factoryName="Application" nameIsGenerated="true" temporary="true"
+            type="Application">
+            <extension name="coverage" enabled="false" merge="false" runner="idea"
+                sample_coverage="true" />
+            <option name="MAIN_CLASS_NAME" value="Main" />
+            <option name="VM_PARAMETERS" />
+            <option name="PROGRAM_PARAMETERS" />
+            <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+            <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+            <option name="ALTERNATIVE_JRE_PATH" />
+            <option name="ENABLE_SWING_INSPECTOR" value="false" />
+            <option name="ENV_VARIABLES" />
+            <option name="PASS_PARENT_ENVS" value="true" />
+            <module name="socketserver" />
+            <envs />
+        </configuration>
+        <configuration default="true" factoryName="Applet" type="Applet">
+            <option name="HTML_USED" value="false" />
+            <option name="WIDTH" value="400" />
+            <option name="HEIGHT" value="300" />
+            <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+            <module />
+        </configuration>
+        <configuration default="true" factoryName="Application" type="Application">
+            <extension name="coverage" enabled="false" merge="false" runner="idea"
+                sample_coverage="true" />
+            <option name="MAIN_CLASS_NAME" />
+            <option name="VM_PARAMETERS" />
+            <option name="PROGRAM_PARAMETERS" />
+            <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+            <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+            <option name="ALTERNATIVE_JRE_PATH" />
+            <option name="ENABLE_SWING_INSPECTOR" value="false" />
+            <option name="ENV_VARIABLES" />
+            <option name="PASS_PARENT_ENVS" value="true" />
+            <module name="" />
+            <envs />
+        </configuration>
+        <configuration default="true" factoryName="JUnit" type="JUnit">
+            <extension name="coverage" enabled="false" merge="false" runner="idea"
+                sample_coverage="true" />
+            <module name="" />
+            <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+            <option name="ALTERNATIVE_JRE_PATH" />
+            <option name="PACKAGE_NAME" />
+            <option name="MAIN_CLASS_NAME" />
+            <option name="METHOD_NAME" />
+            <option name="TEST_OBJECT" value="class" />
+            <option name="VM_PARAMETERS" value="-ea" />
+            <option name="PARAMETERS" />
+            <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+            <option name="ENV_VARIABLES" />
+            <option name="PASS_PARENT_ENVS" value="true" />
+            <option name="TEST_SEARCH_SCOPE">
+                <value defaultName="singleModule" />
+            </option>
+            <envs />
+            <patterns />
+        </configuration>
+        <configuration default="true" factoryName="Plugin"
+            type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
+            <module name="" />
+            <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+            <option name="PROGRAM_PARAMETERS" />
+            <predefined_log_file enabled="true" id="idea.log" />
+        </configuration>
+        <configuration default="true" factoryName="Remote" type="Remote">
+            <option name="USE_SOCKET_TRANSPORT" value="true" />
+            <option name="SERVER_MODE" value="false" />
+            <option name="SHMEM_ADDRESS" value="javadebug" />
+            <option name="HOST" value="localhost" />
+            <option name="PORT" value="5005" />
+        </configuration>
+        <configuration default="true" factoryName="TestNG" type="TestNG">
+            <extension name="coverage" enabled="false" merge="false" runner="idea"
+                sample_coverage="true" />
+            <module name="" />
+            <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+            <option name="ALTERNATIVE_JRE_PATH" />
+            <option name="SUITE_NAME" />
+            <option name="PACKAGE_NAME" />
+            <option name="MAIN_CLASS_NAME" />
+            <option name="METHOD_NAME" />
+            <option name="GROUP_NAME" />
+            <option name="TEST_OBJECT" value="CLASS" />
+            <option name="VM_PARAMETERS" value="-ea" />
+            <option name="PARAMETERS" />
+            <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+            <option name="OUTPUT_DIRECTORY" />
+            <option name="ANNOTATION_TYPE" />
+            <option name="ENV_VARIABLES" />
+            <option name="PASS_PARENT_ENVS" value="true" />
+            <option name="TEST_SEARCH_SCOPE">
+                <value defaultName="singleModule" />
+            </option>
+            <option name="USE_DEFAULT_REPORTERS" value="false" />
+            <option name="PROPERTIES_FILE" />
+            <envs />
+            <properties />
+            <listeners />
+        </configuration>
+        <recent_temporary>
+            <list size="1">
+                <item class="java.lang.String" index="0" itemvalue="Application.Main" />
+            </list>
+        </recent_temporary>
+    </component>
+    <component name="ShelveChangesManager" show_recycled="false">
+        <option name="remove_strategy" value="false" />
+    </component>
+    <component name="TaskManager">
+        <task active="true" id="Default" summary="Default task">
+            <changelist name="Default" comment="" id="ad4452af-0817-4862-9ffe-87cf848531ce" />
+            <created>1509448698351</created>
+            <option name="number" value="Default" />
+            <option name="presentableId" value="Default" />
+            <updated>1509448698351</updated>
+        </task>
+        <servers />
+    </component>
+    <component name="ToolWindowManager">
+        <frame extended-state="0" height="806" width="1406" x="34" y="57" />
+        <editor active="true" />
+        <layout>
+            <window_info active="false" anchor="right" auto_hide="false" content_ui="tabs"
+                id="Palette" internal_type="DOCKED" order="3" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="TODO" internal_type="DOCKED" order="6" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Messages" internal_type="DOCKED" order="7" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="right" auto_hide="false" content_ui="tabs"
+                id="Palette&#9;" internal_type="DOCKED" order="3" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="left" auto_hide="false" content_ui="tabs"
+                id="Image Layers" internal_type="DOCKED" order="2" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="right" auto_hide="false" content_ui="tabs"
+                id="Capture Analysis" internal_type="DOCKED" order="3" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Event Log" internal_type="DOCKED" order="7" show_stripe_button="true"
+                sideWeight="0.5" side_tool="true" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="right" auto_hide="false" content_ui="tabs"
+                id="Maven Projects" internal_type="DOCKED" order="3" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Run" internal_type="DOCKED" order="2" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false"
+                weight="0.51476794" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Version Control" internal_type="DOCKED" order="7" show_stripe_button="false"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Terminal" internal_type="DOCKED" order="7" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="left" auto_hide="false" content_ui="tabs"
+                id="Capture Tool" internal_type="DOCKED" order="2" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="left" auto_hide="false" content_ui="tabs"
+                id="Designer" internal_type="DOCKED" order="2" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="true" anchor="left" auto_hide="false" content_ui="combo"
+                id="Project" internal_type="DOCKED" order="0" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="true"
+                weight="0.24633431" />
+            <window_info active="false" anchor="left" auto_hide="false" content_ui="tabs"
+                id="Structure" internal_type="DOCKED" order="1" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.25" />
+            <window_info active="false" anchor="right" auto_hide="false" content_ui="tabs"
+                id="Ant Build" internal_type="DOCKED" order="1" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.25" />
+            <window_info active="false" anchor="left" auto_hide="false" content_ui="tabs"
+                id="UI Designer" internal_type="DOCKED" order="2" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="right" auto_hide="false" content_ui="tabs"
+                id="Theme Preview" internal_type="DOCKED" order="3" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Debug" internal_type="DOCKED" order="3" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.3994374" />
+            <window_info active="false" anchor="left" auto_hide="false" content_ui="tabs"
+                id="Favorites" internal_type="DOCKED" order="2" show_stripe_button="true"
+                sideWeight="0.5" side_tool="true" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Cvs" internal_type="DOCKED" order="4" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.25" />
+            <window_info active="false" anchor="right" auto_hide="false" content_ui="tabs"
+                id="Palette" internal_type="DOCKED" order="3" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Message" internal_type="DOCKED" order="0" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="right" auto_hide="false" content_ui="tabs"
+                id="Commander" internal_type="DOCKED" order="0" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.4" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Event Log" internal_type="DOCKED" order="7" show_stripe_button="true"
+                sideWeight="0.5" side_tool="true" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="right" auto_hide="false" content_ui="tabs"
+                id="Maven Projects" internal_type="DOCKED" order="3" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="left" auto_hide="false" content_ui="tabs"
+                id="Capture Tool" internal_type="DOCKED" order="2" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="right" auto_hide="false" content_ui="combo"
+                id="Hierarchy" internal_type="DOCKED" order="2" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.25" />
+            <window_info active="false" anchor="left" auto_hide="false" content_ui="tabs"
+                id="Designer" internal_type="DOCKED" order="2" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="left" auto_hide="false" content_ui="tabs"
+                id="Structure" internal_type="DOCKED" order="1" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.25" />
+            <window_info active="false" anchor="right" auto_hide="false" content_ui="tabs"
+                id="Ant Build" internal_type="DOCKED" order="1" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.25" />
+            <window_info active="false" anchor="left" auto_hide="false" content_ui="tabs"
+                id="UI Designer" internal_type="DOCKED" order="2" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Debug" internal_type="DOCKED" order="3" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.3994374" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="TODO" internal_type="DOCKED" order="6" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Messages" internal_type="DOCKED" order="7" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="right" auto_hide="false" content_ui="tabs"
+                id="Palette&#9;" internal_type="DOCKED" order="3" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="left" auto_hide="false" content_ui="tabs"
+                id="Image Layers" internal_type="DOCKED" order="2" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="right" auto_hide="false" content_ui="tabs"
+                id="Capture Analysis" internal_type="DOCKED" order="3" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Inspection" internal_type="DOCKED" order="5" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.4" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Run" internal_type="DOCKED" order="2" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false"
+                weight="0.51476794" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Version Control" internal_type="DOCKED" order="7" show_stripe_button="false"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Terminal" internal_type="DOCKED" order="7" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="left" auto_hide="false" content_ui="combo"
+                id="Project" internal_type="DOCKED" order="0" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="true"
+                weight="0.24633431" />
+            <window_info active="false" anchor="bottom" auto_hide="false" content_ui="tabs"
+                id="Find" internal_type="DOCKED" order="1" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="right" auto_hide="false" content_ui="tabs"
+                id="Theme Preview" internal_type="DOCKED" order="3" show_stripe_button="true"
+                sideWeight="0.5" side_tool="false" type="DOCKED" visible="false" weight="0.33" />
+            <window_info active="false" anchor="left" auto_hide="false" content_ui="tabs"
+                id="Favorites" internal_type="DOCKED" order="2" show_stripe_button="true"
+                sideWeight="0.5" side_tool="true" type="DOCKED" visible="false" weight="0.33" />
+        </layout>
+    </component>
+    <component name="VcsContentAnnotationSettings">
+        <option name="myLimit" value="2678400000" />
+    </component>
+    <component name="XDebuggerManager">
+        <breakpoint-manager>
+            <option name="time" value="6" />
+        </breakpoint-manager>
+        <watches-manager>
+            <configuration name="Application">
+                <watch expression="InetAddress.getLocalHost().getHostAddress()" />
+            </configuration>
+        </watches-manager>
+    </component>
+    <component name="editorHistoryManager">
+        <entry file="file://$PROJECT_DIR$/src/bean/MsgBean.java" />
+        <entry file="file://$PROJECT_DIR$/src/bean/PluseBean.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/util/concurrent/ConcurrentHashMap.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/net/InetAddress.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/security/AccessController.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/security/PrivilegedExceptionAction.java" />
         <entry file="file://$PROJECT_DIR$/src/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="988">
-              <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
+            <provider editor-type-id="text-editor" selected="true">
+                <state relative-caret-position="1005">
+                    <caret column="0" lean-forward="false" line="67" selection-end-column="0"
+                        selection-end-line="67" selection-start-column="0"
+                        selection-start-line="67" />
+                    <folding>
+                        <element expanded="true" signature="imports" />
+                    </folding>
+                </state>
+            </provider>
         </entry>
-      </file>
-      <file leaf-file-name="MsgDispatcher.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/MsgDispatcher.java" />
+        <entry file="file://$PROJECT_DIR$/src/bean/MsgBean.java" />
+        <entry file="file://$PROJECT_DIR$/src/MsgDispatcher.java" />
+        <entry file="file://$PROJECT_DIR$/src/bean/PluseBean.java" />
+        <entry file="file://$PROJECT_DIR$/src/utils/PortCheck.java" />
+        <entry file="file://$PROJECT_DIR$/src/Main.java">
+            <provider editor-type-id="text-editor" selected="true">
+                <state relative-caret-position="750">
+                    <caret column="32" lean-forward="true" line="50" selection-end-column="32"
+                        selection-end-line="50" selection-start-column="32"
+                        selection-start-line="50" />
+                    <folding>
+                        <element expanded="true" signature="imports" />
+                    </folding>
+                </state>
+            </provider>
+        </entry>
+        <entry file="file://$PROJECT_DIR$/src/bean/MsgBean.java" />
+        <entry file="file://$PROJECT_DIR$/src/bean/PluseBean.java" />
+        <entry file="file://$PROJECT_DIR$/src/MessageQueue.java" />
+        <entry file="file://$PROJECT_DIR$/src/utils/PortCheck.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/security/PrivilegedExceptionAction.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/security/AccessController.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/net/Socket.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/net/Inet4Address.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/net/InetAddress.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/util/concurrent/ConcurrentHashMap.java" />
+        <entry file="file://$PROJECT_DIR$/src/Main.java">
+            <provider editor-type-id="text-editor" selected="true">
+                <state relative-caret-position="988">
+                    <caret column="0" lean-forward="false" line="67" selection-end-column="0"
+                        selection-end-line="67" selection-start-column="0"
+                        selection-start-line="67" />
+                    <folding>
+                        <element expanded="true" signature="imports" />
+                    </folding>
+                </state>
+            </provider>
+        </entry>
         <entry file="file://$PROJECT_DIR$/src/MsgDispatcher.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
+            <provider editor-type-id="text-editor" selected="true">
+                <state relative-caret-position="120">
+                    <caret column="0" lean-forward="true" line="21" selection-end-column="0"
+                        selection-end-line="21" selection-start-column="0"
+                        selection-start-line="21" />
+                    <folding>
+                        <marker date="1520309171000" expanded="true" ph="{...}"
+                            signature="9198:9935" />
+                    </folding>
+                </state>
+            </provider>
         </entry>
-      </file>
-    </leaf>
-  </component>
-  <component name="GradleLocalSettings">
-    <option name="externalProjectsViewState">
-      <projects_view />
-    </option>
-  </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/src/bean/MsgBean.java" />
-        <option value="$PROJECT_DIR$/src/MessageQueue.java" />
-        <option value="$PROJECT_DIR$/src/utils/PortCheck.java" />
-        <option value="$PROJECT_DIR$/src/Main.java" />
-        <option value="$PROJECT_DIR$/src/MsgDispatcher.java" />
-      </list>
-    </option>
-  </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="34" />
-    <option name="y" value="57" />
-    <option name="width" value="1406" />
-    <option name="height" value="806" />
-  </component>
-  <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
-      <flattenPackages />
-      <showMembers />
-      <showModules />
-      <showLibraryContents />
-      <hideEmptyPackages />
-      <abbreviatePackageNames />
-      <autoscrollToSource />
-      <autoscrollFromSource />
-      <sortByType />
-      <manualOrder />
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="socketserver" type="b2602c69:ProjectViewProjectNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="socketserver" type="b2602c69:ProjectViewProjectNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="socketserver" type="b2602c69:ProjectViewProjectNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="socketserver" type="b2602c69:ProjectViewProjectNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-              <item name="socketserver_jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="socketserver" type="b2602c69:ProjectViewProjectNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="socketserver" type="b2602c69:ProjectViewProjectNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="bean" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="socketserver" type="b2602c69:ProjectViewProjectNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
-  </component>
-  <component name="PropertiesComponent">
-    <property name="project.structure.last.edited" value="Artifacts" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-  </component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src" />
-    </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager" selected="Application.Main">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="Main" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="socketserver" />
-      <envs />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <module />
-    </configuration>
-    <configuration default="true" type="Application" factoryName="Application">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="" />
-      <envs />
-    </configuration>
-    <configuration default="true" type="JUnit" factoryName="JUnit">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-    </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
-      <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
-      <option name="PROGRAM_PARAMETERS" />
-      <predefined_log_file id="idea.log" enabled="true" />
-    </configuration>
-    <configuration default="true" type="Remote" factoryName="Remote">
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
-    </configuration>
-    <configuration default="true" type="TestNG" factoryName="TestNG">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="SUITE_NAME" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="GROUP_NAME" />
-      <option name="TEST_OBJECT" value="CLASS" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="OUTPUT_DIRECTORY" />
-      <option name="ANNOTATION_TYPE" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <option name="USE_DEFAULT_REPORTERS" value="false" />
-      <option name="PROPERTIES_FILE" />
-      <envs />
-      <properties />
-      <listeners />
-    </configuration>
-    <recent_temporary>
-      <list size="1">
-        <item index="0" class="java.lang.String" itemvalue="Application.Main" />
-      </list>
-    </recent_temporary>
-  </component>
-  <component name="ShelveChangesManager" show_recycled="false">
-    <option name="remove_strategy" value="false" />
-  </component>
-  <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="ad4452af-0817-4862-9ffe-87cf848531ce" name="Default" comment="" />
-      <created>1509448698351</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1509448698351</updated>
-    </task>
-    <servers />
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="34" y="57" width="1406" height="806" extended-state="0" />
-    <layout>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.51476794" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24633431" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3994374" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-    </layout>
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <option name="time" value="6" />
-    </breakpoint-manager>
-    <watches-manager>
-      <configuration name="Application">
-        <watch expression="InetAddress.getLocalHost().getHostAddress()" />
-      </configuration>
-    </watches-manager>
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/bean/MsgBean.java" />
-    <entry file="file://$PROJECT_DIR$/src/bean/PluseBean.java" />
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/util/concurrent/ConcurrentHashMap.java" />
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/net/InetAddress.java" />
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/security/AccessController.java" />
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/security/PrivilegedExceptionAction.java" />
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1005">
-          <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/MsgDispatcher.java" />
-    <entry file="file://$PROJECT_DIR$/src/bean/MsgBean.java" />
-    <entry file="file://$PROJECT_DIR$/src/MsgDispatcher.java" />
-    <entry file="file://$PROJECT_DIR$/src/bean/PluseBean.java" />
-    <entry file="file://$PROJECT_DIR$/src/utils/PortCheck.java" />
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="750">
-          <caret line="50" column="32" lean-forward="true" selection-start-line="50" selection-start-column="32" selection-end-line="50" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/bean/MsgBean.java" />
-    <entry file="file://$PROJECT_DIR$/src/bean/PluseBean.java" />
-    <entry file="file://$PROJECT_DIR$/src/MessageQueue.java" />
-    <entry file="file://$PROJECT_DIR$/src/utils/PortCheck.java" />
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/security/PrivilegedExceptionAction.java" />
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/security/AccessController.java" />
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/net/Socket.java" />
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/net/Inet4Address.java" />
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/net/InetAddress.java" />
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/util/concurrent/ConcurrentHashMap.java" />
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="988">
-          <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/MsgDispatcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ArtifactsStructureConfigurable.UI">
-        <settings>
-          <artifact-editor />
-          <last-edited>socketserver:jar</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-                <option value="0.5" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="FacetStructureConfigurable.UI">
-        <settings>
-          <last-edited>No facets are configured</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="GlobalLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="JdkListConfigurable.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ModuleStructureConfigurable.UI">
-        <settings>
-          <last-edited>socketserver</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-                <option value="0.6" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
-  </component>
+        <entry file="file://$PROJECT_DIR$/src/Main.java">
+            <provider editor-type-id="text-editor" selected="true">
+                <state relative-caret-position="0">
+                    <caret column="0" lean-forward="false" line="0" selection-end-column="0"
+                        selection-end-line="0" selection-start-column="0"
+                        selection-start-line="0" />
+                    <folding>
+                        <element expanded="true" signature="imports" />
+                    </folding>
+                </state>
+            </provider>
+        </entry>
+        <entry file="file://$PROJECT_DIR$/src/Main.java">
+            <provider editor-type-id="text-editor" selected="true">
+                <state relative-caret-position="0">
+                    <caret column="0" lean-forward="false" line="0" selection-end-column="0"
+                        selection-end-line="0" selection-start-column="0"
+                        selection-start-line="0" />
+                    <folding>
+                        <element expanded="true" signature="imports" />
+                    </folding>
+                </state>
+            </provider>
+        </entry>
+        <entry file="file://$PROJECT_DIR$/src/bean/MsgBean.java" />
+        <entry file="file://$PROJECT_DIR$/src/bean/PluseBean.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/util/concurrent/ConcurrentHashMap.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/net/InetAddress.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/security/AccessController.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/security/PrivilegedExceptionAction.java" />
+        <entry file="file://$PROJECT_DIR$/src/Main.java">
+            <provider editor-type-id="text-editor" selected="true">
+                <state relative-caret-position="1005">
+                    <caret column="0" lean-forward="false" line="67" selection-end-column="0"
+                        selection-end-line="67" selection-start-column="0"
+                        selection-start-line="67" />
+                    <folding>
+                        <element expanded="true" signature="imports" />
+                    </folding>
+                </state>
+            </provider>
+        </entry>
+        <entry file="file://$PROJECT_DIR$/src/MsgDispatcher.java" />
+        <entry file="file://$PROJECT_DIR$/src/bean/MsgBean.java" />
+        <entry file="file://$PROJECT_DIR$/src/MsgDispatcher.java" />
+        <entry file="file://$PROJECT_DIR$/src/bean/PluseBean.java" />
+        <entry file="file://$PROJECT_DIR$/src/utils/PortCheck.java" />
+        <entry file="file://$PROJECT_DIR$/src/Main.java">
+            <provider editor-type-id="text-editor" selected="true">
+                <state relative-caret-position="750">
+                    <caret column="32" lean-forward="true" line="50" selection-end-column="32"
+                        selection-end-line="50" selection-start-column="32"
+                        selection-start-line="50" />
+                    <folding>
+                        <element expanded="true" signature="imports" />
+                    </folding>
+                </state>
+            </provider>
+        </entry>
+        <entry file="file://$PROJECT_DIR$/src/bean/MsgBean.java" />
+        <entry file="file://$PROJECT_DIR$/src/bean/PluseBean.java" />
+        <entry file="file://$PROJECT_DIR$/src/MessageQueue.java" />
+        <entry file="file://$PROJECT_DIR$/src/utils/PortCheck.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/security/PrivilegedExceptionAction.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/security/AccessController.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/net/Socket.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/net/Inet4Address.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/net/InetAddress.java" />
+        <entry
+            file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/util/concurrent/ConcurrentHashMap.java" />
+        <entry file="file://$PROJECT_DIR$/src/Main.java">
+            <provider editor-type-id="text-editor" selected="true">
+                <state relative-caret-position="988">
+                    <caret column="0" lean-forward="false" line="67" selection-end-column="0"
+                        selection-end-line="67" selection-start-column="0"
+                        selection-start-line="67" />
+                    <folding>
+                        <element expanded="true" signature="imports" />
+                    </folding>
+                </state>
+            </provider>
+        </entry>
+        <entry file="file://$PROJECT_DIR$/src/MsgDispatcher.java">
+            <provider editor-type-id="text-editor" selected="true">
+                <state relative-caret-position="210">
+                    <caret column="0" lean-forward="true" line="27" selection-end-column="0"
+                        selection-end-line="27" selection-start-column="0"
+                        selection-start-line="27" />
+                    <folding>
+                        <marker date="1520309171000" expanded="true" ph="{...}"
+                            signature="9198:9935" />
+                    </folding>
+                </state>
+            </provider>
+        </entry>
+    </component>
+    <component name="masterDetails">
+        <states>
+            <state key="ArtifactsStructureConfigurable.UI">
+                <settings>
+                    <artifact-editor />
+                    <last-edited>socketserver:jar</last-edited>
+                    <splitter-proportions>
+                        <option name="proportions">
+                            <list>
+                                <option value="0.2" />
+                                <option value="0.5" />
+                            </list>
+                        </option>
+                    </splitter-proportions>
+                </settings>
+            </state>
+            <state key="FacetStructureConfigurable.UI">
+                <settings>
+                    <last-edited>No facets are configured</last-edited>
+                    <splitter-proportions>
+                        <option name="proportions">
+                            <list>
+                                <option value="0.2" />
+                            </list>
+                        </option>
+                    </splitter-proportions>
+                </settings>
+            </state>
+            <state key="GlobalLibrariesConfigurable.UI">
+                <settings>
+                    <splitter-proportions>
+                        <option name="proportions">
+                            <list>
+                                <option value="0.2" />
+                            </list>
+                        </option>
+                    </splitter-proportions>
+                </settings>
+            </state>
+            <state key="JdkListConfigurable.UI">
+                <settings>
+                    <last-edited>1.8</last-edited>
+                    <splitter-proportions>
+                        <option name="proportions">
+                            <list>
+                                <option value="0.2" />
+                            </list>
+                        </option>
+                    </splitter-proportions>
+                </settings>
+            </state>
+            <state key="ModuleStructureConfigurable.UI">
+                <settings>
+                    <last-edited>socketserver</last-edited>
+                    <splitter-proportions>
+                        <option name="proportions">
+                            <list>
+                                <option value="0.2" />
+                                <option value="0.6" />
+                            </list>
+                        </option>
+                    </splitter-proportions>
+                </settings>
+            </state>
+            <state key="ProjectLibrariesConfigurable.UI">
+                <settings>
+                    <splitter-proportions>
+                        <option name="proportions">
+                            <list>
+                                <option value="0.2" />
+                            </list>
+                        </option>
+                    </splitter-proportions>
+                </settings>
+            </state>
+        </states>
+    </component>
 </project>

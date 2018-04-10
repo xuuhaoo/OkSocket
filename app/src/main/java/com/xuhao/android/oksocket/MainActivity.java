@@ -158,8 +158,8 @@ public class MainActivity extends AppCompatActivity {
 
 //        mInfo = new ConnectionInfo("111.206.162.233", 8088);
         mInfo = new ConnectionInfo("117.136.38.163", 8080);
-        mManager = open(mInfo);
         mOkOptions = OkSocketOptions.getDefault();
+        mManager = open(mInfo, mOkOptions);
     }
 
     private void setListener() {
