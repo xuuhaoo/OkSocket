@@ -73,20 +73,20 @@ public class MsgDispatcher {
                             }
                         }
 
-                        if (mIsHex) {
+//                        if (mIsHex) {
                             Log.bytes("write from:" + msgBean.getFromWho() + " to all data:", msgBean.getBytes());
-                        } else {
-                            Log.i("write from:" + msgBean.getFromWho() + " to all data:"
-                                    + new String(msgBean.getBytes(), Charset.forName("utf-8")));
-                        }
+//                        } else {
+//                            Log.i("write from:" + msgBean.getFromWho() + " to all data:"
+//                                    + new String(msgBean.getBytes(), Charset.forName("utf-8")));
+//                        }
                     }
                 }
             } catch (Exception e) {
-                Log.e(e.getMessage());
+                Log.e("write error: "+e.getMessage());
             } finally {
                 outerStream.remove(mSocket.getInetAddress().getHostAddress());
                 try {
-                    Log.e(mSocket.getInetAddress().getHostAddress() + " client is disconnect");
+                    Log.e("write error:"+mSocket.getInetAddress().getHostAddress() + " client is disconnect");
                     if (mOutputStream != null) {
                         mOutputStream.close();
                     }
@@ -199,18 +199,18 @@ public class MsgDispatcher {
                     }
 
                     if (totalBuf != null) {
-                        if (mIsHex) {
+//                        if (mIsHex) {
                             Log.bytes("read from:" + mSocket.getInetAddress().getHostAddress() + " data:", totalBuf.array());
-                        } else {
-                            Log.i("read from:" + mSocket.getInetAddress().getHostAddress() + " data:"
-                                    + new String(totalBuf.array(), Charset.forName("utf-8")));
-                        }
+//                        } else {
+//                            Log.i("read from:" + mSocket.getInetAddress().getHostAddress() + " data:"
+//                                    + new String(totalBuf.array(), Charset.forName("utf-8")));
+//                        }
                         MsgBean msgBean = new MsgBean(mSocket.getInetAddress().getHostAddress(), null, totalBuf.array());
                         MessageQueue.getIns().offer(msgBean);
                     }
                 }
             } catch (Exception e) {
-                Log.e(e.getMessage());
+                Log.e("read error: "+e.getMessage());
             } finally {
                 try {
                     if (mOutputStream != null) {

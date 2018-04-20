@@ -60,7 +60,9 @@ public class ReaderImpl extends AbsReader {
             }
             if (bodyLength > 0) {
                 if (bodyLength > mOkOptions.getMaxReadDataMB() * 1024 * 1024) {
-                    throw new ReadException("we can't read data bigger than " + mOkOptions.getMaxReadDataMB() + "Mb");
+                    throw new ReadException("Server need to follow the transmission protocol.\r\n" +
+                            "Please check the server code.\r\n" +
+                            "According to the packet header data in the transport protocol, the package length is " + bodyLength + " Bytes.");
                 }
                 ByteBuffer byteBuffer = ByteBuffer.allocate(bodyLength);
                 byteBuffer.order(mOkOptions.getReadByteOrder());
@@ -103,8 +105,7 @@ public class ReaderImpl extends AbsReader {
                 }
             } else if (bodyLength < 0) {
                 throw new ReadException(
-                        "this socket input stream has some problem,wrong body length " + bodyLength
-                                + ",we'll disconnect");
+                        "this socket input stream is end of file read " + bodyLength + " ,we'll disconnect");
             }
             mStateSender.sendBroadcast(IAction.ACTION_READ_COMPLETE, originalData);
         } catch (Exception e) {

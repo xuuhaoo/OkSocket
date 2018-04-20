@@ -128,7 +128,7 @@ public class MainSimpleActivity extends AppCompatActivity {
         mReceList.setLayoutManager(manager2);
         mReceList.setAdapter(mReceLogAdapter);
 
-        mInfo = new ConnectionInfo("172.25.116.174", 8080);
+        mInfo = new ConnectionInfo("172.25.117.74", 8080);
         mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault())
                 .setReconnectionManager(new NoneReconnect())
                 .setSinglePackageBytes(1024)
