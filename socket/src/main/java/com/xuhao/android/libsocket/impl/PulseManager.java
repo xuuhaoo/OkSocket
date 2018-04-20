@@ -66,7 +66,7 @@ public class PulseManager implements IPulse {
                     if (mManager != null && mSendable != null) {
                         if (mOkOptions.getPulseFeedLoseTimes() != -1
                                 && ++mLoseTimes >= mOkOptions.getPulseFeedLoseTimes()) {
-                            mManager.disConnect(
+                            mManager.disconnect(
                                     new DogDeadException("you need feed dog on time,otherwise he will die"));
                         } else {
                             mManager.send(mSendable);

@@ -128,9 +128,10 @@ public class MainSimpleActivity extends AppCompatActivity {
         mReceList.setLayoutManager(manager2);
         mReceList.setAdapter(mReceLogAdapter);
 
-        mInfo = new ConnectionInfo("104.238.184.237", 8080);
+        mInfo = new ConnectionInfo("172.25.116.174", 8080);
         mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault())
                 .setReconnectionManager(new NoneReconnect())
+                .setSinglePackageBytes(1024)
                 .build();
         mManager = open(mInfo, mOkOptions);
     }
@@ -147,7 +148,7 @@ public class MainSimpleActivity extends AppCompatActivity {
                     mManager.connect();
                 } else {
                     mConnect.setText("DisConnecting");
-                    mManager.disConnect();
+                    mManager.disconnect();
                 }
             }
         });
@@ -165,8 +166,10 @@ public class MainSimpleActivity extends AppCompatActivity {
                         return;
                     }
                     MsgDataBean msgDataBean = new MsgDataBean(msg);
-                    mManager.send(msgDataBean);
-                    mSendET.setText("");
+                    for (int i = 0; i < 1000; i++) {
+                        mManager.send(msgDataBean);
+                    }
+//                    mSendET.setText("");
                 }
             }
         });
@@ -197,7 +200,7 @@ public class MainSimpleActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (mManager != null) {
-            mManager.disConnect();
+            mManager.disconnect();
         }
     }
 }

@@ -35,7 +35,7 @@ import static com.xuhao.android.libsocket.sdk.connection.interfacies.IAction.ACT
  * Created by xuhao on 2017/5/17.
  */
 
-public abstract class AbsConnectionManager implements IConnectionManager, IStateSender {
+public abstract class AbsConnectionManager implements IConnectionManager {
     /**
      * 上下文
      */
@@ -45,163 +45,43 @@ public abstract class AbsConnectionManager implements IConnectionManager, IState
      */
     protected ConnectionInfo mConnectionInfo;
     /**
-     * 每个连接一个广播管理器不会串
-     */
-    private SocketBroadcastManager mSocketBroadcastManager;
-    /**
-     * 除了广播还支持回调
-     */
-    private HashMap<ISocketActionListener, BroadcastReceiver> mResponseHandlerMap = new HashMap<>();
-    /**
      * 连接信息switch监听器
      */
     private IConnectionSwitchListener mConnectionSwitchListener;
+    /**
+     * 状态机
+     */
+    protected ActionDispatcher mActionDispatcher;
 
     public AbsConnectionManager(Context context, ConnectionInfo info) {
         mContext = context;
         mConnectionInfo = info;
-        mSocketBroadcastManager = new SocketBroadcastManager(context.getApplicationContext());
+        mActionDispatcher = new ActionDispatcher(mContext, info);
     }
 
     public void registerReceiver(BroadcastReceiver broadcastReceiver, String... action) {
-        IntentFilter intentFilter = new IntentFilter();
-        if (action != null) {
-            for (int i = 0; i < action.length; i++) {
-                intentFilter.addAction(action[i]);
-            }
-        }
-        mSocketBroadcastManager.registerReceiver(broadcastReceiver, intentFilter);
+        mActionDispatcher.registerReceiver(broadcastReceiver, action);
     }
 
     public void registerReceiver(final ISocketActionListener socketResponseHandler) {
-        if (socketResponseHandler != null) {
-            if (!mResponseHandlerMap.containsKey(socketResponseHandler)) {
-                BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        dispatchActionToListener(context, intent, socketResponseHandler);
-                    }
-                };
-                registerReceiver(broadcastReceiver,
-                        ACTION_CONNECTION_FAILED,
-                        ACTION_CONNECTION_SUCCESS,
-                        ACTION_DISCONNECTION,
-                        ACTION_READ_COMPLETE,
-                        ACTION_READ_THREAD_SHUTDOWN,
-                        ACTION_READ_THREAD_START,
-                        ACTION_WRITE_COMPLETE,
-                        ACTION_WRITE_THREAD_SHUTDOWN,
-                        ACTION_WRITE_THREAD_START,
-                        ACTION_PULSE_REQUEST);
-                mResponseHandlerMap.put(socketResponseHandler, broadcastReceiver);
-            }
-        }
+        mActionDispatcher.registerReceiver(socketResponseHandler);
     }
 
-    /**
-     * 分发收到的响应
-     *
-     * @param context
-     * @param intent
-     * @param responseHandler
-     */
-    private void dispatchActionToListener(Context context, Intent intent,
-            ISocketActionListener responseHandler) {
-        String action = intent.getAction();
-        switch (action) {
-            case ACTION_CONNECTION_SUCCESS: {
-                try {
-                    responseHandler.onSocketConnectionSuccess(context, mConnectionInfo, action);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-            case ACTION_CONNECTION_FAILED: {
-                try {
-                    Exception exception = (Exception) intent.getSerializableExtra(ACTION_DATA);
-                    responseHandler.onSocketConnectionFailed(context, mConnectionInfo, action, exception);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-            case ACTION_DISCONNECTION: {
-                try {
-                    Exception exception = (Exception) intent.getSerializableExtra(ACTION_DATA);
-                    responseHandler.onSocketDisconnection(context, mConnectionInfo, action, exception);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-            case ACTION_READ_COMPLETE: {
-                try {
-                    OriginalData data = (OriginalData) intent.getSerializableExtra(ACTION_DATA);
-                    responseHandler.onSocketReadResponse(context, mConnectionInfo, action, data);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-            case ACTION_READ_THREAD_START:
-            case ACTION_WRITE_THREAD_START: {
-                try {
-                    responseHandler.onSocketIOThreadStart(context, action);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-            case ACTION_WRITE_COMPLETE: {
-                try {
-                    ISendable sendable = (ISendable) intent.getSerializableExtra(ACTION_DATA);
-                    responseHandler.onSocketWriteResponse(context, mConnectionInfo, action, sendable);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-            case ACTION_WRITE_THREAD_SHUTDOWN:
-            case ACTION_READ_THREAD_SHUTDOWN: {
-                try {
-                    Exception exception = (Exception) intent.getSerializableExtra(ACTION_DATA);
-                    responseHandler.onSocketIOThreadShutdown(context, action, exception);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-            case ACTION_PULSE_REQUEST: {
-                try {
-                    IPulseSendable sendable = (IPulseSendable) intent.getSerializableExtra(ACTION_DATA);
-                    responseHandler.onPulseSend(context, mConnectionInfo, sendable);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-        }
+
+    public void unRegisterReceiver(BroadcastReceiver broadcastReceiver) {
+        mActionDispatcher.unRegisterReceiver(broadcastReceiver);
     }
 
-    public synchronized void unRegisterReceiver(BroadcastReceiver broadcastReceiver) {
-        mSocketBroadcastManager.unregisterReceiver(broadcastReceiver);
+    public void unRegisterReceiver(ISocketActionListener socketResponseHandler) {
+        mActionDispatcher.unRegisterReceiver(socketResponseHandler);
     }
 
-    public synchronized void unRegisterReceiver(ISocketActionListener socketResponseHandler) {
-        BroadcastReceiver broadcastReceiver = mResponseHandlerMap.get(socketResponseHandler);
-        mResponseHandlerMap.remove(socketResponseHandler);
-        unRegisterReceiver(broadcastReceiver);
+    protected void sendBroadcast(String action, Serializable serializable) {
+        mActionDispatcher.sendBroadcast(action, serializable);
     }
 
-    public void sendBroadcast(String action, Serializable serializable) {
-        Intent intent = new Intent(action);
-        intent.putExtra(ACTION_DATA, serializable);
-        mSocketBroadcastManager.sendBroadcast(intent);
-    }
-
-    public void sendBroadcast(String action) {
-        sendBroadcast(action, null);
+    protected void sendBroadcast(String action) {
+        mActionDispatcher.sendBroadcast(action);
     }
 
     @Override

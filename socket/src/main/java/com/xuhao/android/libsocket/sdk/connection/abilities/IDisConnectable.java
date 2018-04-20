@@ -5,7 +5,7 @@ package com.xuhao.android.libsocket.sdk.connection.abilities;
  */
 
 public interface IDisConnectable {
-    void disConnect(Exception e);
+    void disconnect(Exception e);
 
-    void disConnect();
+    void disconnect();
 }

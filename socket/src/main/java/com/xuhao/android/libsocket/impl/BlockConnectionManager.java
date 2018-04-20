@@ -1,8 +1,6 @@
 package com.xuhao.android.libsocket.impl;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -20,6 +18,7 @@ import com.xuhao.android.libsocket.sdk.connection.AbsReconnectionManager;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 import com.xuhao.android.libsocket.sdk.connection.interfacies.IAction;
 import com.xuhao.android.libsocket.sdk.protocol.DefaultX509ProtocolTrustManager;
+import com.xuhao.android.libsocket.utils.NetUtils;
 import com.xuhao.android.libsocket.utils.SL;
 
 import java.io.IOException;
@@ -67,15 +66,15 @@ public class BlockConnectionManager extends AbsConnectionManager {
     /**
      * 能否连接
      */
-    private boolean canConnect = true;
+    private volatile boolean canConnect = true;
     /**
      * 是否正在断开
      */
-    private boolean isDisconnecting = false;
+    private volatile boolean isDisconnecting = false;
     /**
      * 是否连接超时
      */
-    private boolean isConnectTimeout = false;
+    private volatile boolean isConnectTimeout = false;
     /**
      * 连接超时处理Task
      */
@@ -138,10 +137,12 @@ public class BlockConnectionManager extends AbsConnectionManager {
             mReconnectionManager.attach(mContext, this);
         }
         mSocket = getSocketByConfig();
+
         mConnectionTimeout
                 .sendMessageDelayed(mConnectionTimeout.obtainMessage(0), mOptions.getConnectTimeoutSecond() * 1000);
-        mConnectThread = new ConnectionThread(
-                mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " connect thread");
+
+        String info = mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort();
+        mConnectThread = new ConnectionThread(" Connect thread for " + info);
         mConnectThread.setDaemon(true);
         mConnectThread.start();
     }
@@ -199,20 +200,21 @@ public class BlockConnectionManager extends AbsConnectionManager {
                 if (!canConnect) {
                     return;
                 }
+                canConnect = false;
                 isConnectTimeout = false;
-                SL.i("开始连接 " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " Socket服务器");
+                SL.i("Start connect: " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " socket server...");
                 mSocket.connect(new InetSocketAddress(mConnectionInfo.getIp(), mConnectionInfo.getPort()));
                 //关闭Nagle算法,无论TCP数据报大小,立即发送
                 mSocket.setTcpNoDelay(true);
                 mConnectionTimeout.removeCallbacksAndMessages(null);
                 resolveManager();
                 sendBroadcast(IAction.ACTION_CONNECTION_SUCCESS);
-                SL.i("Socket服务器连接成功 " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort());
+                SL.i("Socket server: " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " connect successful!");
             } catch (Exception e) {
                 if (isConnectTimeout) {//超时后不处理Socket异常
                     return;
                 }
-                SL.i("连接 " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " 出现异常:" + e.getMessage());
+                SL.e("Socket server " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " connect failed! error msg:" + e.getMessage());
                 mConnectionTimeout.removeCallbacksAndMessages(null);
                 sendBroadcast(IAction.ACTION_CONNECTION_FAILED, new UnconnectException(e));
                 canConnect = true;
@@ -223,23 +225,16 @@ public class BlockConnectionManager extends AbsConnectionManager {
     private void resolveManager() throws IOException {
         mPulseManager = new PulseManager(this, mOptions);
 
-        mManager = new IOManager(mContext, mSocket.getInputStream(), mSocket.getOutputStream(), mOptions,
-                BlockConnectionManager.this);
+        mManager = new IOManager(mContext,
+                mSocket.getInputStream(),
+                mSocket.getOutputStream(),
+                mOptions,
+                mActionDispatcher);
         mManager.resolve();
     }
 
-    private boolean netIsAvailable() {
-        ConnectivityManager manager = (ConnectivityManager) mContext.getApplicationContext()
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (manager == null) {
-            return false;
-        }
-        NetworkInfo networkinfo = manager.getActiveNetworkInfo();
-        return !(networkinfo == null || !networkinfo.isAvailable());
-    }
-
     @Override
-    public synchronized void disConnect(Exception exception) {
+    public synchronized void disconnect(Exception exception) {
         if (isDisconnecting) {
             return;
         }
@@ -255,47 +250,68 @@ public class BlockConnectionManager extends AbsConnectionManager {
             mPulseManager.dead();
             mPulseManager = null;
         }
-        if (mSocket != null) {
-            try {
-                if (mSocket.getInputStream() != null) {
-                    mSocket.getInputStream().close();
-                }
-            } catch (Exception e) {
-            }
-            try {
-                if (mSocket.getOutputStream() != null) {
-                    mSocket.getOutputStream().close();
-                }
-            } catch (Exception e) {
-            }
 
-            try {
-                mSocket.close();
-            } catch (IOException e) {
-            }
-            mSocket = null;
-        }
-        if (mManager != null) {
-            mManager.close();
-        }
-
-        if (!(exception instanceof UnconnectException)) {
-            sendBroadcast(IAction.ACTION_DISCONNECTION, exception);
-        }
-
-        if (mActionHandler != null) {
-            mActionHandler.detach(BlockConnectionManager.this);
-            mActionHandler = null;
-        }
-        if (exception != null) {
-            exception.printStackTrace();
-        }
-        canConnect = true;
+        String info = mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort();
+        DisconnectThread thread = new DisconnectThread(exception, "Disconnect Thread for " + info);
+        thread.setDaemon(true);
+        thread.start();
     }
 
+    private class DisconnectThread extends Thread {
+        private Exception mException;
+
+        public DisconnectThread(Exception exception, String name) {
+            super(name);
+            mException = exception;
+        }
+
+        @Override
+        public void run() {
+            if (mSocket != null) {
+                try {
+                    if (mSocket.getInputStream() != null) {
+                        mSocket.getInputStream().close();
+                    }
+                } catch (Exception e) {
+                }
+                try {
+                    if (mSocket.getOutputStream() != null) {
+                        mSocket.getOutputStream().close();
+                    }
+                } catch (Exception e) {
+                }
+
+                try {
+                    mSocket.close();
+                } catch (IOException e) {
+                }
+                mSocket = null;
+            }
+            if (mManager != null) {
+                mManager.close();
+            }
+
+            if (!(mException instanceof UnconnectException)) {
+                sendBroadcast(IAction.ACTION_DISCONNECTION, mException);
+            }
+
+            if (mActionHandler != null) {
+                mActionHandler.detach(BlockConnectionManager.this);
+                mActionHandler = null;
+            }
+            if (mException != null) {
+                mException.printStackTrace();
+            }
+
+            canConnect = true;
+            isDisconnecting = false;
+        }
+    }
+
+
     @Override
-    public void disConnect() {
-        disConnect(null);
+    public void disconnect() {
+        disconnect(null);
     }
 
     @Override
@@ -333,7 +349,12 @@ public class BlockConnectionManager extends AbsConnectionManager {
             return false;
         }
 
-        return mSocket.isConnected() && !mSocket.isClosed() && netIsAvailable();
+        return mSocket.isConnected() && !mSocket.isClosed() && NetUtils.netIsAvailable(mContext);
+    }
+
+    @Override
+    public boolean isDisconnecting() {
+        return isDisconnecting;
     }
 
     @Override

@@ -47,7 +47,7 @@ public class EnvironmentalManager {
                     mPurifyList.clear();
                     List<IConnectionManager> list = mHolder.getList();
                     for (IConnectionManager manager : list) {
-                        manager.disConnect(new PurifyException("environmental disconnect"));
+                        manager.disconnect(new PurifyException("environmental disconnect"));
                     }
                     mPurifyList.addAll(list);
                     break;

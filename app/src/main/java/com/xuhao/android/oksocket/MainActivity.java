@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 ConnectionInfo redirectInfo = new ConnectionInfo(ip, port);
                 redirectInfo.setBackupInfo(mInfo.getBackupInfo());
                 mManager.getReconnectionManager().addIgnoreException(RedirectException.class);
-                mManager.disConnect(new RedirectException(redirectInfo));
+                mManager.disconnect(new RedirectException(redirectInfo));
             } else if (cmd == 14) {//心跳
                 mManager.getPulseManager().feed();
             }
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                     mManager.connect();
                 } else {
                     mConnect.setText("DisConnecting");
-                    mManager.disConnect();
+                    mManager.disconnect();
                 }
             }
         });
@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (mManager != null) {
-            mManager.disConnect();
+            mManager.disconnect();
         }
     }
 
