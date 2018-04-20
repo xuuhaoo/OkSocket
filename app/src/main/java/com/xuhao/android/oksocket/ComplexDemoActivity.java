@@ -82,7 +82,6 @@ public class ComplexDemoActivity extends AppCompatActivity {
                     logSend("异常断开:" + e.getMessage());
                 }
             } else {
-                Toast.makeText(context, "正常断开", LENGTH_SHORT).show();
                 logSend("正常断开");
             }
             mConnect.setText("Connect");
