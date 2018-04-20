@@ -30,7 +30,7 @@ public class EnvironmentalManager {
      * 后台存活时间(毫秒)
      * -1为永久存活,取值范围[1000,Long.MAX]
      */
-    private long mBackgroundLiveMills;
+    private long mBackgroundLiveMills = -1;
 
     private ManagerHolder mHolder;
 
@@ -73,6 +73,7 @@ public class EnvironmentalManager {
         isInit = true;
         this.mHolder = holder;
         ActivityStack.addStackChangedListener(mChangedAdapter);
+        mBackgroundLiveMills = -1;
     }
 
     private ActivityStack.OnStackChangedAdapter mChangedAdapter = new ActivityStack.OnStackChangedAdapter() {

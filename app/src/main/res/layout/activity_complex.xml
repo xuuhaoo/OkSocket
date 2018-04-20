@@ -118,7 +118,7 @@
                         android:id="@+id/bg_live_minute"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="send size"
+                        android:hint="set bg live mills"
                         android:inputType="number"
                         android:lines="1"
                         android:maxLines="1" />
@@ -131,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:text="set size" />
+                    android:text="set bg mills" />
             </LinearLayout>
 
             <LinearLayout
