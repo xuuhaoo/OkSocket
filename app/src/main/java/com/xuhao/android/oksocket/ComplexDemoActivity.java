@@ -31,7 +31,7 @@ import java.nio.charset.Charset;
 import static android.widget.Toast.LENGTH_SHORT;
 import static com.xuhao.android.libsocket.sdk.OkSocket.open;
 
-public class MainActivity extends AppCompatActivity {
+public class ComplexDemoActivity extends AppCompatActivity {
 
     private ConnectionInfo mInfo;
 
@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     private Button mUnSub;
     private EditText mSendSizeET;
     private Button mSetSize;
-    private OkSocketOptions mOkOptions;
     private EditText mFrequency;
     private Button mSetFrequency;
     private Button mMenualPulse;
@@ -127,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_complex);
         findViews();
         initData();
         setListener();
@@ -156,10 +155,8 @@ public class MainActivity extends AppCompatActivity {
         mReceList.setLayoutManager(manager2);
         mReceList.setAdapter(mReceLogAdapter);
 
-//        mInfo = new ConnectionInfo("111.206.162.233", 8088);
         mInfo = new ConnectionInfo("117.136.38.163", 8080);
-        mOkOptions = OkSocketOptions.getDefault();
-        mManager = open(mInfo, mOkOptions);
+        mManager = open(mInfo).option(OkSocketOptions.getDefault());
     }
 
     private void setListener() {
@@ -225,9 +222,10 @@ public class MainActivity extends AppCompatActivity {
                 int size = 0;
                 try {
                     size = Integer.parseInt(sizestr);
-                    mOkOptions = new OkSocketOptions.Builder(mOkOptions)
-                            .setSinglePackageBytes(size).build();
-                    mManager.option(mOkOptions);
+                    OkSocketOptions okOptions = new OkSocketOptions.Builder(mManager.getOption())
+                            .setWritePackageBytes(size)
+                            .build();
+                    mManager.option(okOptions);
                 } catch (NumberFormatException e) {
                 }
             }
@@ -242,9 +240,10 @@ public class MainActivity extends AppCompatActivity {
                 long frequency = 0;
                 try {
                     frequency = Long.parseLong(timeoutstr);
-                    mOkOptions = new OkSocketOptions.Builder(mOkOptions)
-                            .setPulseFrequency(frequency).build();
-                    mManager.option(mOkOptions);
+                    OkSocketOptions okOptions = new OkSocketOptions.Builder(mManager.getOption())
+                            .setPulseFrequency(frequency)
+                            .build();
+                    mManager.option(okOptions);
                 } catch (NumberFormatException e) {
                 }
             }

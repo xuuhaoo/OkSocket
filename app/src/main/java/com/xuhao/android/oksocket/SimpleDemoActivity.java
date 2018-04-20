@@ -32,7 +32,7 @@ import static com.xuhao.android.libsocket.sdk.OkSocket.open;
  * Created by Tony on 2017/10/24.
  */
 
-public class MainSimpleActivity extends AppCompatActivity {
+public class SimpleDemoActivity extends AppCompatActivity {
     private ConnectionInfo mInfo;
 
     private Button mConnect;
@@ -99,7 +99,7 @@ public class MainSimpleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simple_main);
+        setContentView(R.layout.activity_simple);
         findViews();
         initData();
         setListener();
@@ -129,11 +129,11 @@ public class MainSimpleActivity extends AppCompatActivity {
         mReceList.setAdapter(mReceLogAdapter);
 
         mInfo = new ConnectionInfo("172.25.117.74", 8080);
-        mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault())
+        mOkOptions = new OkSocketOptions.Builder()
                 .setReconnectionManager(new NoneReconnect())
-                .setSinglePackageBytes(1024)
+                .setWritePackageBytes(1024)
                 .build();
-        mManager = open(mInfo, mOkOptions);
+        mManager = open(mInfo).option(mOkOptions);
     }
 
     private void setListener() {

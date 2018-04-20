@@ -33,6 +33,15 @@ public class ManagerHolder {
         mConnectionManagerMap.clear();
     }
 
+    public IConnectionManager get(ConnectionInfo info, Context context) {
+        IConnectionManager manager = mConnectionManagerMap.get(info);
+        if (manager == null) {
+            return get(info, context, OkSocketOptions.getDefault());
+        } else {
+            return get(info, context, manager.getOption());
+        }
+    }
+
     public IConnectionManager get(ConnectionInfo info, Context context, OkSocketOptions okOptions) {
         IConnectionManager manager = mConnectionManagerMap.get(info);
         if (manager != null) {

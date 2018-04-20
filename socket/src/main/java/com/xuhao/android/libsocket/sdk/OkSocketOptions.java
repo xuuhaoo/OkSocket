@@ -48,11 +48,11 @@ public class OkSocketOptions {
     /**
      * 发送给服务器时单个数据包的总长度
      */
-    private int mSendSinglePackageBytes;
+    private int mWritePackageBytes;
     /**
      * 从服务器读取时单次读取的缓存字节长度,数值越大,读取效率越高.但是相应的系统消耗将越大
      */
-    private int mReadSingleTimeBufferBytes;
+    private int mReadPackageBytes;
     /**
      * 脉搏频率单位是毫秒
      */
@@ -124,11 +124,11 @@ public class OkSocketOptions {
         /**
          * 发送给服务器时单个数据包的总长度
          */
-        private int mSinglePackageBytes;
+        private int mWritePackageBytes;
         /**
          * 从服务器读取时单次读取的缓存字节长度,数值越大,读取效率越高.但是相应的系统消耗将越大
          */
-        private int mReadSingleTimeBufferBytes;
+        private int mReadPackageBytes;
         /**
          * 写入Socket管道中给服务器的字节序
          */
@@ -170,8 +170,8 @@ public class OkSocketOptions {
             mHeaderProtocol = okOptions.mHeaderProtocol;
             mBackgroundLiveMinute = okOptions.mBackgroundLiveMinute;
             mConnectTimeoutSecond = okOptions.mConnectTimeoutSecond;
-            mSinglePackageBytes = okOptions.mSendSinglePackageBytes;
-            mReadSingleTimeBufferBytes = okOptions.mReadSingleTimeBufferBytes;
+            mWritePackageBytes = okOptions.mWritePackageBytes;
+            mReadPackageBytes = okOptions.mReadPackageBytes;
             mWriteOrder = okOptions.mWriteOrder;
             mReadByteOrder = okOptions.mReadByteOrder;
             isConnectionHolden = okOptions.isConnectionHolden;
@@ -230,9 +230,36 @@ public class OkSocketOptions {
             return this;
         }
 
-        public Builder setReadSingleTimeBufferBytes(int readSingleTimeBufferBytes) {
-            mReadSingleTimeBufferBytes = readSingleTimeBufferBytes;
+        public Builder setWritePackageBytes(int writePackageBytes) {
+            mWritePackageBytes = writePackageBytes;
             return this;
+        }
+
+        public Builder setReadPackageBytes(int readPackageBytes) {
+            mReadPackageBytes = readPackageBytes;
+            return this;
+        }
+
+        /**
+         * see {@link OkSocketOptions.Builder#setReadPackageBytes(int)}
+         *
+         * @param readSingleTimeBufferBytes
+         * @return
+         */
+        @Deprecated
+        public Builder setReadSingleTimeBufferBytes(int readSingleTimeBufferBytes) {
+            return setReadPackageBytes(readSingleTimeBufferBytes);
+        }
+
+        /**
+         * see {@link OkSocketOptions.Builder#setWritePackageBytes(int)}
+         *
+         * @param singlePackageBytes
+         * @return
+         */
+        @Deprecated
+        public Builder setSinglePackageBytes(int singlePackageBytes) {
+            return setWritePackageBytes(singlePackageBytes);
         }
 
         public Builder setConnectTimeoutSecond(int connectTimeoutSecond) {
@@ -240,10 +267,6 @@ public class OkSocketOptions {
             return this;
         }
 
-        public Builder setSinglePackageBytes(int singlePackageBytes) {
-            mSinglePackageBytes = singlePackageBytes;
-            return this;
-        }
 
         public Builder setReconnectionManager(
                 AbsReconnectionManager reconnectionManager) {
@@ -260,8 +283,8 @@ public class OkSocketOptions {
             okOptions.mHeaderProtocol = mHeaderProtocol;
             okOptions.mBackgroundLiveMinute = mBackgroundLiveMinute;
             okOptions.mConnectTimeoutSecond = mConnectTimeoutSecond;
-            okOptions.mSendSinglePackageBytes = mSinglePackageBytes;
-            okOptions.mReadSingleTimeBufferBytes = mReadSingleTimeBufferBytes;
+            okOptions.mWritePackageBytes = mWritePackageBytes;
+            okOptions.mReadPackageBytes = mReadPackageBytes;
             okOptions.mWriteOrder = mWriteOrder;
             okOptions.mReadByteOrder = mReadByteOrder;
             okOptions.isConnectionHolden = isConnectionHolden;
@@ -289,12 +312,12 @@ public class OkSocketOptions {
         return mSSLConfig;
     }
 
-    public int getSendSinglePackageBytes() {
-        return mSendSinglePackageBytes;
+    public int getWritePackageBytes() {
+        return mWritePackageBytes;
     }
 
-    public int getReadSingleTimeBufferBytes() {
-        return mReadSingleTimeBufferBytes;
+    public int getReadPackageBytes() {
+        return mReadPackageBytes;
     }
 
     public int getConnectTimeoutSecond() {
@@ -342,8 +365,8 @@ public class OkSocketOptions {
         okOptions.mHeaderProtocol = new DefaultNormalHeaderProtocol();
         okOptions.mMaxReadDataMB = 10;
         okOptions.mConnectTimeoutSecond = 3;
-        okOptions.mSendSinglePackageBytes = 50;
-        okOptions.mReadSingleTimeBufferBytes = 50;
+        okOptions.mWritePackageBytes = 100;
+        okOptions.mReadPackageBytes = 50;
         okOptions.mReadByteOrder = ByteOrder.BIG_ENDIAN;
         okOptions.mWriteOrder = ByteOrder.BIG_ENDIAN;
         okOptions.isConnectionHolden = true;

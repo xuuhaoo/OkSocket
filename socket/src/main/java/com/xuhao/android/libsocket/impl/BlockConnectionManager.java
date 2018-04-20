@@ -285,13 +285,12 @@ public class BlockConnectionManager extends AbsConnectionManager {
                     mSocket.close();
                 } catch (IOException e) {
                 }
-                mSocket = null;
             }
             if (mManager != null) {
                 mManager.close();
             }
 
-            if (!(mException instanceof UnconnectException)) {
+            if (!(mException instanceof UnconnectException) && mSocket != null) {
                 sendBroadcast(IAction.ACTION_DISCONNECTION, mException);
             }
 
@@ -302,7 +301,7 @@ public class BlockConnectionManager extends AbsConnectionManager {
             if (mException != null) {
                 mException.printStackTrace();
             }
-
+            mSocket = null;
             canConnect = true;
             isDisconnecting = false;
         }

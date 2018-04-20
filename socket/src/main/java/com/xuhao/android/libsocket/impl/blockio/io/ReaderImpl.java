@@ -60,8 +60,8 @@ public class ReaderImpl extends AbsReader {
             }
             if (bodyLength > 0) {
                 if (bodyLength > mOkOptions.getMaxReadDataMB() * 1024 * 1024) {
-                    throw new ReadException("Server need to follow the transmission protocol.\r\n" +
-                            "Please check the server code.\r\n" +
+                    throw new ReadException("Need to follow the transmission protocol.\r\n" +
+                            "Please check the client/server code.\r\n" +
                             "According to the packet header data in the transport protocol, the package length is " + bodyLength + " Bytes.");
                 }
                 ByteBuffer byteBuffer = ByteBuffer.allocate(bodyLength);
@@ -117,7 +117,7 @@ public class ReaderImpl extends AbsReader {
     private void readBodyFromChannel(ByteBuffer byteBuffer) throws IOException {
         while (byteBuffer.hasRemaining()) {
             try {
-                byte[] bufArray = new byte[mOkOptions.getReadSingleTimeBufferBytes()];
+                byte[] bufArray = new byte[mOkOptions.getReadPackageBytes()];
                 int len = mInputStream.read(bufArray);
                 if (len < 0) {
                     break;

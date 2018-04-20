@@ -46,7 +46,7 @@ public class WriterImpl implements IWriter {
         if (sendable != null) {
             try {
                 byte[] sendBytes = sendable.parse();
-                int packageSize = mOkOptions.getSendSinglePackageBytes();
+                int packageSize = mOkOptions.getWritePackageBytes();
                 int remainingCount = sendBytes.length;
                 ByteBuffer writeBuf = ByteBuffer.allocate(packageSize);
                 writeBuf.order(mOkOptions.getWriteOrder());

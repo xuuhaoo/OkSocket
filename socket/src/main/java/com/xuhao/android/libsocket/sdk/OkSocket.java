@@ -46,11 +46,37 @@ public class OkSocket {
     }
 
     /**
-     * 开启一个socket通讯通道
+     * 开启一个socket通讯通道,参配为默认参配
      *
      * @param connectInfo 连接信息{@link ConnectionInfo}
-     * @param okOptions 连接参配{@link OkSocketOptions}
      * @return 该参数的连接管理器 {@link IConnectionManager} 连接参数仅作为配置该通道的参配,不影响全局参配
+     */
+    public static IConnectionManager open(ConnectionInfo connectInfo) {
+        assertIsInit();
+        return holder.get(connectInfo, app);
+    }
+
+    /**
+     * 开启一个socket通讯通道,参配为默认参配
+     *
+     * @param ip   需要连接的主机IPV4地址
+     * @param port 需要连接的主机开放的Socket端口号
+     * @return 该参数的连接管理器 {@link IConnectionManager} 连接参数仅作为配置该通道的参配,不影响全局参配
+     */
+    public static IConnectionManager open(String ip, int port) {
+        assertIsInit();
+        ConnectionInfo info = new ConnectionInfo(ip, port);
+        return holder.get(info, app);
+    }
+
+    /**
+     * 开启一个socket通讯通道
+     * Deprecated please use {@link OkSocket#open(ConnectionInfo)}@{@link IConnectionManager#option(OkSocketOptions)}
+     *
+     * @param connectInfo 连接信息{@link ConnectionInfo}
+     * @param okOptions   连接参配{@link OkSocketOptions}
+     * @return 该参数的连接管理器 {@link IConnectionManager} 连接参数仅作为配置该通道的参配,不影响全局参配
+     * @deprecated
      */
     public static IConnectionManager open(ConnectionInfo connectInfo, OkSocketOptions okOptions) {
         assertIsInit();
@@ -59,11 +85,13 @@ public class OkSocket {
 
     /**
      * 开启一个socket通讯通道
+     * Deprecated please use {@link OkSocket#open(String, int)}@{@link IConnectionManager#option(OkSocketOptions)}
      *
-     * @param ip 需要连接的主机IPV4地址
-     * @param port 需要连接的主机开放的Socket端口号
+     * @param ip        需要连接的主机IPV4地址
+     * @param port      需要连接的主机开放的Socket端口号
      * @param okOptions 连接参配{@link OkSocketOptions}
      * @return 该参数的连接管理器 {@link IConnectionManager}
+     * @deprecated
      */
     public static IConnectionManager open(String ip, int port, OkSocketOptions okOptions) {
         assertIsInit();
