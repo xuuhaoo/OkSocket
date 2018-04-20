@@ -9,6 +9,7 @@ import android.os.Message;
 import com.xuhao.android.libsocket.impl.exceptions.PurifyException;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
+import com.xuhao.android.libsocket.utils.ActivityStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,23 +20,25 @@ import java.util.List;
  */
 
 public class EnvironmentalManager {
+    public static final long DELAY_CONNECT_MILLS = 1000;
+
     private static class InstanceHolder {
         private static EnvironmentalManager INSTANCE = new EnvironmentalManager();
     }
 
-    private Application mApplication;
+    /**
+     * 后台存活时间(毫秒)
+     * -1为永久存活,取值范围[1000,Long.MAX]
+     */
+    private long mBackgroundLiveMills;
 
     private ManagerHolder mHolder;
 
     private boolean isInit;
 
-    private OkSocketOptions mOkOptions;
-
     private List<IConnectionManager> mPurifyList = new ArrayList<>();
 
     private boolean isPurify = false;
-
-    private int mCount = 0;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -63,74 +66,53 @@ public class EnvironmentalManager {
         return InstanceHolder.INSTANCE;
     }
 
-    public void init(Application application, ManagerHolder holder, OkSocketOptions options) {
+    public void init(ManagerHolder holder) {
         if (isInit) {
             return;
         }
         isInit = true;
-        this.mApplication = application;
         this.mHolder = holder;
-        this.mOkOptions = options;
-        this.mApplication.registerActivityLifecycleCallbacks(new OkSocketAppLifecycleListener());
+        ActivityStack.addStackChangedListener(mChangedAdapter);
     }
 
-    private class OkSocketAppLifecycleListener implements Application.ActivityLifecycleCallbacks {
-
+    private ActivityStack.OnStackChangedAdapter mChangedAdapter = new ActivityStack.OnStackChangedAdapter() {
         @Override
-        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+        public void onAppPause() {
+            mHandler.removeCallbacksAndMessages(null);
+            if (mBackgroundLiveMills > 0) {
+                long backLiveMills = mBackgroundLiveMills;
+                backLiveMills = backLiveMills < DELAY_CONNECT_MILLS ? DELAY_CONNECT_MILLS : backLiveMills;
+                mHandler.sendEmptyMessageDelayed(0, backLiveMills);
+            }
         }
 
         @Override
-        public void onActivityStarted(Activity activity) {
-            mCount++;
-        }
-
-        @Override
-        public void onActivityResumed(Activity activity) {
-            mHandler.removeMessages(0);
+        public void onAppResume() {
+            mHandler.removeCallbacksAndMessages(null);
             if (isPurify) {
                 isPurify = false;
                 restore();
             }
         }
-
-        @Override
-        public void onActivityPaused(Activity activity) {
-
-        }
-
-        @Override
-        public void onActivityStopped(Activity activity) {
-            mHandler.removeMessages(0);
-            mCount--;
-            if (mCount == 0) {
-                if (mOkOptions.getBackgroundLiveMinute() > 0) {
-                    mHandler.sendEmptyMessageDelayed(0, mOkOptions.getBackgroundLiveMinute() * 60 * 1000);
-                }
-            }
-        }
-
-        @Override
-        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-
-        }
-
-        @Override
-        public void onActivityDestroyed(Activity activity) {
-
-        }
-    }
+    };
 
     private void restore() {
-        for (IConnectionManager manager : mPurifyList) {
-            manager.connect();
-        }
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                for (IConnectionManager manager : mPurifyList) {
+                    manager.connect();
+                }
+            }
+        }, DELAY_CONNECT_MILLS);
+
     }
 
-    public void setOkOptions(OkSocketOptions okOptions) {
-        if (okOptions == null) {
-            return;
-        }
-        mOkOptions = okOptions;
+    public void setBackgroundLiveMills(long backgroundLiveMills) {
+        mBackgroundLiveMills = backgroundLiveMills;
+    }
+
+    public long getBackgroundLiveMills() {
+        return mBackgroundLiveMills;
     }
 }

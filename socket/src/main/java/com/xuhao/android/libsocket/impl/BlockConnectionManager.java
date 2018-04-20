@@ -333,7 +333,6 @@ public class BlockConnectionManager extends AbsConnectionManager {
         if (mPulseManager != null) {
             mPulseManager.setOkOptions(mOptions);
         }
-        EnvironmentalManager.getIns().setOkOptions(mOptions);
         return this;
     }
 

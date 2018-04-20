@@ -19,7 +19,7 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
     /**
      * 默认重连时间(后面会以指数次增加)
      */
-    private static final int DEFAULT = 5 * 1000;
+    private static final long DEFAULT = 5 * 1000;
     /**
      * 最大连接失败次数,不包括断开异常
      */
@@ -27,7 +27,7 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
     /**
      * 延时连接时间
      */
-    private int mReconnectTimeDelay = DEFAULT;
+    private long mReconnectTimeDelay = DEFAULT;
     /**
      * 连接失败次数,不包括断开异常
      */
@@ -82,6 +82,8 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
                         SL.i("尝试重新连接至备用线路 " + "Addrs:" + backupInfo.getIp() + ":" + backupInfo.getPort());
                         mConnectionManager.connect();
                     }
+                }else{
+                    reconnectDelay();
                 }
             } else {
                 reconnectDelay();

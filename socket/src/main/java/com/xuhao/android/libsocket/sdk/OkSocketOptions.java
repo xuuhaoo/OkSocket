@@ -65,11 +65,6 @@ public class OkSocketOptions {
      */
     private int mPulseFeedLoseTimes;
     /**
-     * 后台存活时间(分钟)
-     * -1为永久存活
-     */
-    private int mBackgroundLiveMinute;
-    /**
      * 连接超时时间(秒)
      */
     private int mConnectTimeoutSecond;
@@ -113,11 +108,6 @@ public class OkSocketOptions {
          * Socket通讯中,业务层定义的数据包包头格式
          */
         private IHeaderProtocol mHeaderProtocol;
-        /**
-         * 后台存活时间(分钟)
-         * -1为永久存活
-         */
-        private int mBackgroundLiveMinute;
         /**
          * 连接超时时间(秒)
          */
@@ -174,7 +164,6 @@ public class OkSocketOptions {
             mPulseFrequency = okOptions.mPulseFrequency;
             mMaxReadDataMB = okOptions.mMaxReadDataMB;
             mHeaderProtocol = okOptions.mHeaderProtocol;
-            mBackgroundLiveMinute = okOptions.mBackgroundLiveMinute;
             mConnectTimeoutSecond = okOptions.mConnectTimeoutSecond;
             mWritePackageBytes = okOptions.mWritePackageBytes;
             mReadPackageBytes = okOptions.mReadPackageBytes;
@@ -231,11 +220,6 @@ public class OkSocketOptions {
             return this;
         }
 
-        public Builder setBackgroundLiveMinute(int backgroundLiveMinute) {
-            mBackgroundLiveMinute = backgroundLiveMinute;
-            return this;
-        }
-
         public Builder setWritePackageBytes(int writePackageBytes) {
             mWritePackageBytes = writePackageBytes;
             return this;
@@ -287,7 +271,6 @@ public class OkSocketOptions {
             okOptions.mPulseFrequency = mPulseFrequency;
             okOptions.mMaxReadDataMB = mMaxReadDataMB;
             okOptions.mHeaderProtocol = mHeaderProtocol;
-            okOptions.mBackgroundLiveMinute = mBackgroundLiveMinute;
             okOptions.mConnectTimeoutSecond = mConnectTimeoutSecond;
             okOptions.mWritePackageBytes = mWritePackageBytes;
             okOptions.mReadPackageBytes = mReadPackageBytes;
@@ -308,10 +291,6 @@ public class OkSocketOptions {
 
     public long getPulseFrequency() {
         return mPulseFrequency;
-    }
-
-    public int getBackgroundLiveMinute() {
-        return mBackgroundLiveMinute;
     }
 
     public OkSocketSSLConfig getSSLConfig() {
@@ -350,7 +329,6 @@ public class OkSocketOptions {
         return mReadByteOrder;
     }
 
-
     public int getPulseFeedLoseTimes() {
         return mPulseFeedLoseTimes;
     }
@@ -365,7 +343,6 @@ public class OkSocketOptions {
 
     public static OkSocketOptions getDefault() {
         OkSocketOptions okOptions = new OkSocketOptions();
-        okOptions.mBackgroundLiveMinute = 1;
         okOptions.mPulseFrequency = 5 * 1000;
         okOptions.mIOThreadMode = IOThreadMode.DUPLEX;
         okOptions.mHeaderProtocol = new DefaultNormalHeaderProtocol();

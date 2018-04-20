@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
+import com.xuhao.android.libsocket.sdk.OkSocket;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
 import com.xuhao.android.libsocket.sdk.bean.IPulseSendable;
@@ -26,10 +27,10 @@ import com.xuhao.android.libsocket.sdk.connection.NoneReconnect;
 import com.xuhao.android.oksocket.adapter.LogAdapter;
 import com.xuhao.android.oksocket.data.HandShake;
 import com.xuhao.android.oksocket.data.LogBean;
-import com.xuhao.android.oksocket.data.NearCarRegisterRq;
 import com.xuhao.android.oksocket.data.PulseBean;
 
 import java.nio.charset.Charset;
+import java.util.Arrays;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static com.xuhao.android.libsocket.sdk.OkSocket.open;
@@ -42,7 +43,9 @@ public class ComplexDemoActivity extends AppCompatActivity {
     private IConnectionManager mManager;
     private EditText mSendSizeET;
     private Button mSetSize;
-    private EditText mFrequency;
+    private EditText mFrequencyET;
+    private Button mLiveBgBtn;
+    private EditText mLiveBgET;
     private Button mSetFrequency;
     private Button mMenualPulse;
     private Button mClearLog;
@@ -59,6 +62,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
 
         @Override
         public void onSocketConnectionSuccess(Context context, ConnectionInfo info, String action) {
+            logRece("连接成功");
             mManager.send(new HandShake());
             mConnect.setText("DisConnect");
             initSwitch();
@@ -66,7 +70,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
 
         private void initSwitch() {
             OkSocketOptions okSocketOptions = mManager.getOption();
-            int minute = okSocketOptions.getBackgroundLiveMinute();
+            long minute = OkSocket.getBackgroundSurvivalTime();
             mLiveBGSwitch.setChecked(minute != -1);
             mReconnectSwitch.setChecked(!(okSocketOptions.getReconnectionManager() instanceof NoneReconnect));
         }
@@ -98,15 +102,13 @@ public class ComplexDemoActivity extends AppCompatActivity {
         public void onSocketReadResponse(Context context, ConnectionInfo info, String action, OriginalData data) {
             super.onSocketReadResponse(context, info, action, data);
             String str = new String(data.getBodyBytes(), Charset.forName("utf-8"));
-            logRece(str);
-            //打印日志
-            byte[] body = data.getBodyBytes();
-            String bodyStr = new String(body);
-            JsonObject jsonObject = new JsonParser().parse(bodyStr).getAsJsonObject();
+            JsonObject jsonObject = new JsonParser().parse(str).getAsJsonObject();
             int cmd = jsonObject.get("cmd").getAsInt();
             if (cmd == 54) {//登陆成功
+                String handshake = jsonObject.get("handshake").getAsString();
+                logRece("握手成功! 握手信息:" + handshake + ". 开始心跳..");
                 mManager.getPulseManager().setPulseSendable(new PulseBean()).pulse();
-            } else if (cmd == 57) {//切换
+            } else if (cmd == 57) {//切换,重定向.(暂时无法演示,如有疑问请咨询github)
                 String ip = jsonObject.get("data").getAsString().split(":")[0];
                 int port = Integer.parseInt(jsonObject.get("data").getAsString().split(":")[1]);
                 ConnectionInfo redirectInfo = new ConnectionInfo(ip, port);
@@ -114,22 +116,43 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 mManager.getReconnectionManager().addIgnoreException(RedirectException.class);
                 mManager.disconnect(new RedirectException(redirectInfo));
             } else if (cmd == 14) {//心跳
+                logRece("收到心跳,喂狗成功");
                 mManager.getPulseManager().feed();
+            } else {
+                logRece(str);
             }
         }
 
         @Override
         public void onSocketWriteResponse(Context context, ConnectionInfo info, String action, ISendable data) {
             super.onSocketWriteResponse(context, info, action, data);
-            String str = new String(data.parse(), Charset.forName("utf-8"));
-            logSend(str);
+            byte[] bytes = data.parse();
+            bytes = Arrays.copyOfRange(bytes, 4, bytes.length);
+            String str = new String(bytes, Charset.forName("utf-8"));
+            JsonObject jsonObject = new JsonParser().parse(str).getAsJsonObject();
+            int cmd = jsonObject.get("cmd").getAsInt();
+            switch (cmd) {
+                case 54: {
+                    String handshake = jsonObject.get("handshake").getAsString();
+                    logSend("发送握手数据:" + handshake);
+                    break;
+                }
+                default:
+                    logSend(str);
+            }
         }
 
         @Override
         public void onPulseSend(Context context, ConnectionInfo info, IPulseSendable data) {
             super.onPulseSend(context, info, data);
-            String str = new String(data.parse(), Charset.forName("utf-8"));
-            logSend(str);
+            byte[] bytes = data.parse();
+            bytes = Arrays.copyOfRange(bytes, 4, bytes.length);
+            String str = new String(bytes, Charset.forName("utf-8"));
+            JsonObject jsonObject = new JsonParser().parse(str).getAsJsonObject();
+            int cmd = jsonObject.get("cmd").getAsInt();
+            if (cmd == 14) {
+                logSend("发送心跳包");
+            }
         }
     };
 
@@ -147,10 +170,12 @@ public class ComplexDemoActivity extends AppCompatActivity {
         mReceList = findViewById(R.id.rece_list);
         mClearLog = findViewById(R.id.clear_log);
         mSetFrequency = findViewById(R.id.set_pulse_frequency);
-        mFrequency = findViewById(R.id.pulse_frequency);
+        mFrequencyET = findViewById(R.id.pulse_frequency);
         mConnect = findViewById(R.id.connect);
         mSendSizeET = findViewById(R.id.send_size);
         mSetSize = findViewById(R.id.set_size);
+        mLiveBgET = findViewById(R.id.bg_live_minute);
+        mLiveBgBtn = findViewById(R.id.bg_live_minute_btn);
         mMenualPulse = findViewById(R.id.manual_pulse);
         mLiveBGSwitch = findViewById(R.id.is_live_in_bg);
         mReconnectSwitch = findViewById(R.id.switch_reconnect);
@@ -175,20 +200,18 @@ public class ComplexDemoActivity extends AppCompatActivity {
         mLiveBGSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (mManager != null && !mManager.isConnect()) {
-                    buttonView.setChecked(!isChecked);
+                if (buttonView.isChecked() == isChecked) {
                     return;
                 }
-                int value = -1;
+                long value = -1;
                 if (isChecked) {
-                    value = OkSocketOptions.getDefault().getBackgroundLiveMinute();
+                    value = OkSocket.getBackgroundSurvivalTime();
                 } else {
                     value = -1;
                 }
-                OkSocketOptions okSocketOptions = new OkSocketOptions.Builder(mManager.getOption())
-                        .setBackgroundLiveMinute(value)
-                        .build();
-                mManager.option(okSocketOptions);
+                OkSocket.setBackgroundSurvivalTime(value);
+                mLiveBgET.setText("");
+                mLiveBgET.setHint(value + "");
             }
         });
 
@@ -199,6 +222,9 @@ public class ComplexDemoActivity extends AppCompatActivity {
                     buttonView.setChecked(!isChecked);
                     return;
                 }
+                if (buttonView.isChecked() == isChecked) {
+                    return;
+                }
                 if (!isChecked) {
                     mManager.option(new OkSocketOptions.Builder(mManager.getOption()).setReconnectionManager(new NoneReconnect()).build());
                 } else {
@@ -206,6 +232,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 }
             }
         });
+
         mConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,6 +247,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 }
             }
         });
+
         mClearLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -229,6 +257,20 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 mSendLogAdapter.notifyDataSetChanged();
             }
         });
+
+        mLiveBgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String timeStr = mLiveBgET.getText().toString();
+                long time = 0;
+                try {
+                    time = Long.parseLong(timeStr);
+                    OkSocket.setBackgroundSurvivalTime(time);
+                } catch (Exception e) {
+                }
+            }
+        });
+
         mSetSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -247,13 +289,14 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 }
             }
         });
+
         mSetFrequency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mManager == null) {
                     return;
                 }
-                String frequencyStr = mFrequency.getText().toString();
+                String frequencyStr = mFrequencyET.getText().toString();
                 long frequency = 0;
                 try {
                     frequency = Long.parseLong(frequencyStr);
@@ -265,6 +308,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 }
             }
         });
+
         mMenualPulse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

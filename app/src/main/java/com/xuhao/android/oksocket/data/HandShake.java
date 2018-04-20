@@ -2,6 +2,9 @@ package com.xuhao.android.oksocket.data;
 
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
@@ -14,7 +17,14 @@ public class HandShake implements ISendable {
     private String content = "";
 
     public HandShake() {
-        content = "Hello I'm a OkSocket demo";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("cmd", 54);
+            jsonObject.put("handshake", "Hello I'm a OkSocket demo");
+            content = jsonObject.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

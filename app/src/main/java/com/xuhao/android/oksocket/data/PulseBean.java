@@ -17,7 +17,6 @@ public class PulseBean implements IPulseSendable {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("cmd", 14);
-            jsonObject.put("data", "{name:pulse}");
             str = jsonObject.toString();
         } catch (JSONException e) {
             e.printStackTrace();

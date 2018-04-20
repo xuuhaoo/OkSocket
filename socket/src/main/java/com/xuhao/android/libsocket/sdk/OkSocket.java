@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.xuhao.android.libsocket.impl.EnvironmentalManager;
 import com.xuhao.android.libsocket.impl.ManagerHolder;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
+import com.xuhao.android.libsocket.utils.ActivityStack;
 
 /**
  * OkSocket是一款轻量级的Socket通讯框架,可以提供单工,双工的TCP通讯.
@@ -39,10 +40,9 @@ public class OkSocket {
         assertIsNotInit();
         isInit = true;
         OkSocketOptions.isDebug = isDebug;
+        ActivityStack.init(application, isDebug);
         OkSocket.app = (Application) application.getApplicationContext();
-        //保证混淆时的Builder
-        OkSocketOptions.Builder builder = new OkSocketOptions.Builder(OkSocketOptions.getDefault());
-        EnvironmentalManager.getIns().init(app, holder, builder.build());
+        EnvironmentalManager.getIns().init(holder);
     }
 
     /**
@@ -97,6 +97,24 @@ public class OkSocket {
         assertIsInit();
         ConnectionInfo info = new ConnectionInfo(ip, port);
         return holder.get(info, app, okOptions);
+    }
+
+    /**
+     * 设置OkSocket后台存活时间,为了保证耗电量,保证后台断开连接
+     * 如果为-1,表示App至于后台时不进行连接断开操作.
+     *
+     * @param mills App至于后台后的存活的毫秒数.
+     *              取值范围: -1为永久存活,取值范围[1000,Long.MAX]
+     *              小于1000毫秒按照1000毫秒计算,具体最小值定义请见{@link EnvironmentalManager#DELAY_CONNECT_MILLS}
+     */
+    public static void setBackgroundSurvivalTime(long mills) {
+        assertIsInit();
+        EnvironmentalManager.getIns().setBackgroundLiveMills(mills);
+    }
+
+    public static long getBackgroundSurvivalTime() {
+        assertIsInit();
+        return EnvironmentalManager.getIns().getBackgroundLiveMills();
     }
 
     private static void assertIsNotInit() throws RuntimeException {
