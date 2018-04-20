@@ -52,8 +52,13 @@ artifacts {
 }
 
 bintray {
-    user = project.bintrayUser
-    key = project.bintrayApiKey
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def bintrayUser = properties.getProperty('bintrayUser')
+    def bintrayApiKey = properties.getProperty('bintrayApiKey')
+
+    user = bintrayUser
+    key = bintrayApiKey
     publications = ['Production']
     configurations = ['archives']
     override = true
