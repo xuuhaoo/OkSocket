@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ import com.xuhao.android.libsocket.sdk.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
+import com.xuhao.android.libsocket.sdk.connection.NoneReconnect;
 import com.xuhao.android.oksocket.adapter.LogAdapter;
 import com.xuhao.android.oksocket.data.HandShake;
 import com.xuhao.android.oksocket.data.LogBean;
@@ -37,14 +40,14 @@ public class ComplexDemoActivity extends AppCompatActivity {
 
     private Button mConnect;
     private IConnectionManager mManager;
-    private Button mSub;
-    private Button mUnSub;
     private EditText mSendSizeET;
     private Button mSetSize;
     private EditText mFrequency;
     private Button mSetFrequency;
     private Button mMenualPulse;
     private Button mClearLog;
+    private SwitchCompat mReconnectSwitch;
+    private SwitchCompat mLiveBGSwitch;
 
     private RecyclerView mSendList;
     private RecyclerView mReceList;
@@ -58,6 +61,14 @@ public class ComplexDemoActivity extends AppCompatActivity {
         public void onSocketConnectionSuccess(Context context, ConnectionInfo info, String action) {
             mManager.send(new HandShake());
             mConnect.setText("DisConnect");
+            initSwitch();
+        }
+
+        private void initSwitch() {
+            OkSocketOptions okSocketOptions = mManager.getOption();
+            int minute = okSocketOptions.getBackgroundLiveMinute();
+            mLiveBGSwitch.setChecked(minute != -1);
+            mReconnectSwitch.setChecked(!(okSocketOptions.getReconnectionManager() instanceof NoneReconnect));
         }
 
         @Override
@@ -133,17 +144,17 @@ public class ComplexDemoActivity extends AppCompatActivity {
     }
 
     private void findViews() {
-        mSendList = (RecyclerView) findViewById(R.id.send_list);
-        mReceList = (RecyclerView) findViewById(R.id.rece_list);
-        mClearLog = (Button) findViewById(R.id.clear_log);
-        mSetFrequency = (Button) findViewById(R.id.set_pulse_frequency);
-        mFrequency = (EditText) findViewById(R.id.pulse_frequency);
-        mConnect = (Button) findViewById(R.id.connect);
-        mSub = (Button) findViewById(R.id.subscript);
-        mUnSub = (Button) findViewById(R.id.unsubscript);
-        mSendSizeET = (EditText) findViewById(R.id.send_size);
-        mSetSize = (Button) findViewById(R.id.set_size);
-        mMenualPulse = (Button) findViewById(R.id.manual_pulse);
+        mSendList = findViewById(R.id.send_list);
+        mReceList = findViewById(R.id.rece_list);
+        mClearLog = findViewById(R.id.clear_log);
+        mSetFrequency = findViewById(R.id.set_pulse_frequency);
+        mFrequency = findViewById(R.id.pulse_frequency);
+        mConnect = findViewById(R.id.connect);
+        mSendSizeET = findViewById(R.id.send_size);
+        mSetSize = findViewById(R.id.set_size);
+        mMenualPulse = findViewById(R.id.manual_pulse);
+        mLiveBGSwitch = findViewById(R.id.is_live_in_bg);
+        mReconnectSwitch = findViewById(R.id.switch_reconnect);
     }
 
     private void initData() {
@@ -155,12 +166,47 @@ public class ComplexDemoActivity extends AppCompatActivity {
         mReceList.setLayoutManager(manager2);
         mReceList.setAdapter(mReceLogAdapter);
 
-        mInfo = new ConnectionInfo("117.136.38.163", 8080);
+        mInfo = new ConnectionInfo("104.238.184.237", 8080);
         mManager = open(mInfo).option(OkSocketOptions.getDefault());
     }
 
     private void setListener() {
         mManager.registerReceiver(adapter);
+
+        mLiveBGSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (mManager != null && !mManager.isConnect()) {
+                    buttonView.setChecked(!isChecked);
+                    return;
+                }
+                int value = -1;
+                if (isChecked) {
+                    value = OkSocketOptions.getDefault().getBackgroundLiveMinute();
+                } else {
+                    value = -1;
+                }
+                OkSocketOptions okSocketOptions = new OkSocketOptions.Builder(mManager.getOption())
+                        .setBackgroundLiveMinute(value)
+                        .build();
+                mManager.option(okSocketOptions);
+            }
+        });
+
+        mReconnectSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (mManager != null && !mManager.isConnect()) {
+                    buttonView.setChecked(!isChecked);
+                    return;
+                }
+                if (!isChecked) {
+                    mManager.option(new OkSocketOptions.Builder(mManager.getOption()).setReconnectionManager(new NoneReconnect()).build());
+                } else {
+                    mManager.option(new OkSocketOptions.Builder(mManager.getOption()).setReconnectionManager(OkSocketOptions.getDefault().getReconnectionManager()).build());
+                }
+            }
+        });
         mConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,20 +221,6 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 }
             }
         });
-        mSub.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mManager == null) {
-                    return;
-                }
-                if (!mManager.isConnect()) {
-                    Toast.makeText(getApplicationContext(), "未连接,请先连接", LENGTH_SHORT).show();
-                } else {
-                    NearCarRegisterRq nearCarRegisterRq = new NearCarRegisterRq(getApplicationContext(), true);
-                    mManager.send(nearCarRegisterRq);
-                }
-            }
-        });
         mClearLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,20 +228,6 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 mSendLogAdapter.getDataList().clear();
                 mReceLogAdapter.notifyDataSetChanged();
                 mSendLogAdapter.notifyDataSetChanged();
-            }
-        });
-        mUnSub.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mManager == null) {
-                    return;
-                }
-                if (!mManager.isConnect()) {
-                    Toast.makeText(getApplicationContext(), "未连接,请先连接", LENGTH_SHORT).show();
-                } else {
-                    NearCarRegisterRq nearCarRegisterRq = new NearCarRegisterRq(getApplicationContext(), false);
-                    mManager.send(nearCarRegisterRq);
-                }
             }
         });
         mSetSize.setOnClickListener(new View.OnClickListener() {
@@ -236,10 +254,10 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 if (mManager == null) {
                     return;
                 }
-                String timeoutstr = mFrequency.getText().toString();
+                String frequencyStr = mFrequency.getText().toString();
                 long frequency = 0;
                 try {
-                    frequency = Long.parseLong(timeoutstr);
+                    frequency = Long.parseLong(frequencyStr);
                     OkSocketOptions okOptions = new OkSocketOptions.Builder(mManager.getOption())
                             .setPulseFrequency(frequency)
                             .build();
@@ -251,7 +269,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
         mMenualPulse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mManager.send(new PulseBean());
+                mManager.getPulseManager().trigger();
             }
         });
     }
@@ -273,6 +291,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
         super.onDestroy();
         if (mManager != null) {
             mManager.disconnect();
+            mManager.unRegisterReceiver(adapter);
         }
     }
 

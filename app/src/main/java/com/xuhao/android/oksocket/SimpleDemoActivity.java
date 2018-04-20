@@ -18,6 +18,7 @@ import com.xuhao.android.libsocket.sdk.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
+import com.xuhao.android.libsocket.sdk.connection.NoneReconnect;
 import com.xuhao.android.oksocket.adapter.LogAdapter;
 import com.xuhao.android.oksocket.data.HandShake;
 import com.xuhao.android.oksocket.data.LogBean;
@@ -128,7 +129,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
         mReceList.setLayoutManager(manager2);
         mReceList.setAdapter(mReceLogAdapter);
 
-        mInfo = new ConnectionInfo("172.25.117.74", 8080);
+        mInfo = new ConnectionInfo("104.238.184.237", 8080);
         mOkOptions = new OkSocketOptions.Builder()
                 .setReconnectionManager(new NoneReconnect())
                 .setWritePackageBytes(1024)
@@ -166,10 +167,8 @@ public class SimpleDemoActivity extends AppCompatActivity {
                         return;
                     }
                     MsgDataBean msgDataBean = new MsgDataBean(msg);
-                    for (int i = 0; i < 1000; i++) {
-                        mManager.send(msgDataBean);
-                    }
-//                    mSendET.setText("");
+                    mManager.send(msgDataBean);
+                    mSendET.setText("");
                 }
             }
         });
@@ -201,6 +200,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
         super.onDestroy();
         if (mManager != null) {
             mManager.disconnect();
+            mManager.unRegisterReceiver(adapter);
         }
     }
 }

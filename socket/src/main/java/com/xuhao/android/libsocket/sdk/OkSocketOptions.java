@@ -1,5 +1,6 @@
 package com.xuhao.android.libsocket.sdk;
 
+import com.xuhao.android.libsocket.sdk.connection.abilities.IConfiguration;
 import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
 import com.xuhao.android.libsocket.sdk.connection.AbsReconnectionManager;
 import com.xuhao.android.libsocket.sdk.connection.DefaultReconnectManager;
@@ -98,7 +99,7 @@ public class OkSocketOptions {
          * 非阻塞式可以热切换<br>
          * </p>
          */
-        private IOThreadMode mIOThreadMode;
+        private IOThreadMode mIOThreadMode = IOThreadMode.DUPLEX;
         /**
          * 脉搏频率单位是毫秒
          */
@@ -161,6 +162,11 @@ public class OkSocketOptions {
         private OkSocketSSLConfig mSSLConfig;
 
         public Builder() {
+            this(OkSocketOptions.getDefault());
+        }
+
+        public Builder(IConfiguration configuration) {
+            this(configuration.getOption());
         }
 
         public Builder(OkSocketOptions okOptions) {
