@@ -91,7 +91,7 @@ public class MyApplication extends Application {
 * 公网Port:`8080`
 
 <font size=2>您也可以选择下载 JAR 文件到本地,运行在您的本地进行调试
-[Download JAR](https://raw.githubusercontent.com/xuuhaoo/OkSocket/master/server/out/artifacts/socketserver_jar/socketserver.jar "download jar file")</font>
+[Download JAR](https://github.com/xuuhaoo/OkSocket/blob/release-2.0.0-beta/server/out/artifacts/socketserver_jar/socketserver.jar?raw=true "download jar file")</font>
 
 * <font size=2>您可以使用下面的代码将其运行起来`java -jar SocketServerDemo.jar`</font>
 

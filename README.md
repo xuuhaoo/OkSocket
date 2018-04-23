@@ -92,7 +92,7 @@ public class MyApplication extends Application {
 * IP:`104.238.184.237`
 * Port:`8080`
 
-<font size=2>You can also choose to download the JAR file to local and run it locally for debugging [Download JAR](https://raw.githubusercontent.com/xuuhaoo/OkSocket/master/server/out/artifacts/socketserver_jar/socketserver.jar "download jar file")</font>
+<font size=2>You can also choose to download the JAR file to local and run it locally for debugging [Download JAR](https://github.com/xuuhaoo/OkSocket/blob/release-2.0.0-beta/server/out/artifacts/socketserver_jar/socketserver.jar?raw=true "download jar file")</font>
 
 * <font size=2>You can use the following code to run it`java -jar SocketServerDemo.jar`</font>
 
