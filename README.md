@@ -4,7 +4,7 @@ An blocking socket client for Android applications.
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Download](https://api.bintray.com/packages/xuuhaoo/maven/OkSocket/images/download.svg)](https://bintray.com/xuuhaoo/maven/OkSocket/_latestVersion)
 
-Read this in other languages: [简体中文](https://github.com/xuuhaoo/OkSocket/blob/master/README-CN.md)
+Read this in other languages: [简体中文](https://github.com/xuuhaoo/OkSocket/blob/release-2.0.0-beta/README-CN.md)
 
 ### <font id="1">OkSocket Introduce</font>
 <font size=2>
@@ -92,7 +92,7 @@ public class MyApplication extends Application {
 * IP:`104.238.184.237`
 * Port:`8080`
 
-<font size=2>You can also choose to download the JAR file to local and run it locally for debugging [Download JAR](https://raw.githubusercontent.com/xuuhaoo/OkSocket/master/server/out/artifacts/socketserver_jar/socketserver.jar "download jar file")</font>
+<font size=2>You can also choose to download the JAR file to local and run it locally for debugging [Download JAR](https://github.com/xuuhaoo/OkSocket/blob/release-2.0.0-beta/server/out/artifacts/socketserver_jar/socketserver.jar?raw=true "download jar file")</font>
 
 * <font size=2>You can use the following code to run it`java -jar SocketServerDemo.jar`</font>
 

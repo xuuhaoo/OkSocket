@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Download](https://api.bintray.com/packages/xuuhaoo/maven/OkSocket/images/download.svg)](https://bintray.com/xuuhaoo/maven/OkSocket/_latestVersion)
 
-其他语言支持: [English](https://github.com/xuuhaoo/OkSocket/blob/master/README.md)
+其他语言支持: [English](https://github.com/xuuhaoo/OkSocket/blob/release-2.0.0-beta/README.md)
 
 ### <font id="1">OkSocket简介</font>
 <font size=2>Android OkSocket是一款基于阻塞式传统Socket的一款Socket客户端整体解决方案.您可以使用它进行简单的基于Tcp协议的Socket通讯,当然,也可以进行大数据量复杂的Socket通讯,
@@ -91,7 +91,7 @@ public class MyApplication extends Application {
 * 公网Port:`8080`
 
 <font size=2>您也可以选择下载 JAR 文件到本地,运行在您的本地进行调试
-[Download JAR](https://raw.githubusercontent.com/xuuhaoo/OkSocket/master/server/out/artifacts/socketserver_jar/socketserver.jar "download jar file")</font>
+[Download JAR](https://github.com/xuuhaoo/OkSocket/blob/release-2.0.0-beta/server/out/artifacts/socketserver_jar/socketserver.jar?raw=true "download jar file")</font>
 
 * <font size=2>您可以使用下面的代码将其运行起来`java -jar SocketServerDemo.jar`</font>
 
