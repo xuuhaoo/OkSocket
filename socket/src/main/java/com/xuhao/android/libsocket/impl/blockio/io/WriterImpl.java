@@ -46,7 +46,7 @@ public class WriterImpl implements IWriter {
         if (sendable != null) {
             try {
                 byte[] sendBytes = sendable.parse();
-                int packageSize = mOkOptions.getSendSinglePackageBytes();
+                int packageSize = mOkOptions.getWritePackageBytes();
                 int remainingCount = sendBytes.length;
                 ByteBuffer writeBuf = ByteBuffer.allocate(packageSize);
                 writeBuf.order(mOkOptions.getWriteOrder());
@@ -62,8 +62,8 @@ public class WriterImpl implements IWriter {
                     mOutputStream.write(writeArr);
                     mOutputStream.flush();
 
-                    byte[] forLogBytes = Arrays.copyOfRange(sendBytes, index, index + realWriteLength);
                     if (OkSocketOptions.isDebug()) {
+                        byte[] forLogBytes = Arrays.copyOfRange(sendBytes, index, index + realWriteLength);
                         SL.i("write bytes: " + BytesUtils.toHexStringForLog(forLogBytes));
                         SL.i("bytes write length:" + realWriteLength);
                     }

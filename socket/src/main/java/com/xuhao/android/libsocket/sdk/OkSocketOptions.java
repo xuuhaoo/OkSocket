@@ -1,5 +1,6 @@
 package com.xuhao.android.libsocket.sdk;
 
+import com.xuhao.android.libsocket.sdk.connection.abilities.IConfiguration;
 import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
 import com.xuhao.android.libsocket.sdk.connection.AbsReconnectionManager;
 import com.xuhao.android.libsocket.sdk.connection.DefaultReconnectManager;
@@ -48,11 +49,11 @@ public class OkSocketOptions {
     /**
      * 发送给服务器时单个数据包的总长度
      */
-    private int mSendSinglePackageBytes;
+    private int mWritePackageBytes;
     /**
      * 从服务器读取时单次读取的缓存字节长度,数值越大,读取效率越高.但是相应的系统消耗将越大
      */
-    private int mReadSingleTimeBufferBytes;
+    private int mReadPackageBytes;
     /**
      * 脉搏频率单位是毫秒
      */
@@ -63,11 +64,6 @@ public class OkSocketOptions {
      * 抛出{@link com.xuhao.android.libsocket.impl.exceptions.DogDeadException}
      */
     private int mPulseFeedLoseTimes;
-    /**
-     * 后台存活时间(分钟)
-     * -1为永久存活
-     */
-    private int mBackgroundLiveMinute;
     /**
      * 连接超时时间(秒)
      */
@@ -98,7 +94,7 @@ public class OkSocketOptions {
          * 非阻塞式可以热切换<br>
          * </p>
          */
-        private IOThreadMode mIOThreadMode;
+        private IOThreadMode mIOThreadMode = IOThreadMode.DUPLEX;
         /**
          * 脉搏频率单位是毫秒
          */
@@ -113,22 +109,17 @@ public class OkSocketOptions {
          */
         private IHeaderProtocol mHeaderProtocol;
         /**
-         * 后台存活时间(分钟)
-         * -1为永久存活
-         */
-        private int mBackgroundLiveMinute;
-        /**
          * 连接超时时间(秒)
          */
         private int mConnectTimeoutSecond;
         /**
          * 发送给服务器时单个数据包的总长度
          */
-        private int mSinglePackageBytes;
+        private int mWritePackageBytes;
         /**
          * 从服务器读取时单次读取的缓存字节长度,数值越大,读取效率越高.但是相应的系统消耗将越大
          */
-        private int mReadSingleTimeBufferBytes;
+        private int mReadPackageBytes;
         /**
          * 写入Socket管道中给服务器的字节序
          */
@@ -161,6 +152,11 @@ public class OkSocketOptions {
         private OkSocketSSLConfig mSSLConfig;
 
         public Builder() {
+            this(OkSocketOptions.getDefault());
+        }
+
+        public Builder(IConfiguration configuration) {
+            this(configuration.getOption());
         }
 
         public Builder(OkSocketOptions okOptions) {
@@ -168,10 +164,9 @@ public class OkSocketOptions {
             mPulseFrequency = okOptions.mPulseFrequency;
             mMaxReadDataMB = okOptions.mMaxReadDataMB;
             mHeaderProtocol = okOptions.mHeaderProtocol;
-            mBackgroundLiveMinute = okOptions.mBackgroundLiveMinute;
             mConnectTimeoutSecond = okOptions.mConnectTimeoutSecond;
-            mSinglePackageBytes = okOptions.mSendSinglePackageBytes;
-            mReadSingleTimeBufferBytes = okOptions.mReadSingleTimeBufferBytes;
+            mWritePackageBytes = okOptions.mWritePackageBytes;
+            mReadPackageBytes = okOptions.mReadPackageBytes;
             mWriteOrder = okOptions.mWriteOrder;
             mReadByteOrder = okOptions.mReadByteOrder;
             isConnectionHolden = okOptions.isConnectionHolden;
@@ -225,14 +220,36 @@ public class OkSocketOptions {
             return this;
         }
 
-        public Builder setBackgroundLiveMinute(int backgroundLiveMinute) {
-            mBackgroundLiveMinute = backgroundLiveMinute;
+        public Builder setWritePackageBytes(int writePackageBytes) {
+            mWritePackageBytes = writePackageBytes;
             return this;
         }
 
-        public Builder setReadSingleTimeBufferBytes(int readSingleTimeBufferBytes) {
-            mReadSingleTimeBufferBytes = readSingleTimeBufferBytes;
+        public Builder setReadPackageBytes(int readPackageBytes) {
+            mReadPackageBytes = readPackageBytes;
             return this;
+        }
+
+        /**
+         * see {@link OkSocketOptions.Builder#setReadPackageBytes(int)}
+         *
+         * @param readSingleTimeBufferBytes
+         * @return
+         */
+        @Deprecated
+        public Builder setReadSingleTimeBufferBytes(int readSingleTimeBufferBytes) {
+            return setReadPackageBytes(readSingleTimeBufferBytes);
+        }
+
+        /**
+         * see {@link OkSocketOptions.Builder#setWritePackageBytes(int)}
+         *
+         * @param singlePackageBytes
+         * @return
+         */
+        @Deprecated
+        public Builder setSinglePackageBytes(int singlePackageBytes) {
+            return setWritePackageBytes(singlePackageBytes);
         }
 
         public Builder setConnectTimeoutSecond(int connectTimeoutSecond) {
@@ -240,10 +257,6 @@ public class OkSocketOptions {
             return this;
         }
 
-        public Builder setSinglePackageBytes(int singlePackageBytes) {
-            mSinglePackageBytes = singlePackageBytes;
-            return this;
-        }
 
         public Builder setReconnectionManager(
                 AbsReconnectionManager reconnectionManager) {
@@ -258,10 +271,9 @@ public class OkSocketOptions {
             okOptions.mPulseFrequency = mPulseFrequency;
             okOptions.mMaxReadDataMB = mMaxReadDataMB;
             okOptions.mHeaderProtocol = mHeaderProtocol;
-            okOptions.mBackgroundLiveMinute = mBackgroundLiveMinute;
             okOptions.mConnectTimeoutSecond = mConnectTimeoutSecond;
-            okOptions.mSendSinglePackageBytes = mSinglePackageBytes;
-            okOptions.mReadSingleTimeBufferBytes = mReadSingleTimeBufferBytes;
+            okOptions.mWritePackageBytes = mWritePackageBytes;
+            okOptions.mReadPackageBytes = mReadPackageBytes;
             okOptions.mWriteOrder = mWriteOrder;
             okOptions.mReadByteOrder = mReadByteOrder;
             okOptions.isConnectionHolden = isConnectionHolden;
@@ -281,20 +293,16 @@ public class OkSocketOptions {
         return mPulseFrequency;
     }
 
-    public int getBackgroundLiveMinute() {
-        return mBackgroundLiveMinute;
-    }
-
     public OkSocketSSLConfig getSSLConfig() {
         return mSSLConfig;
     }
 
-    public int getSendSinglePackageBytes() {
-        return mSendSinglePackageBytes;
+    public int getWritePackageBytes() {
+        return mWritePackageBytes;
     }
 
-    public int getReadSingleTimeBufferBytes() {
-        return mReadSingleTimeBufferBytes;
+    public int getReadPackageBytes() {
+        return mReadPackageBytes;
     }
 
     public int getConnectTimeoutSecond() {
@@ -321,7 +329,6 @@ public class OkSocketOptions {
         return mReadByteOrder;
     }
 
-
     public int getPulseFeedLoseTimes() {
         return mPulseFeedLoseTimes;
     }
@@ -336,14 +343,13 @@ public class OkSocketOptions {
 
     public static OkSocketOptions getDefault() {
         OkSocketOptions okOptions = new OkSocketOptions();
-        okOptions.mBackgroundLiveMinute = 1;
         okOptions.mPulseFrequency = 5 * 1000;
         okOptions.mIOThreadMode = IOThreadMode.DUPLEX;
         okOptions.mHeaderProtocol = new DefaultNormalHeaderProtocol();
         okOptions.mMaxReadDataMB = 10;
         okOptions.mConnectTimeoutSecond = 3;
-        okOptions.mSendSinglePackageBytes = 50;
-        okOptions.mReadSingleTimeBufferBytes = 50;
+        okOptions.mWritePackageBytes = 100;
+        okOptions.mReadPackageBytes = 50;
         okOptions.mReadByteOrder = ByteOrder.BIG_ENDIAN;
         okOptions.mWriteOrder = ByteOrder.BIG_ENDIAN;
         okOptions.isConnectionHolden = true;

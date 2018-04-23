@@ -47,13 +47,13 @@ public class SocketActionHandler extends SocketActionAdapter {
         } else {//多工模式
             if (!iOThreadIsCalledDisconnect) {//保证只调用一次,多工多线程,会调用两次
                 iOThreadIsCalledDisconnect = true;
-                mManager.disConnect(e);
+                mManager.disconnect(e);
             }
         }
     }
 
     @Override
     public void onSocketConnectionFailed(Context context, ConnectionInfo info, String action, Exception e) {
-        mManager.disConnect(e);
+        mManager.disconnect(e);
     }
 }

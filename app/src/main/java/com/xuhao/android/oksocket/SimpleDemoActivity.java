@@ -18,6 +18,7 @@ import com.xuhao.android.libsocket.sdk.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
+import com.xuhao.android.libsocket.sdk.connection.NoneReconnect;
 import com.xuhao.android.oksocket.adapter.LogAdapter;
 import com.xuhao.android.oksocket.data.HandShake;
 import com.xuhao.android.oksocket.data.LogBean;
@@ -32,7 +33,7 @@ import static com.xuhao.android.libsocket.sdk.OkSocket.open;
  * Created by Tony on 2017/10/24.
  */
 
-public class MainSimpleActivity extends AppCompatActivity {
+public class SimpleDemoActivity extends AppCompatActivity {
     private ConnectionInfo mInfo;
 
     private Button mConnect;
@@ -61,7 +62,6 @@ public class MainSimpleActivity extends AppCompatActivity {
             if (e != null) {
                 logSend("异常断开:" + e.getMessage());
             } else {
-                Toast.makeText(context, "正常断开", LENGTH_SHORT).show();
                 logSend("正常断开");
             }
             mConnect.setText("Connect");
@@ -99,7 +99,7 @@ public class MainSimpleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simple_main);
+        setContentView(R.layout.activity_simple);
         findViews();
         initData();
         setListener();
@@ -129,10 +129,11 @@ public class MainSimpleActivity extends AppCompatActivity {
         mReceList.setAdapter(mReceLogAdapter);
 
         mInfo = new ConnectionInfo("104.238.184.237", 8080);
-        mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault())
+        mOkOptions = new OkSocketOptions.Builder()
                 .setReconnectionManager(new NoneReconnect())
+                .setWritePackageBytes(1024)
                 .build();
-        mManager = open(mInfo, mOkOptions);
+        mManager = open(mInfo).option(mOkOptions);
     }
 
     private void setListener() {
@@ -147,7 +148,7 @@ public class MainSimpleActivity extends AppCompatActivity {
                     mManager.connect();
                 } else {
                     mConnect.setText("DisConnecting");
-                    mManager.disConnect();
+                    mManager.disconnect();
                 }
             }
         });
@@ -197,7 +198,8 @@ public class MainSimpleActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (mManager != null) {
-            mManager.disConnect();
+            mManager.disconnect();
+            mManager.unRegisterReceiver(adapter);
         }
     }
 }

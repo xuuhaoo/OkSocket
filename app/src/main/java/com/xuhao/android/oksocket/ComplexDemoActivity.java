@@ -8,44 +8,49 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
+import com.xuhao.android.libsocket.sdk.OkSocket;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
 import com.xuhao.android.libsocket.sdk.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
+import com.xuhao.android.libsocket.sdk.connection.NoneReconnect;
 import com.xuhao.android.oksocket.adapter.LogAdapter;
 import com.xuhao.android.oksocket.data.HandShake;
 import com.xuhao.android.oksocket.data.LogBean;
-import com.xuhao.android.oksocket.data.NearCarRegisterRq;
 import com.xuhao.android.oksocket.data.PulseBean;
 
 import java.nio.charset.Charset;
+import java.util.Arrays;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static com.xuhao.android.libsocket.sdk.OkSocket.open;
 
-public class MainActivity extends AppCompatActivity {
+public class ComplexDemoActivity extends AppCompatActivity {
 
     private ConnectionInfo mInfo;
 
     private Button mConnect;
     private IConnectionManager mManager;
-    private Button mSub;
-    private Button mUnSub;
     private EditText mSendSizeET;
     private Button mSetSize;
-    private OkSocketOptions mOkOptions;
-    private EditText mFrequency;
+    private EditText mFrequencyET;
+    private Button mLiveBgBtn;
+    private EditText mLiveBgET;
     private Button mSetFrequency;
     private Button mMenualPulse;
     private Button mClearLog;
+    private SwitchCompat mReconnectSwitch;
+    private SwitchCompat mLiveBGSwitch;
 
     private RecyclerView mSendList;
     private RecyclerView mReceList;
@@ -57,8 +62,17 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onSocketConnectionSuccess(Context context, ConnectionInfo info, String action) {
+            logRece("连接成功");
             mManager.send(new HandShake());
             mConnect.setText("DisConnect");
+            initSwitch();
+        }
+
+        private void initSwitch() {
+            OkSocketOptions okSocketOptions = mManager.getOption();
+            long minute = OkSocket.getBackgroundSurvivalTime();
+            mLiveBGSwitch.setChecked(minute != -1);
+            mReconnectSwitch.setChecked(!(okSocketOptions.getReconnectionManager() instanceof NoneReconnect));
         }
 
         @Override
@@ -72,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
                     logSend("异常断开:" + e.getMessage());
                 }
             } else {
-                Toast.makeText(context, "正常断开", LENGTH_SHORT).show();
                 logSend("正常断开");
             }
             mConnect.setText("Connect");
@@ -89,62 +102,83 @@ public class MainActivity extends AppCompatActivity {
         public void onSocketReadResponse(Context context, ConnectionInfo info, String action, OriginalData data) {
             super.onSocketReadResponse(context, info, action, data);
             String str = new String(data.getBodyBytes(), Charset.forName("utf-8"));
-            logRece(str);
-            //打印日志
-            byte[] body = data.getBodyBytes();
-            String bodyStr = new String(body);
-            JsonObject jsonObject = new JsonParser().parse(bodyStr).getAsJsonObject();
+            JsonObject jsonObject = new JsonParser().parse(str).getAsJsonObject();
             int cmd = jsonObject.get("cmd").getAsInt();
             if (cmd == 54) {//登陆成功
+                String handshake = jsonObject.get("handshake").getAsString();
+                logRece("握手成功! 握手信息:" + handshake + ". 开始心跳..");
                 mManager.getPulseManager().setPulseSendable(new PulseBean()).pulse();
-            } else if (cmd == 57) {//切换
+            } else if (cmd == 57) {//切换,重定向.(暂时无法演示,如有疑问请咨询github)
                 String ip = jsonObject.get("data").getAsString().split(":")[0];
                 int port = Integer.parseInt(jsonObject.get("data").getAsString().split(":")[1]);
                 ConnectionInfo redirectInfo = new ConnectionInfo(ip, port);
                 redirectInfo.setBackupInfo(mInfo.getBackupInfo());
                 mManager.getReconnectionManager().addIgnoreException(RedirectException.class);
-                mManager.disConnect(new RedirectException(redirectInfo));
+                mManager.disconnect(new RedirectException(redirectInfo));
             } else if (cmd == 14) {//心跳
+                logRece("收到心跳,喂狗成功");
                 mManager.getPulseManager().feed();
+            } else {
+                logRece(str);
             }
         }
 
         @Override
         public void onSocketWriteResponse(Context context, ConnectionInfo info, String action, ISendable data) {
             super.onSocketWriteResponse(context, info, action, data);
-            String str = new String(data.parse(), Charset.forName("utf-8"));
-            logSend(str);
+            byte[] bytes = data.parse();
+            bytes = Arrays.copyOfRange(bytes, 4, bytes.length);
+            String str = new String(bytes, Charset.forName("utf-8"));
+            JsonObject jsonObject = new JsonParser().parse(str).getAsJsonObject();
+            int cmd = jsonObject.get("cmd").getAsInt();
+            switch (cmd) {
+                case 54: {
+                    String handshake = jsonObject.get("handshake").getAsString();
+                    logSend("发送握手数据:" + handshake);
+                    break;
+                }
+                default:
+                    logSend(str);
+            }
         }
 
         @Override
         public void onPulseSend(Context context, ConnectionInfo info, IPulseSendable data) {
             super.onPulseSend(context, info, data);
-            String str = new String(data.parse(), Charset.forName("utf-8"));
-            logSend(str);
+            byte[] bytes = data.parse();
+            bytes = Arrays.copyOfRange(bytes, 4, bytes.length);
+            String str = new String(bytes, Charset.forName("utf-8"));
+            JsonObject jsonObject = new JsonParser().parse(str).getAsJsonObject();
+            int cmd = jsonObject.get("cmd").getAsInt();
+            if (cmd == 14) {
+                logSend("发送心跳包");
+            }
         }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_complex);
         findViews();
         initData();
         setListener();
     }
 
     private void findViews() {
-        mSendList = (RecyclerView) findViewById(R.id.send_list);
-        mReceList = (RecyclerView) findViewById(R.id.rece_list);
-        mClearLog = (Button) findViewById(R.id.clear_log);
-        mSetFrequency = (Button) findViewById(R.id.set_pulse_frequency);
-        mFrequency = (EditText) findViewById(R.id.pulse_frequency);
-        mConnect = (Button) findViewById(R.id.connect);
-        mSub = (Button) findViewById(R.id.subscript);
-        mUnSub = (Button) findViewById(R.id.unsubscript);
-        mSendSizeET = (EditText) findViewById(R.id.send_size);
-        mSetSize = (Button) findViewById(R.id.set_size);
-        mMenualPulse = (Button) findViewById(R.id.manual_pulse);
+        mSendList = findViewById(R.id.send_list);
+        mReceList = findViewById(R.id.rece_list);
+        mClearLog = findViewById(R.id.clear_log);
+        mSetFrequency = findViewById(R.id.set_pulse_frequency);
+        mFrequencyET = findViewById(R.id.pulse_frequency);
+        mConnect = findViewById(R.id.connect);
+        mSendSizeET = findViewById(R.id.send_size);
+        mSetSize = findViewById(R.id.set_size);
+        mLiveBgET = findViewById(R.id.bg_live_minute);
+        mLiveBgBtn = findViewById(R.id.bg_live_minute_btn);
+        mMenualPulse = findViewById(R.id.manual_pulse);
+        mLiveBGSwitch = findViewById(R.id.is_live_in_bg);
+        mReconnectSwitch = findViewById(R.id.switch_reconnect);
     }
 
     private void initData() {
@@ -156,14 +190,49 @@ public class MainActivity extends AppCompatActivity {
         mReceList.setLayoutManager(manager2);
         mReceList.setAdapter(mReceLogAdapter);
 
-//        mInfo = new ConnectionInfo("111.206.162.233", 8088);
-        mInfo = new ConnectionInfo("117.136.38.163", 8080);
-        mManager = open(mInfo);
-        mOkOptions = OkSocketOptions.getDefault();
+        mInfo = new ConnectionInfo("104.238.184.237", 8080);
+        mManager = open(mInfo).option(OkSocketOptions.getDefault());
     }
 
     private void setListener() {
         mManager.registerReceiver(adapter);
+
+        mLiveBGSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isChecked() == isChecked) {
+                    return;
+                }
+                long value = -1;
+                if (isChecked) {
+                    value = OkSocket.getBackgroundSurvivalTime();
+                } else {
+                    value = -1;
+                }
+                OkSocket.setBackgroundSurvivalTime(value);
+                mLiveBgET.setText("");
+                mLiveBgET.setHint(value + "");
+            }
+        });
+
+        mReconnectSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (mManager != null && !mManager.isConnect()) {
+                    buttonView.setChecked(!isChecked);
+                    return;
+                }
+                if (buttonView.isChecked() == isChecked) {
+                    return;
+                }
+                if (!isChecked) {
+                    mManager.option(new OkSocketOptions.Builder(mManager.getOption()).setReconnectionManager(new NoneReconnect()).build());
+                } else {
+                    mManager.option(new OkSocketOptions.Builder(mManager.getOption()).setReconnectionManager(OkSocketOptions.getDefault().getReconnectionManager()).build());
+                }
+            }
+        });
+
         mConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,24 +243,11 @@ public class MainActivity extends AppCompatActivity {
                     mManager.connect();
                 } else {
                     mConnect.setText("DisConnecting");
-                    mManager.disConnect();
+                    mManager.disconnect();
                 }
             }
         });
-        mSub.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mManager == null) {
-                    return;
-                }
-                if (!mManager.isConnect()) {
-                    Toast.makeText(getApplicationContext(), "未连接,请先连接", LENGTH_SHORT).show();
-                } else {
-                    NearCarRegisterRq nearCarRegisterRq = new NearCarRegisterRq(getApplicationContext(), true);
-                    mManager.send(nearCarRegisterRq);
-                }
-            }
-        });
+
         mClearLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,20 +257,20 @@ public class MainActivity extends AppCompatActivity {
                 mSendLogAdapter.notifyDataSetChanged();
             }
         });
-        mUnSub.setOnClickListener(new View.OnClickListener() {
+
+        mLiveBgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mManager == null) {
-                    return;
-                }
-                if (!mManager.isConnect()) {
-                    Toast.makeText(getApplicationContext(), "未连接,请先连接", LENGTH_SHORT).show();
-                } else {
-                    NearCarRegisterRq nearCarRegisterRq = new NearCarRegisterRq(getApplicationContext(), false);
-                    mManager.send(nearCarRegisterRq);
+                String timeStr = mLiveBgET.getText().toString();
+                long time = 0;
+                try {
+                    time = Long.parseLong(timeStr);
+                    OkSocket.setBackgroundSurvivalTime(time);
+                } catch (Exception e) {
                 }
             }
         });
+
         mSetSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,34 +281,38 @@ public class MainActivity extends AppCompatActivity {
                 int size = 0;
                 try {
                     size = Integer.parseInt(sizestr);
-                    mOkOptions = new OkSocketOptions.Builder(mOkOptions)
-                            .setSinglePackageBytes(size).build();
-                    mManager.option(mOkOptions);
+                    OkSocketOptions okOptions = new OkSocketOptions.Builder(mManager.getOption())
+                            .setWritePackageBytes(size)
+                            .build();
+                    mManager.option(okOptions);
                 } catch (NumberFormatException e) {
                 }
             }
         });
+
         mSetFrequency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mManager == null) {
                     return;
                 }
-                String timeoutstr = mFrequency.getText().toString();
+                String frequencyStr = mFrequencyET.getText().toString();
                 long frequency = 0;
                 try {
-                    frequency = Long.parseLong(timeoutstr);
-                    mOkOptions = new OkSocketOptions.Builder(mOkOptions)
-                            .setPulseFrequency(frequency).build();
-                    mManager.option(mOkOptions);
+                    frequency = Long.parseLong(frequencyStr);
+                    OkSocketOptions okOptions = new OkSocketOptions.Builder(mManager.getOption())
+                            .setPulseFrequency(frequency)
+                            .build();
+                    mManager.option(okOptions);
                 } catch (NumberFormatException e) {
                 }
             }
         });
+
         mMenualPulse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mManager.send(new PulseBean());
+                mManager.getPulseManager().trigger();
             }
         });
     }
@@ -273,7 +333,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (mManager != null) {
-            mManager.disConnect();
+            mManager.disconnect();
+            mManager.unRegisterReceiver(adapter);
         }
     }
 

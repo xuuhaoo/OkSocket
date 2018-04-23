@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center_horizontal"
-              android:orientation="vertical"
-              android:padding="16dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <ScrollView
         android:id="@+id/form"
@@ -19,26 +19,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="发送"/>
+                android:text="发送" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/send_list"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:background="#dfdddd"/>
+                android:background="#dfdddd" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="10dp"
-                android:text="接收"/>
+                android:text="接收" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rece_list"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:background="#dfdddd"/>
+                android:background="#dfdddd" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Connect"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/clear_log"
@@ -61,38 +61,83 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="CLEAR_LOG"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="right"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/subscript"
-                    style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="SUBSCRIPT"
-                    android:textStyle="bold"/>
+                    android:text="Whether reconnect when loss connect ?" />
 
-
-                <Button
-                    android:id="@+id/unsubscript"
-                    style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/switch_reconnect"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="UNSUBSCRIPT"
-                    android:textStyle="bold"/>
+                    android:layout_marginLeft="20dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Should we auto disconnect in background ?" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/is_live_in_bg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/bg_live_minute"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="set bg live mills"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLines="1" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <Button
+                    android:id="@+id/bg_live_minute_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="set bg mills" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
@@ -107,7 +152,7 @@
                         android:hint="send size"
                         android:inputType="number"
                         android:lines="1"
-                        android:maxLines="1"/>
+                        android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -117,42 +162,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:text="set size"/>
+                    android:text="set size" />
             </LinearLayout>
-
-            <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<android.support.design.widget.TextInputLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1">-->
-
-            <!--<EditText-->
-            <!--android:id="@+id/read_timeout_second"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:hint="read timeout second"-->
-            <!--android:inputType="number"-->
-            <!--android:lines="1"-->
-            <!--android:maxLines="1"/>-->
-
-            <!--</android.support.design.widget.TextInputLayout>-->
-
-            <!--<Button-->
-            <!--android:id="@+id/set_timeout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="set timeout"/>-->
-            <!--</LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
@@ -167,7 +183,7 @@
                         android:hint="frequency a minute"
                         android:inputType="number"
                         android:lines="1"
-                        android:maxLines="1"/>
+                        android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -177,7 +193,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:text="set pulse frequ"/>
+                    android:text="set pulse frequ" />
             </LinearLayout>
 
             <Button
@@ -185,8 +201,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_weight="1"
-                android:text="manual pulse"/>
+                android:text="manual pulse" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

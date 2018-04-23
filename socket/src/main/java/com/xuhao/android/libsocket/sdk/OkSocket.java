@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.xuhao.android.libsocket.impl.EnvironmentalManager;
 import com.xuhao.android.libsocket.impl.ManagerHolder;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
+import com.xuhao.android.libsocket.utils.ActivityStack;
 
 /**
  * OkSocket是一款轻量级的Socket通讯框架,可以提供单工,双工的TCP通讯.
@@ -39,18 +40,43 @@ public class OkSocket {
         assertIsNotInit();
         isInit = true;
         OkSocketOptions.isDebug = isDebug;
+        ActivityStack.init(application, isDebug);
         OkSocket.app = (Application) application.getApplicationContext();
-        //保证混淆时的Builder
-        OkSocketOptions.Builder builder = new OkSocketOptions.Builder(OkSocketOptions.getDefault());
-        EnvironmentalManager.getIns().init(app, holder, builder.build());
+        EnvironmentalManager.getIns().init(holder);
+    }
+
+    /**
+     * 开启一个socket通讯通道,参配为默认参配
+     *
+     * @param connectInfo 连接信息{@link ConnectionInfo}
+     * @return 该参数的连接管理器 {@link IConnectionManager} 连接参数仅作为配置该通道的参配,不影响全局参配
+     */
+    public static IConnectionManager open(ConnectionInfo connectInfo) {
+        assertIsInit();
+        return holder.get(connectInfo, app);
+    }
+
+    /**
+     * 开启一个socket通讯通道,参配为默认参配
+     *
+     * @param ip   需要连接的主机IPV4地址
+     * @param port 需要连接的主机开放的Socket端口号
+     * @return 该参数的连接管理器 {@link IConnectionManager} 连接参数仅作为配置该通道的参配,不影响全局参配
+     */
+    public static IConnectionManager open(String ip, int port) {
+        assertIsInit();
+        ConnectionInfo info = new ConnectionInfo(ip, port);
+        return holder.get(info, app);
     }
 
     /**
      * 开启一个socket通讯通道
+     * Deprecated please use {@link OkSocket#open(ConnectionInfo)}@{@link IConnectionManager#option(OkSocketOptions)}
      *
      * @param connectInfo 连接信息{@link ConnectionInfo}
-     * @param okOptions 连接参配{@link OkSocketOptions}
+     * @param okOptions   连接参配{@link OkSocketOptions}
      * @return 该参数的连接管理器 {@link IConnectionManager} 连接参数仅作为配置该通道的参配,不影响全局参配
+     * @deprecated
      */
     public static IConnectionManager open(ConnectionInfo connectInfo, OkSocketOptions okOptions) {
         assertIsInit();
@@ -59,16 +85,36 @@ public class OkSocket {
 
     /**
      * 开启一个socket通讯通道
+     * Deprecated please use {@link OkSocket#open(String, int)}@{@link IConnectionManager#option(OkSocketOptions)}
      *
-     * @param ip 需要连接的主机IPV4地址
-     * @param port 需要连接的主机开放的Socket端口号
+     * @param ip        需要连接的主机IPV4地址
+     * @param port      需要连接的主机开放的Socket端口号
      * @param okOptions 连接参配{@link OkSocketOptions}
      * @return 该参数的连接管理器 {@link IConnectionManager}
+     * @deprecated
      */
     public static IConnectionManager open(String ip, int port, OkSocketOptions okOptions) {
         assertIsInit();
         ConnectionInfo info = new ConnectionInfo(ip, port);
         return holder.get(info, app, okOptions);
+    }
+
+    /**
+     * 设置OkSocket后台存活时间,为了保证耗电量,保证后台断开连接
+     * 如果为-1,表示App至于后台时不进行连接断开操作.
+     *
+     * @param mills App至于后台后的存活的毫秒数.
+     *              取值范围: -1为永久存活,取值范围[1000,Long.MAX]
+     *              小于1000毫秒按照1000毫秒计算,具体最小值定义请见{@link EnvironmentalManager#DELAY_CONNECT_MILLS}
+     */
+    public static void setBackgroundSurvivalTime(long mills) {
+        assertIsInit();
+        EnvironmentalManager.getIns().setBackgroundLiveMills(mills);
+    }
+
+    public static long getBackgroundSurvivalTime() {
+        assertIsInit();
+        return EnvironmentalManager.getIns().getBackgroundLiveMills();
     }
 
     private static void assertIsNotInit() throws RuntimeException {

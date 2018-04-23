@@ -21,6 +21,8 @@ public interface IConnectionManager extends
 
     boolean isConnect();
 
+    boolean isDisconnecting();
+
     PulseManager getPulseManager();
 
     void setIsConnectionHolder(boolean isHold);
