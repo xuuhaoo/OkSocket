@@ -112,6 +112,11 @@ public class OkSocket {
         EnvironmentalManager.getIns().setBackgroundLiveMills(mills);
     }
 
+    /**
+     * 获取当前框架允许的后台存活时间
+     *
+     * @return 后台存活时间
+     */
     public static long getBackgroundSurvivalTime() {
         assertIsInit();
         return EnvironmentalManager.getIns().getBackgroundLiveMills();

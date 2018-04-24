@@ -9,6 +9,12 @@ import android.net.NetworkInfo;
  */
 
 public class NetUtils {
+    /**
+     * 网络是否可用
+     *
+     * @param context 上下文
+     * @return true则网络可用, false则网络不可用
+     */
     public static boolean netIsAvailable(Context context) {
         ConnectivityManager manager = (ConnectivityManager) context.getApplicationContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
