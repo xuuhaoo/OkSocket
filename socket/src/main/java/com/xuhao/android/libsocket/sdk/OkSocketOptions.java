@@ -175,56 +175,132 @@ public class OkSocketOptions {
             mSSLConfig = okOptions.mSSLConfig;
         }
 
+        /**
+         * Socket通讯模式
+         * <p>
+         * 请注意:<br>
+         * 阻塞式仅支持冷切换(断开后切换)<br>
+         * 非阻塞式可以热切换<br>
+         * </p>
+         *
+         * @param IOThreadMode {@link IOThreadMode}
+         */
         public Builder setIOThreadMode(IOThreadMode IOThreadMode) {
             mIOThreadMode = IOThreadMode;
             return this;
         }
 
+        /**
+         * 最大读取数据的兆数(MB)<br>
+         * 防止服务器返回数据体过大的数据导致前端内存溢出<br>
+         *
+         * @param maxReadDataMB 兆字节为单位
+         */
         public Builder setMaxReadDataMB(int maxReadDataMB) {
             mMaxReadDataMB = maxReadDataMB;
             return this;
         }
 
+        /**
+         * 安全套接字层配置<br>
+         *
+         * @param SSLConfig {@link OkSocketSSLConfig}
+         */
         public Builder setSSLConfig(OkSocketSSLConfig SSLConfig) {
             mSSLConfig = SSLConfig;
             return this;
         }
 
+        /**
+         * Socket通讯中,业务层定义的数据包包头格式<br>
+         * 默认的为{@link DefaultNormalHeaderProtocol}<br>
+         *
+         * @param headerProtocol {@link IHeaderProtocol} 通讯头协议
+         */
         public Builder setHeaderProtocol(IHeaderProtocol headerProtocol) {
             mHeaderProtocol = headerProtocol;
             return this;
         }
+
+        /**
+         * 设置脉搏间隔频率<br>
+         * 单位是毫秒<br>
+         *
+         * @param pulseFrequency 间隔毫秒数
+         */
 
         public Builder setPulseFrequency(long pulseFrequency) {
             mPulseFrequency = pulseFrequency;
             return this;
         }
 
+        /**
+         * 连接是否管理保存<br>
+         * <p>
+         * true:连接将会保存在管理器中,进行性能优化和断线重连<br>
+         * false:不会保存在管理器中,对于已经保存的会进行删除,将不进行性能优化和断线重连.
+         * </p>
+         * 默认是 true
+         *
+         * @param connectionHolden true 讲此次链接交由OkSocket进行缓存管理,false 则不进行缓存管理.
+         * @return
+         */
         public Builder setConnectionHolden(boolean connectionHolden) {
             isConnectionHolden = connectionHolden;
             return this;
         }
 
+        /**
+         * 脉搏丢失次数<br>
+         * 大于或等于丢失次数时将断开该通道的连接<br>
+         * 抛出{@link com.xuhao.android.libsocket.impl.exceptions.DogDeadException}<br>
+         * 默认是5次
+         *
+         * @param pulseFeedLoseTimes 丢失心跳ACK的次数,例如5,当丢失3次时,自动断开.
+         * @return
+         */
         public Builder setPulseFeedLoseTimes(int pulseFeedLoseTimes) {
             mPulseFeedLoseTimes = pulseFeedLoseTimes;
             return this;
         }
 
+        /**
+         * 设置输出Socket管道中给服务器的字节序<br>
+         * 默认是:大端字节序<br>
+         *
+         * @param writeOrder {@link ByteOrder} 字节序
+         */
         public Builder setWriteOrder(ByteOrder writeOrder) {
             mWriteOrder = writeOrder;
             return this;
         }
 
+        /**
+         * 设置输入Socket管道中读取时的字节序<br>
+         * 默认是:大端字节序<br>
+         *
+         * @param readByteOrder {@link ByteOrder} 字节序
+         */
         public Builder setReadByteOrder(ByteOrder readByteOrder) {
             mReadByteOrder = readByteOrder;
             return this;
         }
 
+        /**
+         * 发送给服务器时单个数据包的总长度
+         *
+         * @param writePackageBytes 单个数据包的总大小
+         */
         public Builder setWritePackageBytes(int writePackageBytes) {
             mWritePackageBytes = writePackageBytes;
             return this;
         }
 
+        /**
+         * 从服务器读取时单个数据包的总长度
+         *
+         * @param readPackageBytes 单个数据包的总大小
+         */
         public Builder setReadPackageBytes(int readPackageBytes) {
             mReadPackageBytes = readPackageBytes;
             return this;
@@ -252,12 +328,25 @@ public class OkSocketOptions {
             return setWritePackageBytes(singlePackageBytes);
         }
 
+        /**
+         * 设置连接超时时间,该超时时间是链路上从开始连接到连接上的时间
+         *
+         * @param connectTimeoutSecond 超时秒数,注意单位是秒
+         * @return
+         */
         public Builder setConnectTimeoutSecond(int connectTimeoutSecond) {
             mConnectTimeoutSecond = connectTimeoutSecond;
             return this;
         }
 
-
+        /**
+         * 设置断线重连的连接管理器<br>
+         * 默认的连接管理器为{@link DefaultReconnectManager}<br>
+         * 如果不需要断线重连请设置该参数为{@link com.xuhao.android.libsocket.sdk.connection.NoneReconnect}
+         *
+         * @param reconnectionManager 断线重连管理器{@link AbsReconnectionManager}
+         * @return
+         */
         public Builder setReconnectionManager(
                 AbsReconnectionManager reconnectionManager) {
             mReconnectionManager = reconnectionManager;
