@@ -68,6 +68,7 @@ public class Main {
         if (port == 65535 && !PortCheck.isPortAvailable(port)) {
             throw new IllegalArgumentException(port + " port is not available");
         }
+        port = 8080;
         try {
             InetAddress ia = InetAddress.getLocalHost();
             Log.i("IP: " + ia.getHostAddress() + " /Port is " + port);

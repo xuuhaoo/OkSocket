@@ -39,16 +39,12 @@ public class ReaderImpl extends AbsReader {
                 if (length < headerProtocol.getHeaderLength()) {
                     //there are no data left
                     mRemainingBuf = null;
-                    for (int i = 0; i < headerProtocol.getHeaderLength() - length; i++) {
-                        headBuf.put((byte) mInputStream.read());
-                    }
+                    readHeaderFromChannel(headBuf, headerProtocol.getHeaderLength() - length);
                 } else {
                     mRemainingBuf.position(headerProtocol.getHeaderLength());
                 }
             } else {
-                for (int i = 0; i < headBuf.capacity(); i++) {
-                    headBuf.put((byte) mInputStream.read());
-                }
+                readHeaderFromChannel(headBuf, headBuf.capacity());
             }
             originalData.setHeadBytes(headBuf.array());
             if (OkSocketOptions.isDebug()) {
@@ -111,6 +107,17 @@ public class ReaderImpl extends AbsReader {
         } catch (Exception e) {
             ReadException readException = new ReadException(e);
             throw readException;
+        }
+    }
+
+    private void readHeaderFromChannel(ByteBuffer headBuf, int readLength) throws IOException {
+        for (int i = 0; i < readLength; i++) {
+            byte value = (byte) mInputStream.read();
+            if (value < 0) {
+                throw new ReadException(
+                        "this socket input stream is end of file read " + value + " ,we'll disconnect");
+            }
+            headBuf.put(value);
         }
     }
 

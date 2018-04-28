@@ -18,17 +18,21 @@ import android.widget.Toast;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocket;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
+import com.xuhao.android.libsocket.sdk.OkSocketSSLConfig;
 import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
 import com.xuhao.android.libsocket.sdk.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 import com.xuhao.android.libsocket.sdk.connection.NoneReconnect;
+import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
+import com.xuhao.android.libsocket.utils.BytesUtils;
 import com.xuhao.android.oksocket.adapter.LogAdapter;
 import com.xuhao.android.oksocket.data.HandShake;
 import com.xuhao.android.oksocket.data.LogBean;
 import com.xuhao.android.oksocket.data.PulseBean;
 
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
@@ -190,8 +194,9 @@ public class ComplexDemoActivity extends AppCompatActivity {
         mReceList.setLayoutManager(manager2);
         mReceList.setAdapter(mReceLogAdapter);
 
-        mInfo = new ConnectionInfo("104.238.184.237", 8080);
-        mManager = open(mInfo).option(OkSocketOptions.getDefault());
+        mInfo = new ConnectionInfo("192.168.43.129", 8080);
+        OkSocketOptions.Builder builder = new OkSocketOptions.Builder();
+        mManager = open(mInfo).option(builder.build());
     }
 
     private void setListener() {
