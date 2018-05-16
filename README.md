@@ -29,7 +29,7 @@ files than you need put this into Module build.gradle file</font>
 
 ```groovy
 dependencies {
-        compile 'com.tonystark.android:socket:2.0.0-beta'
+        compile 'com.tonystark.android:socket:2.0.1'
 }
 ```
 
