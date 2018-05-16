@@ -243,7 +243,6 @@ public class OkSocketOptions {
          * 默认是 true
          *
          * @param connectionHolden true 讲此次链接交由OkSocket进行缓存管理,false 则不进行缓存管理.
-         * @return
          */
         public Builder setConnectionHolden(boolean connectionHolden) {
             isConnectionHolden = connectionHolden;
@@ -257,7 +256,6 @@ public class OkSocketOptions {
          * 默认是5次
          *
          * @param pulseFeedLoseTimes 丢失心跳ACK的次数,例如5,当丢失3次时,自动断开.
-         * @return
          */
         public Builder setPulseFeedLoseTimes(int pulseFeedLoseTimes) {
             mPulseFeedLoseTimes = pulseFeedLoseTimes;
@@ -269,8 +267,21 @@ public class OkSocketOptions {
          * 默认是:大端字节序<br>
          *
          * @param writeOrder {@link ByteOrder} 字节序
+         * @deprecated 请使用 {@link Builder#setWriteByteOrder(ByteOrder)}
          */
         public Builder setWriteOrder(ByteOrder writeOrder) {
+            setWriteByteOrder(writeOrder);
+            return this;
+        }
+
+
+        /**
+         * 设置输出Socket管道中给服务器的字节序<br>
+         * 默认是:大端字节序<br>
+         *
+         * @param writeOrder {@link ByteOrder} 字节序
+         */
+        public Builder setWriteByteOrder(ByteOrder writeOrder) {
             mWriteOrder = writeOrder;
             return this;
         }
