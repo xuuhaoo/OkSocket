@@ -194,7 +194,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
         mReceList.setLayoutManager(manager2);
         mReceList.setAdapter(mReceLogAdapter);
 
-        mInfo = new ConnectionInfo("192.168.43.129", 8080);
+        mInfo = new ConnectionInfo("104.238.184.237", 8080);
         OkSocketOptions.Builder builder = new OkSocketOptions.Builder();
         mManager = open(mInfo).option(builder.build());
     }
