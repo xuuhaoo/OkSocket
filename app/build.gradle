@@ -27,7 +27,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:design:26.1.0'
     compile 'com.google.code.gson:gson:2.8.0'
-    compile 'com.tonystark.android:socket:2.0.0-beta'
-//    compile project(path: ':socket')
+//    compile 'com.tonystark.android:socket:2.0.0-beta'
+    compile project(path: ':socket')
 
 }
