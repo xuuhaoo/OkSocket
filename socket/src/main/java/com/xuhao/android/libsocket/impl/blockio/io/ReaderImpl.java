@@ -113,7 +113,7 @@ public class ReaderImpl extends AbsReader {
     private void readHeaderFromChannel(ByteBuffer headBuf, int readLength) throws IOException {
         for (int i = 0; i < readLength; i++) {
             byte value = (byte) mInputStream.read();
-            if (value < 0) {
+            if (value == -1) {
                 throw new ReadException(
                         "this socket input stream is end of file read " + value + " ,we'll disconnect");
             }
@@ -126,7 +126,7 @@ public class ReaderImpl extends AbsReader {
             try {
                 byte[] bufArray = new byte[mOkOptions.getReadPackageBytes()];
                 int len = mInputStream.read(bufArray);
-                if (len < 0) {
+                if (len == -1) {
                     break;
                 }
                 int remaining = byteBuffer.remaining();
