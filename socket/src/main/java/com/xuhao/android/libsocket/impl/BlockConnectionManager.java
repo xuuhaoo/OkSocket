@@ -89,7 +89,9 @@ public class BlockConnectionManager extends AbsConnectionManager {
                     return;
                 }
                 try {
-                    mSocket.close();
+                    if (mSocket != null) {
+                        mSocket.close();
+                    }
                 } catch (IOException e) {
                     //ignore
                 }
@@ -290,6 +292,10 @@ public class BlockConnectionManager extends AbsConnectionManager {
                 mManager.close();
             }
 
+            mSocket = null;
+            canConnect = true;
+            isDisconnecting = false;
+
             if (!(mException instanceof UnconnectException) && mSocket != null) {
                 sendBroadcast(IAction.ACTION_DISCONNECTION, mException);
             }
@@ -301,9 +307,7 @@ public class BlockConnectionManager extends AbsConnectionManager {
             if (mException != null) {
                 mException.printStackTrace();
             }
-            mSocket = null;
-            canConnect = true;
-            isDisconnecting = false;
+
         }
     }
 
