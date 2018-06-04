@@ -292,7 +292,6 @@ public class BlockConnectionManager extends AbsConnectionManager {
                 mManager.close();
             }
 
-            mSocket = null;
             canConnect = true;
             isDisconnecting = false;
 
@@ -307,7 +306,7 @@ public class BlockConnectionManager extends AbsConnectionManager {
             if (mException != null) {
                 mException.printStackTrace();
             }
-
+            mSocket = null;
         }
     }
 
