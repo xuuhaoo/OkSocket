@@ -2,6 +2,7 @@ package com.xuhao.android.libsocket.impl;
 
 import android.content.Context;
 
+import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
@@ -47,7 +48,9 @@ public class SocketActionHandler extends SocketActionAdapter {
         } else {//多工模式
             if (!iOThreadIsCalledDisconnect) {//保证只调用一次,多工多线程,会调用两次
                 iOThreadIsCalledDisconnect = true;
-                mManager.disconnect(e);
+                if (!(e instanceof ManuallyDisconnectException)) {
+                    mManager.disconnect(e);
+                }
             }
         }
     }

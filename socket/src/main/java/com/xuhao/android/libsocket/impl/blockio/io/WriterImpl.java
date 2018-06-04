@@ -10,6 +10,7 @@ import com.xuhao.android.libsocket.sdk.connection.interfacies.IAction;
 import com.xuhao.android.libsocket.utils.BytesUtils;
 import com.xuhao.android.libsocket.utils.SL;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -96,7 +97,15 @@ public class WriterImpl implements IWriter {
     }
 
     @Override
-    public int queueSize() {
-        return mQueue.size();
+    public void close() {
+        if (mOutputStream != null) {
+            try {
+                mOutputStream.close();
+            } catch (IOException e) {
+                //ignore
+            }
+        }
     }
+
+
 }

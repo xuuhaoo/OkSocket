@@ -6,6 +6,7 @@ import com.xuhao.android.libsocket.impl.abilities.IReader;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.connection.abilities.IStateSender;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -29,5 +30,17 @@ public abstract class AbsReader implements IReader {
     @MainThread
     public void setOption(OkSocketOptions option) {
         mOkOptions = option;
+    }
+
+
+    @Override
+    public void close() {
+        if (mInputStream != null) {
+            try {
+                mInputStream.close();
+            } catch (IOException e) {
+                //ignore
+            }
+        }
     }
 }

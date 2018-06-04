@@ -141,15 +141,31 @@
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2">
+
+                    <EditText
+                        android:id="@+id/ip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="ip"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:maxLines="1" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <EditText
-                        android:id="@+id/send_size"
+                        android:id="@+id/port"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="send size"
+                        android:hint="port"
                         android:inputType="number"
                         android:lines="1"
                         android:maxLines="1" />
@@ -157,12 +173,11 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
-                    android:id="@+id/set_size"
-                    android:layout_width="match_parent"
+                    android:id="@+id/redirect"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:text="set size" />
+                    android:text="redirect" />
             </LinearLayout>
 
             <LinearLayout
@@ -204,6 +219,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:text="manual pulse" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
