@@ -1,4 +1,7 @@
 # OkSocket Document
+
+<img src="Logotype primary.png" width="60%" height="60%" />
+
 An blocking socket client for Android applications.
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
