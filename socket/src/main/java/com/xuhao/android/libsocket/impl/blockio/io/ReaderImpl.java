@@ -112,12 +112,13 @@ public class ReaderImpl extends AbsReader {
 
     private void readHeaderFromChannel(ByteBuffer headBuf, int readLength) throws IOException {
         for (int i = 0; i < readLength; i++) {
-            byte value = (byte) mInputStream.read();
+            byte[] bytes = new byte[1];
+            int value = mInputStream.read(bytes);
             if (value == -1) {
                 throw new ReadException(
                         "this socket input stream is end of file read " + value + " ,we'll disconnect");
             }
-            headBuf.put(value);
+            headBuf.put(bytes);
         }
     }
 
