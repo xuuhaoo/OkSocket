@@ -101,7 +101,7 @@ public class ReaderImpl extends AbsReader {
                 }
             } else if (bodyLength < 0) {
                 throw new ReadException(
-                        "this socket input stream is end of file read " + bodyLength + " ,we'll disconnect");
+                        "read body is wrong,this socket input stream is end of file read " + bodyLength + " ,we'll disconnect");
             }
             mStateSender.sendBroadcast(IAction.ACTION_READ_COMPLETE, originalData);
         } catch (Exception e) {
@@ -116,7 +116,7 @@ public class ReaderImpl extends AbsReader {
             int value = mInputStream.read(bytes);
             if (value == -1) {
                 throw new ReadException(
-                        "this socket input stream is end of file read " + value + " ,we'll disconnect");
+                        "read head is wrong, this socket input stream is end of file read " + value + " ,we'll disconnect");
             }
             headBuf.put(bytes);
         }
