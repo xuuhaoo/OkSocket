@@ -128,7 +128,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
         mReceList.setLayoutManager(manager2);
         mReceList.setAdapter(mReceLogAdapter);
 
-        mInfo = new ConnectionInfo("104.238.184.237", 8080);
+        mInfo = new ConnectionInfo("104.238.184.237", 8082);
         mOkOptions = new OkSocketOptions.Builder()
                 .setReconnectionManager(new NoneReconnect())
                 .setWritePackageBytes(1024)
