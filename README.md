@@ -4,7 +4,7 @@ An blocking socket client for Android applications.
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Download](https://api.bintray.com/packages/xuuhaoo/maven/OkSocket/images/download.svg)](https://bintray.com/xuuhaoo/maven/OkSocket/_latestVersion)
 
-Read this in other languages: [简体中文](https://github.com/xuuhaoo/OkSocket/blob/release-2.0.0-beta/README-CN.md)
+Read this in other languages: [简体中文](https://github.com/xuuhaoo/OkSocket/blob/release-2.0.4/README-CN.md)
 
 ### <font id="1">OkSocket Introduce</font>
 <font size=2>
@@ -29,7 +29,7 @@ files than you need put this into Module build.gradle file</font>
 
 ```groovy
 dependencies {
-        compile 'com.tonystark.android:socket:2.0.1'
+        compile 'com.tonystark.android:socket:2.0.4'
 }
 ```
 
@@ -257,7 +257,7 @@ public void onSocketConnectionSuccess(Context context, ConnectionInfo info, Stri
 }
 ```
 ##### <font id="6.4">The heartbeat feed dog</font>
-* Feed the dog because our client needs to know the Socket server received the heart data, so the server after I receive my heartbeat data need to reply the client after receiving the response data, we need to be local dog operations, or when more than a certain number of times the heart data, but did not get feed the dog, the dog will connect the disconnect reconnection.
+* Feed the dog because our client needs to know the Socket server received the heart data, so the server after received my heartbeat data need to reply the client after receiving the response data,called it ACK. We need to be local dog operations, or when more than a certain number of times the heart data, but did not get feed the dog, the dog will connect the disconnect reconnection.
 
 ```java
 private IConnectionManager mManager;
