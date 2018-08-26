@@ -70,13 +70,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-<<<<<<< HEAD
-    <option name="x" value="194" />
-    <option name="y" value="92" />
-=======
     <option name="x" value="245" />
     <option name="y" value="75" />
->>>>>>> release-2.0.4
     <option name="width" value="1406" />
     <option name="height" value="806" />
   </component>
@@ -95,10 +90,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-<<<<<<< HEAD
-      <pane id="PackagesPane" />
-=======
->>>>>>> release-2.0.4
       <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
@@ -147,11 +138,8 @@
           <select />
         </subPane>
       </pane>
-<<<<<<< HEAD
-=======
       <pane id="PackagesPane" />
       <pane id="Scratches" />
->>>>>>> release-2.0.4
       <pane id="AndroidView" />
     </panes>
   </component>
@@ -294,12 +282,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-<<<<<<< HEAD
-    <frame x="194" y="92" width="1406" height="806" extended-state="0" />
-    <editor active="true" />
-=======
     <frame x="245" y="75" width="1406" height="806" extended-state="0" />
->>>>>>> release-2.0.4
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
