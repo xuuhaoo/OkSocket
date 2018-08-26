@@ -17,9 +17,8 @@ public class DefaultNormalReaderProtocol implements IReaderProtocol {
         if (header == null || header.length < getHeaderLength()) {
             return 0;
         }
-        ByteBuffer bb = ByteBuffer.allocate(header.length);
+        ByteBuffer bb = ByteBuffer.wrap(header);
         bb.order(byteOrder);
-        bb.put(header);
         return bb.getInt();
     }
 }
