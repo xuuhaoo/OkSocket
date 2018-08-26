@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Download](https://api.bintray.com/packages/xuuhaoo/maven/OkSocket/images/download.svg)](https://bintray.com/xuuhaoo/maven/OkSocket/_latestVersion)
 
-其他语言支持: [English](https://github.com/xuuhaoo/OkSocket/blob/release-2.0.0-beta/README.md)
+其他语言支持: [English](https://github.com/xuuhaoo/OkSocket/blob/master/README.md)
 
 ### <font id="1">OkSocket简介</font>
 <font size=2>Android OkSocket是一款基于阻塞式传统Socket的一款Socket客户端整体解决方案.您可以使用它进行简单的基于Tcp协议的Socket通讯,当然,也可以进行大数据量复杂的Socket通讯,
@@ -26,7 +26,7 @@ allprojects {
 
 ```groovy
 dependencies {
-        compile 'com.tonystark.android:socket:2.0.4’
+        compile 'com.tonystark.android:socket:2.1.0’
 }
 ```
 
@@ -199,7 +199,7 @@ public void onSocketConnectionSuccess(Context context, ConnectionInfo info, Stri
 ```java
 //设置自定义解析头
 OkSocketOptions.Builder okOptionsBuilder = new OkSocketOptions.Builder(mOkOptions);
-okOptionsBuilder.setHeaderProtocol(new IHeaderProtocol() {
+okOptionsBuilder.setReaderProtocol(new IReaderProtocol() {
     @Override
     public int getHeaderLength() {
     	//返回自定义的包头长度,框架会解析该长度的包头

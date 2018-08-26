@@ -107,7 +107,7 @@ public class OkSocketOptions {
         /**
          * Socket通讯中,业务层定义的数据包包头格式
          */
-        private IReaderProtocol mHeaderProtocol;
+        private IReaderProtocol mReaderProtocol;
         /**
          * 连接超时时间(秒)
          */
@@ -163,7 +163,7 @@ public class OkSocketOptions {
             mIOThreadMode = okOptions.mIOThreadMode;
             mPulseFrequency = okOptions.mPulseFrequency;
             mMaxReadDataMB = okOptions.mMaxReadDataMB;
-            mHeaderProtocol = okOptions.mReaderProtocol;
+            mReaderProtocol = okOptions.mReaderProtocol;
             mConnectTimeoutSecond = okOptions.mConnectTimeoutSecond;
             mWritePackageBytes = okOptions.mWritePackageBytes;
             mReadPackageBytes = okOptions.mReadPackageBytes;
@@ -215,10 +215,10 @@ public class OkSocketOptions {
          * Socket通讯中,业务层定义的数据包包头格式<br>
          * 默认的为{@link DefaultNormalReaderProtocol}<br>
          *
-         * @param headerProtocol {@link IReaderProtocol} 通讯头协议
+         * @param readerProtocol {@link IReaderProtocol} 通讯头协议
          */
-        public Builder setHeaderProtocol(IReaderProtocol headerProtocol) {
-            mHeaderProtocol = headerProtocol;
+        public Builder setReaderProtocol(IReaderProtocol readerProtocol) {
+            mReaderProtocol = readerProtocol;
             return this;
         }
 
@@ -370,7 +370,7 @@ public class OkSocketOptions {
             okOptions.mIOThreadMode = mIOThreadMode;
             okOptions.mPulseFrequency = mPulseFrequency;
             okOptions.mMaxReadDataMB = mMaxReadDataMB;
-            okOptions.mReaderProtocol = mHeaderProtocol;
+            okOptions.mReaderProtocol = mReaderProtocol;
             okOptions.mConnectTimeoutSecond = mConnectTimeoutSecond;
             okOptions.mWritePackageBytes = mWritePackageBytes;
             okOptions.mReadPackageBytes = mReadPackageBytes;

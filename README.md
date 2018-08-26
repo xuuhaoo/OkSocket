@@ -4,7 +4,7 @@ An blocking socket client for Android applications.
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Download](https://api.bintray.com/packages/xuuhaoo/maven/OkSocket/images/download.svg)](https://bintray.com/xuuhaoo/maven/OkSocket/_latestVersion)
 
-Read this in other languages: [简体中文](https://github.com/xuuhaoo/OkSocket/blob/release-2.0.4/README-CN.md)
+Read this in other languages: [简体中文](https://github.com/xuuhaoo/OkSocket/blob/master/README-CN.md)
 
 ### <font id="1">OkSocket Introduce</font>
 <font size=2>
@@ -29,7 +29,7 @@ files than you need put this into Module build.gradle file</font>
 
 ```groovy
 dependencies {
-        compile 'com.tonystark.android:socket:2.0.4'
+        compile 'com.tonystark.android:socket:2.1.0'
 }
 ```
 
@@ -189,9 +189,9 @@ public void onSocketConnectionSuccess(Context context, ConnectionInfo info, Stri
 * As above, the contents of the header for 4 bytes of type int, the int value identifies the inclusions the length of the data area(body area), this is the default resolution, if you need custom header please according to the following method.
 
 ```java
-//Set the custom parsing header
+//Set the custom parsing protocol
 OkSocketOptions.Builder okOptionsBuilder = new OkSocketOptions.Builder(mOkOptions);
-okOptionsBuilder.setHeaderProtocol(new IHeaderProtocol() {
+okOptionsBuilder.setReaderProtocol(new IReaderProtocol() {
     @Override
     public int getHeaderLength() {
     	//Returns a custom header length that automatically parses the length of the head
