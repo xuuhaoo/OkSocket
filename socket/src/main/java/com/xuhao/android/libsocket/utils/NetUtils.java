@@ -16,6 +16,9 @@ public class NetUtils {
      * @return true则网络可用, false则网络不可用
      */
     public static boolean netIsAvailable(Context context) {
+        if (context == null) {
+            return false;
+        }
         ConnectivityManager manager = (ConnectivityManager) context.getApplicationContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         if (manager == null) {

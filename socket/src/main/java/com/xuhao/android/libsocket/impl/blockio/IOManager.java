@@ -14,7 +14,7 @@ import com.xuhao.android.libsocket.impl.blockio.threads.DuplexWriteThread;
 import com.xuhao.android.libsocket.impl.blockio.threads.SimplexIOThread;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
-import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
+import com.xuhao.android.libsocket.sdk.protocol.IReaderProtocol;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.abilities.IStateSender;
 import com.xuhao.android.libsocket.utils.SL;
@@ -148,9 +148,9 @@ public class IOManager implements IIOManager {
     }
 
     private void assertHeaderProtocolNotEmpty() {
-        IHeaderProtocol protocol = mOkOptions.getHeaderProtocol();
+        IReaderProtocol protocol = mOkOptions.getReaderProtocol();
         if (protocol == null) {
-            throw new IllegalArgumentException("The header protocol can not be Null.");
+            throw new IllegalArgumentException("The reader protocol can not be Null.");
         }
 
         if (protocol.getHeaderLength() == 0) {

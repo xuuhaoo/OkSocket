@@ -6,7 +6,7 @@ import java.nio.ByteOrder;
  * 包头数据格式
  * Created by xuhao on 2017/5/22.
  */
-public interface IHeaderProtocol {
+public interface IReaderProtocol {
     /**
      * 返回包头长度,该长度将告知框架,解析服务端数据时,哪一部分数据属于包头.
      *
@@ -15,7 +15,7 @@ public interface IHeaderProtocol {
     int getHeaderLength();
 
     /**
-     * 框架根据{@link IHeaderProtocol#getHeaderLength()}方法截取到包头后,讲会调用该方法<br>
+     * 框架根据{@link IReaderProtocol#getHeaderLength()}方法截取到包头后,讲会调用该方法<br>
      * 交由开发者进行解析,开发者应该从参数 {@link #getBodyLength(byte[], ByteOrder)}}header中解析出该次通讯服务端返回的包体长度<br>
      *
      * @param header    根据getHeaderLength()方法获得的包头原始数据.开发者应该从此header种解析出包体长度数据.

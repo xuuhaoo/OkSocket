@@ -1,10 +1,10 @@
 package com.xuhao.android.libsocket.sdk;
 
 import com.xuhao.android.libsocket.sdk.connection.abilities.IConfiguration;
-import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
+import com.xuhao.android.libsocket.sdk.protocol.DefaultNormalReaderProtocol;
+import com.xuhao.android.libsocket.sdk.protocol.IReaderProtocol;
 import com.xuhao.android.libsocket.sdk.connection.AbsReconnectionManager;
 import com.xuhao.android.libsocket.sdk.connection.DefaultReconnectManager;
-import com.xuhao.android.libsocket.sdk.protocol.DefaultNormalHeaderProtocol;
 
 import java.nio.ByteOrder;
 
@@ -45,7 +45,7 @@ public class OkSocketOptions {
     /**
      * Socket通讯中,业务层定义的数据包包头格式
      */
-    private IHeaderProtocol mHeaderProtocol;
+    private IReaderProtocol mReaderProtocol;
     /**
      * 发送给服务器时单个数据包的总长度
      */
@@ -107,7 +107,7 @@ public class OkSocketOptions {
         /**
          * Socket通讯中,业务层定义的数据包包头格式
          */
-        private IHeaderProtocol mHeaderProtocol;
+        private IReaderProtocol mHeaderProtocol;
         /**
          * 连接超时时间(秒)
          */
@@ -163,7 +163,7 @@ public class OkSocketOptions {
             mIOThreadMode = okOptions.mIOThreadMode;
             mPulseFrequency = okOptions.mPulseFrequency;
             mMaxReadDataMB = okOptions.mMaxReadDataMB;
-            mHeaderProtocol = okOptions.mHeaderProtocol;
+            mHeaderProtocol = okOptions.mReaderProtocol;
             mConnectTimeoutSecond = okOptions.mConnectTimeoutSecond;
             mWritePackageBytes = okOptions.mWritePackageBytes;
             mReadPackageBytes = okOptions.mReadPackageBytes;
@@ -213,11 +213,11 @@ public class OkSocketOptions {
 
         /**
          * Socket通讯中,业务层定义的数据包包头格式<br>
-         * 默认的为{@link DefaultNormalHeaderProtocol}<br>
+         * 默认的为{@link DefaultNormalReaderProtocol}<br>
          *
-         * @param headerProtocol {@link IHeaderProtocol} 通讯头协议
+         * @param headerProtocol {@link IReaderProtocol} 通讯头协议
          */
-        public Builder setHeaderProtocol(IHeaderProtocol headerProtocol) {
+        public Builder setHeaderProtocol(IReaderProtocol headerProtocol) {
             mHeaderProtocol = headerProtocol;
             return this;
         }
@@ -370,7 +370,7 @@ public class OkSocketOptions {
             okOptions.mIOThreadMode = mIOThreadMode;
             okOptions.mPulseFrequency = mPulseFrequency;
             okOptions.mMaxReadDataMB = mMaxReadDataMB;
-            okOptions.mHeaderProtocol = mHeaderProtocol;
+            okOptions.mReaderProtocol = mHeaderProtocol;
             okOptions.mConnectTimeoutSecond = mConnectTimeoutSecond;
             okOptions.mWritePackageBytes = mWritePackageBytes;
             okOptions.mReadPackageBytes = mReadPackageBytes;
@@ -413,8 +413,8 @@ public class OkSocketOptions {
         return mWriteOrder;
     }
 
-    public IHeaderProtocol getHeaderProtocol() {
-        return mHeaderProtocol;
+    public IReaderProtocol getReaderProtocol() {
+        return mReaderProtocol;
     }
 
     public int getMaxReadDataMB() {
@@ -445,7 +445,7 @@ public class OkSocketOptions {
         OkSocketOptions okOptions = new OkSocketOptions();
         okOptions.mPulseFrequency = 5 * 1000;
         okOptions.mIOThreadMode = IOThreadMode.DUPLEX;
-        okOptions.mHeaderProtocol = new DefaultNormalHeaderProtocol();
+        okOptions.mReaderProtocol = new DefaultNormalReaderProtocol();
         okOptions.mMaxReadDataMB = 10;
         okOptions.mConnectTimeoutSecond = 3;
         okOptions.mWritePackageBytes = 100;

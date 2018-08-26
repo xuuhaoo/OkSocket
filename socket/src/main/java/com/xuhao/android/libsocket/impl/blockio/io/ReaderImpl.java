@@ -5,7 +5,7 @@ import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.abilities.IStateSender;
 import com.xuhao.android.libsocket.sdk.connection.interfacies.IAction;
-import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
+import com.xuhao.android.libsocket.sdk.protocol.IReaderProtocol;
 import com.xuhao.android.libsocket.utils.BytesUtils;
 import com.xuhao.android.libsocket.utils.SL;
 
@@ -28,7 +28,7 @@ public class ReaderImpl extends AbsReader {
     @Override
     public void read() throws RuntimeException {
         OriginalData originalData = new OriginalData();
-        IHeaderProtocol headerProtocol = mOkOptions.getHeaderProtocol();
+        IReaderProtocol headerProtocol = mOkOptions.getReaderProtocol();
         ByteBuffer headBuf = ByteBuffer.allocate(headerProtocol.getHeaderLength());
         headBuf.order(mOkOptions.getReadByteOrder());
         try {
@@ -58,7 +58,8 @@ public class ReaderImpl extends AbsReader {
                 if (bodyLength > mOkOptions.getMaxReadDataMB() * 1024 * 1024) {
                     throw new ReadException("Need to follow the transmission protocol.\r\n" +
                             "Please check the client/server code.\r\n" +
-                            "According to the packet header data in the transport protocol, the package length is " + bodyLength + " Bytes.");
+                            "According to the packet header data in the transport protocol, the package length is " + bodyLength + " Bytes.\r\n" +
+                            "You need check your <ReaderProtocol> definition");
                 }
                 ByteBuffer byteBuffer = ByteBuffer.allocate(bodyLength);
                 byteBuffer.order(mOkOptions.getReadByteOrder());
@@ -101,7 +102,7 @@ public class ReaderImpl extends AbsReader {
                 }
             } else if (bodyLength < 0) {
                 throw new ReadException(
-                        "read body is wrong,this socket input stream is end of file read " + bodyLength + " ,we'll disconnect");
+                        "read body is wrong,this socket input stream is end of file read " + bodyLength + " ,that mean this socket is disconnected by server");
             }
             mStateSender.sendBroadcast(IAction.ACTION_READ_COMPLETE, originalData);
         } catch (Exception e) {
@@ -116,7 +117,7 @@ public class ReaderImpl extends AbsReader {
             int value = mInputStream.read(bytes);
             if (value == -1) {
                 throw new ReadException(
-                        "read head is wrong, this socket input stream is end of file read " + value + " ,we'll disconnect");
+                        "read head is wrong, this socket input stream is end of file read " + value + " ,that mean this socket is disconnected by server");
             }
             headBuf.put(bytes);
         }
