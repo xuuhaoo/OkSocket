@@ -14,6 +14,6 @@ public interface IWriter {
 
     void offer(ISendable sendable);
 
-    int queueSize();
+    void close();
 
 }

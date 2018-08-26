@@ -203,6 +203,10 @@ public class ActionDispatcher implements IRegister, IStateSender {
         mSocketBroadcastManager.sendBroadcast(intent);
     }
 
+    void setConnectionInfo(ConnectionInfo connectionInfo) {
+        mConnectionInfo = connectionInfo;
+    }
+
     @Override
     public void sendBroadcast(String action) {
         sendBroadcast(action, null);

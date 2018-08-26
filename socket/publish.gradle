@@ -1,7 +1,7 @@
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
-//gradle clean build bintrayUpload
+//./gradlew clean ./gradlew build ./gradlew bintrayUpload
 
 publishing {
     publications {

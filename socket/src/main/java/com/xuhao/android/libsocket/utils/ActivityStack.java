@@ -15,8 +15,6 @@ import java.util.List;
  */
 
 public class ActivityStack {
-    private static boolean finishCallFromSelf = false;
-
     private static boolean isDebug;
 
     private static boolean isBackground = false;
@@ -61,10 +59,6 @@ public class ActivityStack {
 
         @Override
         public void onActivityDestroyed(Activity activity) {
-            if (finishCallFromSelf) {
-                finishCallFromSelf = false;
-                return;
-            }
             popInstance(lastIndexOf(activity), false);
         }
     };
@@ -300,17 +294,13 @@ public class ActivityStack {
      * @param isClearTop 是否清除(关闭)该下标以上的Activity
      * @return 该index的Activity对象
      */
-    public static Activity popInstance(int index, boolean isClearTop) {
+    private static Activity popInstance(int index, boolean isClearTop) {
         if (index == -1) {
             return null;
         }
         synchronized (INSTANCE_STACK) {
             try {
                 Activity activity = INSTANCE_STACK.remove(index);
-                if (!activity.isFinishing()) {
-                    finishCallFromSelf = true;
-                    activity.finish();
-                }
                 if (isClearTop) {
                     clearUpByIndex(index - 1);
                 }
@@ -419,9 +409,10 @@ public class ActivityStack {
      */
     public static int indexOf(Class<? extends Activity> clz) {
         for (int i = 0; i < INSTANCE_STACK.size(); i++) {
-            Activity activity = INSTANCE_STACK.get(i);
-            activity.getClass().equals(clz);
-            return i;
+            Class<? extends Activity> stackClz = INSTANCE_STACK.get(i).getClass();
+            if (stackClz.equals(clz)) {
+                return i;
+            }
         }
         return -1;
     }
@@ -434,9 +425,10 @@ public class ActivityStack {
      */
     public static int lastIndexOf(Class<? extends Activity> clz) {
         for (int i = INSTANCE_STACK.size() - 1; i >= 0; i--) {
-            Activity activity = INSTANCE_STACK.get(i);
-            activity.getClass().equals(clz);
-            return i;
+            Class<? extends Activity> stackClz = INSTANCE_STACK.get(i).getClass();
+            if (stackClz.equals(clz)) {
+                return i;
+            }
         }
         return -1;
     }
@@ -449,8 +441,10 @@ public class ActivityStack {
      */
     public static int sizeOf(Class<? extends Activity> clz) {
         int count = 0;
-        for (Activity activity : INSTANCE_STACK) {
-            if (activity.getClass().equals(clz)) {
+        for (int i = 0; i < INSTANCE_STACK.size(); i++) {
+            String clzStr = INSTANCE_STACK.get(i).getLocalClassName();
+
+            if (clzStr.equals(clz.getSimpleName())) {
                 count++;
             }
         }

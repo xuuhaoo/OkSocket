@@ -16,4 +16,6 @@ public interface IReader {
 
     @MainThread
     void setOption(OkSocketOptions option);
+
+    void close();
 }

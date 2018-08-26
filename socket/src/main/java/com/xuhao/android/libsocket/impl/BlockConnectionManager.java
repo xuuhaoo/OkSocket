@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.xuhao.android.libsocket.impl.abilities.IIOManager;
 import com.xuhao.android.libsocket.impl.blockio.IOManager;
+import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.impl.exceptions.UnconnectException;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
@@ -89,7 +90,9 @@ public class BlockConnectionManager extends AbsConnectionManager {
                     return;
                 }
                 try {
-                    mSocket.close();
+                    if (mSocket != null) {
+                        mSocket.close();
+                    }
                 } catch (IOException e) {
                     //ignore
                 }
@@ -135,6 +138,7 @@ public class BlockConnectionManager extends AbsConnectionManager {
         mReconnectionManager = mOptions.getReconnectionManager();
         if (mReconnectionManager != null) {
             mReconnectionManager.attach(mContext, this);
+            SL.i("ReconnectionManager is attached.");
         }
         mSocket = getSocketByConfig();
 
@@ -251,6 +255,11 @@ public class BlockConnectionManager extends AbsConnectionManager {
             mPulseManager = null;
         }
 
+        if (exception instanceof ManuallyDisconnectException) {
+            mReconnectionManager.detach();
+            SL.i("ReconnectionManager is detached.");
+        }
+
         String info = mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort();
         DisconnectThread thread = new DisconnectThread(exception, "Disconnect Thread for " + info);
         thread.setDaemon(true);
@@ -267,30 +276,22 @@ public class BlockConnectionManager extends AbsConnectionManager {
 
         @Override
         public void run() {
-            if (mSocket != null) {
-                try {
-                    if (mSocket.getInputStream() != null) {
-                        mSocket.getInputStream().close();
-                    }
-                } catch (Exception e) {
-                }
-                try {
-                    if (mSocket.getOutputStream() != null) {
-                        mSocket.getOutputStream().close();
-                    }
-                } catch (Exception e) {
-                }
+            if (mManager != null) {
+                mManager.close(mException);
+            }
 
+            if (mSocket != null) {
                 try {
                     mSocket.close();
                 } catch (IOException e) {
                 }
             }
-            if (mManager != null) {
-                mManager.close();
-            }
+
+            canConnect = true;
+            isDisconnecting = false;
 
             if (!(mException instanceof UnconnectException) && mSocket != null) {
+                mException = mException instanceof ManuallyDisconnectException ? null : mException;
                 sendBroadcast(IAction.ACTION_DISCONNECTION, mException);
             }
 
@@ -302,15 +303,13 @@ public class BlockConnectionManager extends AbsConnectionManager {
                 mException.printStackTrace();
             }
             mSocket = null;
-            canConnect = true;
-            isDisconnecting = false;
         }
     }
 
 
     @Override
     public void disconnect() {
-        disconnect(null);
+        disconnect(new ManuallyDisconnectException());
     }
 
     @Override

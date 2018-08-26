@@ -26,7 +26,7 @@ allprojects {
 
 ```groovy
 dependencies {
-        compile 'com.tonystark.android:socket:2.0.0-beta’
+        compile 'com.tonystark.android:socket:2.0.4’
 }
 ```
 
@@ -295,32 +295,6 @@ if(mManager != null){
 	pulseManager.trigger();
 }
 ```
-### <font id="7">OkSocket参配选项及回调说明</font>
-* OkSocketOptions
-	* Socket通讯模式`mIOThreadMode`
-	* 连接是否管理保存`isConnectionHolden`
-	* 写入字节序`mWriteOrder`
-	* 读取字节序`mReadByteOrder`
-	* 头字节协议`mHeaderProtocol`
-	* 发送单个数据包的总长度`mSendSinglePackageBytes`
-	* 单次读取的缓存字节长度`mReadSingleTimeBufferBytes`
-	* 脉搏频率间隔毫秒数`mPulseFrequency`
-	* 脉搏最大丢失次数(狗的失喂次数)`mPulseFeedLoseTimes`
-	* 后台存活时间(分钟)`mBackgroundLiveMinute`
-	* 连接超时时间(秒)`mConnectTimeoutSecond`
-	* 最大读取数据的兆数(MB)`mMaxReadDataMB`
-	* 重新连接管理器`mReconnectionManager`
-
-* ISocketActionListener
-	* Socket读写线程启动后回调`onSocketIOThreadStart`
-	* Socket读写线程关闭后回调`onSocketIOThreadShutdown`
-	* Socket连接状态由连接->断开回调`onSocketDisconnection`
-	* Socket连接成功回调`onSocketConnectionSuccess`
-	* Socket连接失败回调`onSocketConnectionFailed`
-	* Socket从服务器读取到字节回调`onSocketReadResponse`
-	* Socket写给服务器字节后回调`onSocketWriteResponse`
-	* 发送心跳后的回调`onPulseSend`
-
 
 
 ```

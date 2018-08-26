@@ -39,16 +39,12 @@ public class ReaderImpl extends AbsReader {
                 if (length < headerProtocol.getHeaderLength()) {
                     //there are no data left
                     mRemainingBuf = null;
-                    for (int i = 0; i < headerProtocol.getHeaderLength() - length; i++) {
-                        headBuf.put((byte) mInputStream.read());
-                    }
+                    readHeaderFromChannel(headBuf, headerProtocol.getHeaderLength() - length);
                 } else {
                     mRemainingBuf.position(headerProtocol.getHeaderLength());
                 }
             } else {
-                for (int i = 0; i < headBuf.capacity(); i++) {
-                    headBuf.put((byte) mInputStream.read());
-                }
+                readHeaderFromChannel(headBuf, headBuf.capacity());
             }
             originalData.setHeadBytes(headBuf.array());
             if (OkSocketOptions.isDebug()) {
@@ -105,7 +101,7 @@ public class ReaderImpl extends AbsReader {
                 }
             } else if (bodyLength < 0) {
                 throw new ReadException(
-                        "this socket input stream is end of file read " + bodyLength + " ,we'll disconnect");
+                        "read body is wrong,this socket input stream is end of file read " + bodyLength + " ,we'll disconnect");
             }
             mStateSender.sendBroadcast(IAction.ACTION_READ_COMPLETE, originalData);
         } catch (Exception e) {
@@ -114,12 +110,24 @@ public class ReaderImpl extends AbsReader {
         }
     }
 
+    private void readHeaderFromChannel(ByteBuffer headBuf, int readLength) throws IOException {
+        for (int i = 0; i < readLength; i++) {
+            byte[] bytes = new byte[1];
+            int value = mInputStream.read(bytes);
+            if (value == -1) {
+                throw new ReadException(
+                        "read head is wrong, this socket input stream is end of file read " + value + " ,we'll disconnect");
+            }
+            headBuf.put(bytes);
+        }
+    }
+
     private void readBodyFromChannel(ByteBuffer byteBuffer) throws IOException {
         while (byteBuffer.hasRemaining()) {
             try {
                 byte[] bufArray = new byte[mOkOptions.getReadPackageBytes()];
                 int len = mInputStream.read(bufArray);
-                if (len < 0) {
+                if (len == -1) {
                     break;
                 }
                 int remaining = byteBuffer.remaining();

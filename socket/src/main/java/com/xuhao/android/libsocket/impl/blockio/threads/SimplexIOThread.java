@@ -5,6 +5,7 @@ import android.content.Context;
 import com.xuhao.android.libsocket.impl.LoopThread;
 import com.xuhao.android.libsocket.impl.abilities.IReader;
 import com.xuhao.android.libsocket.impl.abilities.IWriter;
+import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.sdk.connection.abilities.IStateSender;
 import com.xuhao.android.libsocket.sdk.connection.interfacies.IAction;
 import com.xuhao.android.libsocket.utils.SL;
@@ -18,7 +19,6 @@ import java.io.IOException;
 public class SimplexIOThread extends LoopThread {
     private IStateSender mStateSender;
 
-
     private IReader mReader;
 
     private IWriter mWriter;
@@ -27,7 +27,7 @@ public class SimplexIOThread extends LoopThread {
 
 
     public SimplexIOThread(Context context, IReader reader,
-            IWriter writer, IStateSender stateSender) {
+                           IWriter writer, IStateSender stateSender) {
         super(context, "simplex_io_thread");
         this.mStateSender = stateSender;
         this.mReader = reader;
@@ -50,7 +50,15 @@ public class SimplexIOThread extends LoopThread {
     }
 
     @Override
+    public synchronized void shutdown(Exception e) {
+        mReader.close();
+        mWriter.close();
+        super.shutdown(e);
+    }
+
+    @Override
     protected void loopFinish(Exception e) {
+        e = e instanceof ManuallyDisconnectException ? null : e;
         if (e != null) {
             SL.e("simplex error,thread is dead with exception:" + e.getMessage());
         }

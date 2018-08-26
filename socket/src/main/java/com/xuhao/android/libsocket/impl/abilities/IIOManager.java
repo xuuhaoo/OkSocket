@@ -16,4 +16,6 @@ public interface IIOManager {
 
     void close();
 
+    void close(Exception e);
+
 }

@@ -97,6 +97,9 @@ public abstract class AbsConnectionManager implements IConnectionManager {
         if (info != null) {
             ConnectionInfo tempOldInfo = mConnectionInfo;
             mConnectionInfo = info.clone();
+            if(mActionDispatcher != null){
+                mActionDispatcher.setConnectionInfo(mConnectionInfo);
+            }
             if (mConnectionSwitchListener != null) {
                 mConnectionSwitchListener.onSwitchConnectionInfo(this, tempOldInfo, mConnectionInfo);
             }

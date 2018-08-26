@@ -51,8 +51,10 @@ public abstract class LoopThread implements Runnable {
                 loopTimes++;
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            ioException = e;
+            if (ioException == null) {
+                e.printStackTrace();
+                ioException = e;
+            }
         } finally {
             this.loopFinish(ioException);
             ioException = null;
@@ -84,7 +86,7 @@ public abstract class LoopThread implements Runnable {
         }
     }
 
-    protected synchronized void shutdownWithException(Exception e) {
+    public synchronized void shutdown(Exception e) {
         this.ioException = e;
         shutdown();
     }

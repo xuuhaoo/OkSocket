@@ -12,6 +12,7 @@ import com.xuhao.android.libsocket.impl.blockio.io.WriterImpl;
 import com.xuhao.android.libsocket.impl.blockio.threads.DuplexReadThread;
 import com.xuhao.android.libsocket.impl.blockio.threads.DuplexWriteThread;
 import com.xuhao.android.libsocket.impl.blockio.threads.SimplexIOThread;
+import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
@@ -89,7 +90,7 @@ public class IOManager implements IIOManager {
     }
 
     private void duplex() {
-        shutdownAllThread();
+        shutdownAllThread(null);
         mDuplexWriteThread = new DuplexWriteThread(mContext, mWriter, mSender);
         mDuplexReadThread = new DuplexReadThread(mContext, mReader, mSender);
         mDuplexWriteThread.start();
@@ -97,22 +98,22 @@ public class IOManager implements IIOManager {
     }
 
     private void simplex() {
-        shutdownAllThread();
+        shutdownAllThread(null);
         mSimplexThread = new SimplexIOThread(mContext, mReader, mWriter, mSender);
         mSimplexThread.start();
     }
 
-    private void shutdownAllThread() {
+    private void shutdownAllThread(Exception e) {
         if (mSimplexThread != null) {
-            mSimplexThread.shutdown();
+            mSimplexThread.shutdown(e);
             mSimplexThread = null;
         }
         if (mDuplexReadThread != null) {
-            mDuplexReadThread.shutdown();
+            mDuplexReadThread.shutdown(e);
             mDuplexReadThread = null;
         }
         if (mDuplexWriteThread != null) {
-            mDuplexWriteThread.shutdown();
+            mDuplexWriteThread.shutdown(e);
             mDuplexWriteThread = null;
         }
     }
@@ -137,7 +138,12 @@ public class IOManager implements IIOManager {
 
     @Override
     public void close() {
-        shutdownAllThread();
+        close(new ManuallyDisconnectException());
+    }
+
+    @Override
+    public void close(Exception e) {
+        shutdownAllThread(e);
         mCurrentThreadMode = null;
     }
 

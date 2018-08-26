@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.xuhao.android.libsocket.impl.LoopThread;
 import com.xuhao.android.libsocket.impl.abilities.IReader;
+import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.sdk.connection.abilities.IStateSender;
 import com.xuhao.android.libsocket.sdk.connection.interfacies.IAction;
 import com.xuhao.android.libsocket.utils.SL;
@@ -36,7 +37,14 @@ public class DuplexReadThread extends LoopThread {
     }
 
     @Override
+    public synchronized void shutdown(Exception e) {
+        mReader.close();
+        super.shutdown(e);
+    }
+
+    @Override
     protected void loopFinish(Exception e) {
+        e = e instanceof ManuallyDisconnectException ? null : e;
         if (e != null) {
             SL.e("duplex read error,thread is dead with exception:" + e.getMessage());
         }

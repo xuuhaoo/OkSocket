@@ -44,7 +44,7 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
                 return;
             }
             ConnectionInfo info = mConnectionManager.getConnectionInfo();
-            SL.i("重新连接 Addrs:" + info.getIp() + ":" + info.getPort());
+            SL.i("Reconnect the server " + info.getIp() + ":" + info.getPort() + " ...");
             if (!mConnectionManager.isConnect()) {
                 mConnectionManager.connect();
             }
@@ -79,10 +79,10 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
                     backupInfo.setBackupInfo(bbInfo);
                     if (!mConnectionManager.isConnect()) {
                         mConnectionManager.switchConnectionInfo(backupInfo);
-                        SL.i("尝试重新连接至备用线路 " + "Addrs:" + backupInfo.getIp() + ":" + backupInfo.getPort());
+                        SL.i("Prepare switch to the backup line " + backupInfo.getIp() + ":" + backupInfo.getPort() + " ...");
                         mConnectionManager.connect();
                     }
-                }else{
+                } else {
                     reconnectDelay();
                 }
             } else {
@@ -122,10 +122,16 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
     private void reconnectDelay() {
         mHandler.removeCallbacksAndMessages(null);
         mHandler.sendEmptyMessageDelayed(0, mReconnectTimeDelay);
-        SL.i(mReconnectTimeDelay + " 毫秒后开始尝试重新连接...");
+        SL.i("Reconnect after " + mReconnectTimeDelay + " mills ...");
         mReconnectTimeDelay = mReconnectTimeDelay * 2;//5+10+20+40 = 75 4次
         if (mReconnectTimeDelay >= DEFAULT * 10) {//DEFAULT * 10 = 50
             mReconnectTimeDelay = DEFAULT;
         }
+    }
+
+    @Override
+    public void detach() {
+        reset();
+        super.detach();
     }
 }

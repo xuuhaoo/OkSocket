@@ -1,5 +1,6 @@
 package com.xuhao.android.oksocket;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -25,6 +26,7 @@ import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 import com.xuhao.android.libsocket.sdk.connection.NoneReconnect;
 import com.xuhao.android.oksocket.adapter.LogAdapter;
+import com.xuhao.android.oksocket.data.DefaultSendBean;
 import com.xuhao.android.oksocket.data.HandShake;
 import com.xuhao.android.oksocket.data.LogBean;
 import com.xuhao.android.oksocket.data.PulseBean;
@@ -41,8 +43,9 @@ public class ComplexDemoActivity extends AppCompatActivity {
 
     private Button mConnect;
     private IConnectionManager mManager;
-    private EditText mSendSizeET;
-    private Button mSetSize;
+    private EditText mIPET;
+    private EditText mPortET;
+    private Button mRedirect;
     private EditText mFrequencyET;
     private Button mLiveBgBtn;
     private EditText mLiveBgET;
@@ -172,8 +175,9 @@ public class ComplexDemoActivity extends AppCompatActivity {
         mSetFrequency = findViewById(R.id.set_pulse_frequency);
         mFrequencyET = findViewById(R.id.pulse_frequency);
         mConnect = findViewById(R.id.connect);
-        mSendSizeET = findViewById(R.id.send_size);
-        mSetSize = findViewById(R.id.set_size);
+        mIPET = findViewById(R.id.ip);
+        mPortET = findViewById(R.id.port);
+        mRedirect = findViewById(R.id.redirect);
         mLiveBgET = findViewById(R.id.bg_live_minute);
         mLiveBgBtn = findViewById(R.id.bg_live_minute_btn);
         mMenualPulse = findViewById(R.id.manual_pulse);
@@ -191,7 +195,8 @@ public class ComplexDemoActivity extends AppCompatActivity {
         mReceList.setAdapter(mReceLogAdapter);
 
         mInfo = new ConnectionInfo("104.238.184.237", 8080);
-        mManager = open(mInfo).option(OkSocketOptions.getDefault());
+        OkSocketOptions.Builder builder = new OkSocketOptions.Builder();
+        mManager = open(mInfo).option(builder.build());
     }
 
     private void setListener() {
@@ -271,22 +276,20 @@ public class ComplexDemoActivity extends AppCompatActivity {
             }
         });
 
-        mSetSize.setOnClickListener(new View.OnClickListener() {
+        mRedirect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mManager == null) {
                     return;
                 }
-                String sizestr = mSendSizeET.getText().toString();
-                int size = 0;
-                try {
-                    size = Integer.parseInt(sizestr);
-                    OkSocketOptions okOptions = new OkSocketOptions.Builder(mManager.getOption())
-                            .setWritePackageBytes(size)
-                            .build();
-                    mManager.option(okOptions);
-                } catch (NumberFormatException e) {
-                }
+                String ip = mIPET.getText().toString();
+                String portStr = mPortET.getText().toString();
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("cmd", 57);
+                jsonObject.addProperty("data", ip + ":" + portStr);
+                DefaultSendBean bean = new DefaultSendBean();
+                bean.setContent(new Gson().toJson(jsonObject));
+                mManager.send(bean);
             }
         });
 
@@ -312,6 +315,9 @@ public class ComplexDemoActivity extends AppCompatActivity {
         mMenualPulse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mManager == null) {
+                    return;
+                }
                 mManager.getPulseManager().trigger();
             }
         });
