@@ -11,9 +11,9 @@ import com.xuhao.android.libsocket.impl.client.abilities.IIOManager;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.impl.exceptions.UnconnectException;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
+import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.OkSocketSSLConfig;
-import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.client.connection.AbsReconnectionManager;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 import com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction;
@@ -255,8 +255,10 @@ public class BlockConnectionManager extends AbsConnectionManager {
         }
 
         if (exception instanceof ManuallyDisconnectException) {
-            mReconnectionManager.detach();
-            SLog.i("ReconnectionManager is detached.");
+            if (mReconnectionManager != null) {
+                mReconnectionManager.detach();
+                SLog.i("ReconnectionManager is detached.");
+            }
         }
 
         String info = mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort();

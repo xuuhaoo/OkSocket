@@ -134,7 +134,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
                 .setWritePackageBytes(1024)
                 .build();
         mManager = OkSocket.open(mInfo).option(mOkOptions);
-        OkSocket.server();
+        OkSocket.server().acceptOn(1000);
     }
 
     private void setListener() {
