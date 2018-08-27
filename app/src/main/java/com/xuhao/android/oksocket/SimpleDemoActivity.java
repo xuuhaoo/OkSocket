@@ -12,11 +12,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
+import com.xuhao.android.libsocket.sdk.OkSocket;
+import com.xuhao.android.libsocket.sdk.bean.ISendable;
+import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.SocketActionAdapter;
 import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
-import com.xuhao.android.libsocket.sdk.bean.ISendable;
-import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 import com.xuhao.android.libsocket.sdk.client.connection.NoneReconnect;
 import com.xuhao.android.oksocket.adapter.LogAdapter;
@@ -27,7 +28,6 @@ import com.xuhao.android.oksocket.data.MsgDataBean;
 import java.nio.charset.Charset;
 
 import static android.widget.Toast.LENGTH_SHORT;
-import static com.xuhao.android.libsocket.sdk.OkSocket.open;
 
 /**
  * Created by Tony on 2017/10/24.
@@ -133,7 +133,8 @@ public class SimpleDemoActivity extends AppCompatActivity {
                 .setReconnectionManager(new NoneReconnect())
                 .setWritePackageBytes(1024)
                 .build();
-        mManager = open(mInfo).option(mOkOptions);
+        mManager = OkSocket.open(mInfo).option(mOkOptions);
+        OkSocket.server();
     }
 
     private void setListener() {

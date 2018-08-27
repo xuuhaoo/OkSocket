@@ -9,6 +9,9 @@ import com.xuhao.android.libsocket.impl.client.ManagerHolder;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 import com.xuhao.android.libsocket.utils.ActivityStack;
+import com.xuhao.android.libsocket.utils.SLog;
+import com.xuhao.android.spi.interfacies.IAcceptManager;
+import com.xuhao.android.spi.utils.SpiUtils;
 
 /**
  * OkSocket是一款轻量级的Socket通讯框架,可以提供单工,双工的TCP通讯.
@@ -44,6 +47,17 @@ public class OkSocket {
         ActivityStack.init(application, isDebug);
         OkSocket.app = (Application) application.getApplicationContext();
         EnvironmentalManager.getIns().init(holder);
+    }
+
+    public static IAcceptManager server() {
+        IAcceptManager manager = SpiUtils.load(IAcceptManager.class);
+        if (manager == null) {
+            SLog.e("server init Error.Server plug-in are required!" +
+                    " For details link to https://github.com/xuuhaoo/OkSocket");
+        } else {
+            return manager;
+        }
+        return null;
     }
 
     /**

@@ -29,5 +29,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
 //    compile 'com.tonystark.android:socket:2.0.4'
     compile project(path: ':socket')
+    compile project(path: ':serverimpl')
 
 }
