@@ -9,4 +9,9 @@ public class OkAcceptManager implements IAcceptManager {
     public void acceptOn(int port) {
         Log.i("OkAcceptManager", "acceptOn:" + port);
     }
+
+    @Override
+    public void close() {
+
+    }
 }

@@ -6,7 +6,7 @@ apply plugin: 'com.jfrog.bintray'
 publishing {
     publications {
         Production(MavenPublication) {
-            artifact("$buildDir/outputs/aar/socketserver-release.aar")
+            artifact("$buildDir/outputs/aar/$project.name-release.aar")
             groupId project.GROUP_ID
             artifactId project.ARTIFACT_ID
             version project.VERSION

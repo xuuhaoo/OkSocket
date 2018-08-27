@@ -24,4 +24,4 @@ android {
         abortOnError false
     }
 }
-apply from: 'publish.gradle'
+apply from: '../publish.gradle'
