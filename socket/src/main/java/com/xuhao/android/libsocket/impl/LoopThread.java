@@ -2,7 +2,7 @@ package com.xuhao.android.libsocket.impl;
 
 import android.content.Context;
 
-import com.xuhao.android.libsocket.utils.SL;
+import com.xuhao.android.libsocket.utils.SLog;
 
 /**
  * Created by xuhao on 15/6/18.
@@ -38,7 +38,7 @@ public abstract class LoopThread implements Runnable {
             isStop = false;
             loopTimes = 0;
             thread.start();
-            SL.i(threadName + " is starting");
+            SLog.i(threadName + " is starting");
         }
     }
 
@@ -58,7 +58,7 @@ public abstract class LoopThread implements Runnable {
         } finally {
             this.loopFinish(ioException);
             ioException = null;
-            SL.i(threadName + " is shutting down");
+            SLog.i(threadName + " is shutting down");
         }
     }
 

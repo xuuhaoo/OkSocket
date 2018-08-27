@@ -26,12 +26,12 @@
 
 -keep class com.xuhao.android.libsocket.impl.abilities.** { *; }
 -keep class com.xuhao.android.libsocket.impl.exceptions.** { *; }
--keep class com.xuhao.android.libsocket.impl.EnvironmentalManager { *; }
--keep class com.xuhao.android.libsocket.impl.BlockConnectionManager { *; }
+-keep class com.xuhao.android.libsocket.impl.client.EnvironmentalManager { *; }
+-keep class com.xuhao.android.libsocket.impl.client.BlockConnectionManager { *; }
 -keep class com.xuhao.android.libsocket.impl.UnBlockConnectionManager { *; }
--keep class com.xuhao.android.libsocket.impl.SocketActionHandler { *; }
--keep class com.xuhao.android.libsocket.impl.PulseManager { *; }
--keep class com.xuhao.android.libsocket.impl.ManagerHolder { *; }
+-keep class com.xuhao.android.libsocket.impl.client.SocketActionHandler { *; }
+-keep class com.xuhao.android.libsocket.impl.client.PulseManager { *; }
+-keep class com.xuhao.android.libsocket.impl.client.ManagerHolder { *; }
 -keep class com.xuhao.android.libsocket.interfaces.** { *; }
 -keep class com.xuhao.android.libsocket.sdk.** { *; }
 
@@ -40,10 +40,10 @@
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
--keep class com.xuhao.android.libsocket.sdk.OkSocketOptions$* {
+-keep class com.xuhao.android.libsocket.sdk.client.OkSocketOptions$* {
     *;
 }
--keep class com.xuhao.android.libsocket.sdk.OkSocketSSLConfig$* {
+-keep class com.xuhao.android.libsocket.sdk.client.OkSocketSSLConfig$* {
     *;
 }
 -keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod

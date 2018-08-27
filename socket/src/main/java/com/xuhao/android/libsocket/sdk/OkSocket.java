@@ -4,9 +4,10 @@ package com.xuhao.android.libsocket.sdk;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
-import com.xuhao.android.libsocket.impl.EnvironmentalManager;
-import com.xuhao.android.libsocket.impl.ManagerHolder;
-import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
+import com.xuhao.android.libsocket.impl.client.EnvironmentalManager;
+import com.xuhao.android.libsocket.impl.client.ManagerHolder;
+import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
+import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 import com.xuhao.android.libsocket.utils.ActivityStack;
 
 /**
@@ -39,7 +40,7 @@ public class OkSocket {
     public static void initialize(@NonNull Application application, boolean isDebug) {
         assertIsNotInit();
         isInit = true;
-        OkSocketOptions.isDebug = isDebug;
+        OkSocketOptions.setIsDebug(isDebug);
         ActivityStack.init(application, isDebug);
         OkSocket.app = (Application) application.getApplicationContext();
         EnvironmentalManager.getIns().init(holder);

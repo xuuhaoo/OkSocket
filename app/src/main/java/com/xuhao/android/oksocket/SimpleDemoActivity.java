@@ -12,13 +12,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
-import com.xuhao.android.libsocket.sdk.OkSocketOptions;
-import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
-import com.xuhao.android.libsocket.sdk.bean.IPulseSendable;
+import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
+import com.xuhao.android.libsocket.sdk.client.SocketActionAdapter;
+import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
-import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
-import com.xuhao.android.libsocket.sdk.connection.NoneReconnect;
+import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
+import com.xuhao.android.libsocket.sdk.client.connection.NoneReconnect;
 import com.xuhao.android.oksocket.adapter.LogAdapter;
 import com.xuhao.android.oksocket.data.HandShake;
 import com.xuhao.android.oksocket.data.LogBean;

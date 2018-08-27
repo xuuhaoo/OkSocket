@@ -64,7 +64,7 @@ dependencies {
 -keep class com.xuhao.android.socket.sdk.OkSocketOptions$* {
     *;
 }
--keep class com.xuhao.android.libsocket.sdk.OkSocketSSLConfig$* {
+-keep class com.xuhao.android.libsocket.sdk.client.OkSocketSSLConfig$* {
     *;
 }
 ```
