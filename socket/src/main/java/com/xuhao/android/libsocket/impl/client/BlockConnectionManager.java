@@ -18,9 +18,9 @@ import com.xuhao.android.libsocket.impl.exceptions.UnconnectException;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.OkSocketSSLConfig;
+import com.xuhao.android.libsocket.sdk.client.action.IAction;
 import com.xuhao.android.libsocket.sdk.client.connection.AbsReconnectionManager;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
-import com.xuhao.android.libsocket.sdk.client.action.IAction;
 import com.xuhao.android.libsocket.sdk.client.protocol.DefaultX509ProtocolTrustManager;
 
 import java.io.IOException;
@@ -290,7 +290,6 @@ public class BlockConnectionManager extends AbsConnectionManager {
                 }
             }
 
-            canConnect = true;
             isDisconnecting = false;
 
             if (!(mException instanceof UnconnectException) && mSocket != null) {
@@ -302,10 +301,12 @@ public class BlockConnectionManager extends AbsConnectionManager {
                 mActionHandler.detach(BlockConnectionManager.this);
                 mActionHandler = null;
             }
-            if (mException != null) {
-                mException.printStackTrace();
-            }
             mSocket = null;
+            canConnect = true;
+
+            if (mException != null) {
+                SLog.e("socket is disconnecting because: " + mException.getMessage());
+            }
         }
     }
 

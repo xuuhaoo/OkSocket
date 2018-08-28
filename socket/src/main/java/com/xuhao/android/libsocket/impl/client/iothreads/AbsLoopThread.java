@@ -38,7 +38,7 @@ public abstract class AbsLoopThread implements Runnable {
             isStop = false;
             loopTimes = 0;
             thread.start();
-            SLog.i(threadName + " is starting");
+            SLog.w(threadName + " is starting");
         }
     }
 
@@ -58,7 +58,7 @@ public abstract class AbsLoopThread implements Runnable {
         } finally {
             this.loopFinish(ioException);
             ioException = null;
-            SLog.i(threadName + " is shutting down");
+            SLog.w(threadName + " is shutting down");
         }
     }
 

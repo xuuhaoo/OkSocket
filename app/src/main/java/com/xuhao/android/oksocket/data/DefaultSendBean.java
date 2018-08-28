@@ -1,5 +1,7 @@
 package com.xuhao.android.oksocket.data;
 
+import com.xuhao.android.common.interfacies.client.msg.ISendable;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;

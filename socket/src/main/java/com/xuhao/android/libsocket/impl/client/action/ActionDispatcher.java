@@ -203,7 +203,7 @@ public class ActionDispatcher implements IRegister<ISocketActionListener>, IStat
         mSocketBroadcastManager.sendBroadcast(intent);
     }
 
-    void setConnectionInfo(ConnectionInfo connectionInfo) {
+    public void setConnectionInfo(ConnectionInfo connectionInfo) {
         mConnectionInfo = connectionInfo;
     }
 

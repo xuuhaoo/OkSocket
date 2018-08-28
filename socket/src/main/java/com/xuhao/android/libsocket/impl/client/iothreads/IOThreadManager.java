@@ -7,12 +7,12 @@ import com.xuhao.android.common.interfacies.IReaderProtocol;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.utils.SLog;
-import com.xuhao.android.libsocket.impl.io.abilities.IReader;
-import com.xuhao.android.libsocket.impl.io.abilities.IWriter;
 import com.xuhao.android.libsocket.impl.client.abilities.IIOManager;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.impl.io.ReaderImpl;
 import com.xuhao.android.libsocket.impl.io.WriterImpl;
+import com.xuhao.android.libsocket.impl.io.abilities.IReader;
+import com.xuhao.android.libsocket.impl.io.abilities.IWriter;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 
 import java.io.InputStream;
@@ -73,11 +73,11 @@ public class IOThreadManager implements IIOManager {
         mWriter.setOption(mOkOptions);
         switch (mOkOptions.getIOThreadMode()) {
             case DUPLEX:
-                SLog.e("DUPLEX is processing");
+                SLog.w("DUPLEX is processing");
                 duplex();
                 break;
             case SIMPLEX:
-                SLog.e("SIMPLEX is processing");
+                SLog.w("SIMPLEX is processing");
                 simplex();
                 break;
             default:
