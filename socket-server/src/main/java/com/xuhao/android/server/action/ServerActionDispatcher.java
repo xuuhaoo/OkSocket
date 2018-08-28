@@ -1,11 +1,12 @@
-package com.xuhao.android.libserver.impl;
+package com.xuhao.android.server.action;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import com.xuhao.android.common.interfacies.client.msg.ISendable;
+import com.xuhao.android.common.interfacies.client.IClient;
+import com.xuhao.android.common.interfacies.client.IClientPool;
 import com.xuhao.android.common.interfacies.dispatcher.IRegister;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.interfacies.server.IServerActionListener;
@@ -13,6 +14,14 @@ import com.xuhao.android.common.utils.SocketBroadcastManager;
 
 import java.io.Serializable;
 import java.util.HashMap;
+
+import static com.xuhao.android.server.action.IAction.ACTION_CLIENT_CONNECTED;
+import static com.xuhao.android.server.action.IAction.ACTION_CLIENT_DISCONNECTED;
+import static com.xuhao.android.server.action.IAction.ACTION_SERVER_ALLREADY_SHUTDOWN;
+import static com.xuhao.android.server.action.IAction.ACTION_SERVER_LISTEN_FAILED;
+import static com.xuhao.android.server.action.IAction.ACTION_SERVER_LISTEN_SUCCESS;
+import static com.xuhao.android.server.action.IAction.ACTION_SERVER_WILL_BE_SHUTDOWN;
+import static com.xuhao.android.server.action.IAction.SERVER_ACTION_DATA;
 
 
 /**
@@ -36,11 +45,15 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
      * 服务器端口
      */
     private int mLocalPort;
+    /**
+     * 客户端池子
+     */
+    private IClientPool<IClient, String> mClientPool;
 
-
-    public ServerActionDispatcher(Context context, int localPort) {
+    public ServerActionDispatcher(Context context, int localPort, IClientPool<IClient, String> clientPool) {
         mContext = context.getApplicationContext();
         mLocalPort = localPort;
+        mClientPool = clientPool;
         mSocketBroadcastManager = new SocketBroadcastManager(mContext);
     }
 
@@ -66,16 +79,12 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
                     }
                 };
                 registerReceiver(broadcastReceiver,
-                        ACTION_CONNECTION_FAILED,
-                        ACTION_CONNECTION_SUCCESS,
-                        ACTION_DISCONNECTION,
-                        ACTION_READ_COMPLETE,
-                        ACTION_READ_THREAD_SHUTDOWN,
-                        ACTION_READ_THREAD_START,
-                        ACTION_WRITE_COMPLETE,
-                        ACTION_WRITE_THREAD_SHUTDOWN,
-                        ACTION_WRITE_THREAD_START,
-                        ACTION_PULSE_REQUEST);
+                        ACTION_SERVER_LISTEN_SUCCESS,
+                        ACTION_SERVER_LISTEN_FAILED,
+                        ACTION_CLIENT_CONNECTED,
+                        ACTION_CLIENT_DISCONNECTED,
+                        ACTION_SERVER_WILL_BE_SHUTDOWN,
+                        ACTION_SERVER_ALLREADY_SHUTDOWN);
                 synchronized (mResponseHandlerMap) {
                     mResponseHandlerMap.put(socketResponseHandler, broadcastReceiver);
                 }
@@ -107,73 +116,53 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
     private void dispatchActionToListener(Context context, Intent intent, IServerActionListener responseHandler) {
         String action = intent.getAction();
         switch (action) {
-            case ACTION_CONNECTION_SUCCESS: {
+            case ACTION_SERVER_LISTEN_SUCCESS: {
                 try {
-                    responseHandler.onSocketConnectionSuccess(context, mConnectionInfo, action);
+                    responseHandler.onServerListenSuccess(context, mLocalPort);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             }
-            case ACTION_CONNECTION_FAILED: {
+            case ACTION_SERVER_LISTEN_FAILED: {
                 try {
-                    Exception exception = (Exception) intent.getSerializableExtra(ACTION_DATA);
-                    responseHandler.onSocketConnectionFailed(context, mConnectionInfo, action, exception);
+                    Throwable throwable = (Throwable) intent.getSerializableExtra(SERVER_ACTION_DATA);
+                    responseHandler.onServerListenFailed(context, mLocalPort, throwable);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             }
-            case ACTION_DISCONNECTION: {
+            case ACTION_CLIENT_CONNECTED: {
                 try {
-                    Exception exception = (Exception) intent.getSerializableExtra(ACTION_DATA);
-                    responseHandler.onSocketDisconnection(context, mConnectionInfo, action, exception);
+                    IClient client = (IClient) intent.getSerializableExtra(SERVER_ACTION_DATA);
+                    responseHandler.onClientConnected(context, client, mLocalPort, mClientPool);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             }
-            case ACTION_READ_COMPLETE: {
+            case ACTION_CLIENT_DISCONNECTED: {
                 try {
-                    OriginalData data = (OriginalData) intent.getSerializableExtra(ACTION_DATA);
-                    responseHandler.onSocketReadResponse(context, mConnectionInfo, action, data);
+                    IClient client = (IClient) intent.getSerializableExtra(SERVER_ACTION_DATA);
+                    responseHandler.onClientDisconnected(context, client, mLocalPort, mClientPool);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             }
-            case ACTION_READ_THREAD_START:
-            case ACTION_WRITE_THREAD_START: {
+            case ACTION_SERVER_WILL_BE_SHUTDOWN: {
                 try {
-                    responseHandler.onSocketIOThreadStart(context, action);
+                    responseHandler.onServerWillBeShutdown(context, mLocalPort, mClientPool);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             }
-            case ACTION_WRITE_COMPLETE: {
+            case ACTION_SERVER_ALLREADY_SHUTDOWN: {
                 try {
-                    ISendable sendable = (ISendable) intent.getSerializableExtra(ACTION_DATA);
-                    responseHandler.onSocketWriteResponse(context, mConnectionInfo, action, sendable);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-            case ACTION_WRITE_THREAD_SHUTDOWN:
-            case ACTION_READ_THREAD_SHUTDOWN: {
-                try {
-                    Exception exception = (Exception) intent.getSerializableExtra(ACTION_DATA);
-                    responseHandler.onSocketIOThreadShutdown(context, action, exception);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-            case ACTION_PULSE_REQUEST: {
-                try {
-                    IPulseSendable sendable = (IPulseSendable) intent.getSerializableExtra(ACTION_DATA);
-                    responseHandler.onPulseSend(context, mConnectionInfo, sendable);
+                    Throwable throwable = (Throwable) intent.getSerializableExtra(SERVER_ACTION_DATA);
+                    responseHandler.onServerAllreadyShutdown(context, mLocalPort, throwable);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -185,7 +174,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
     @Override
     public void sendBroadcast(String action, Serializable serializable) {
         Intent intent = new Intent(action);
-        intent.putExtra(ACTION_DATA, serializable);
+        intent.putExtra(SERVER_ACTION_DATA, serializable);
         mSocketBroadcastManager.sendBroadcast(intent);
     }
 

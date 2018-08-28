@@ -1,17 +1,21 @@
 package com.xuhao.android.common.interfacies.server;
 
+import android.content.Context;
+
 import com.xuhao.android.common.interfacies.client.IClient;
 import com.xuhao.android.common.interfacies.client.IClientPool;
 
 public interface IServerActionListener {
-    void onServerListenerSuccess(int localPort);
+    void onServerListenSuccess(Context context, int localPort);
 
-    void onServerListenerFailed(int localPort, Throwable throwable);
+    void onServerListenFailed(Context context, int localPort, Throwable throwable);
 
-    void onClientConnected(IClient client, int serverLocalPort, IClientPool clientPool);
+    void onClientConnected(Context context, IClient client, int serverLocalPort, IClientPool clientPool);
 
-    void onClientDisconnected(IClient client, int serverLocalPort, IClientPool clientPool);
+    void onClientDisconnected(Context context, IClient client, int serverLocalPort, IClientPool clientPool);
 
-    void onServerWillBeShutdown(IClientPool clientPool);
+    void onServerWillBeShutdown(Context context, int localPort, IClientPool clientPool);
+
+    void onServerAllreadyShutdown(Context context, int localPort, Throwable throwable);
 
 }

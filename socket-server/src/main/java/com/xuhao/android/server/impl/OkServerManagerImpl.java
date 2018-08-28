@@ -1,4 +1,4 @@
-package com.xuhao.android.libserver.impl;
+package com.xuhao.android.server.impl;
 
 import com.xuhao.android.common.interfacies.server.IServerManager;
 

@@ -1,4 +1,4 @@
-package com.xuhao.android.libserver.impl;
+package com.xuhao.android.server.impl;
 
 import android.content.BroadcastReceiver;
 

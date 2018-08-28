@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.impl.client;
+package com.xuhao.android.libsocket.impl.client.action;
 
 import android.content.Context;
 
@@ -6,9 +6,9 @@ import com.xuhao.android.common.interfacies.dispatcher.IRegister;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
+import com.xuhao.android.libsocket.sdk.client.action.ISocketActionListener;
 import com.xuhao.android.libsocket.sdk.client.action.SocketActionAdapter;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
-import com.xuhao.android.libsocket.sdk.client.action.ISocketActionListener;
 
 /**
  * Created by xuhao on 2017/5/18.
@@ -21,7 +21,7 @@ public class SocketActionHandler extends SocketActionAdapter {
 
     private boolean iOThreadIsCalledDisconnect = false;
 
-    protected SocketActionHandler() {
+    public SocketActionHandler() {
 
     }
 

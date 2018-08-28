@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.impl.client;
+package com.xuhao.android.libsocket.impl.client.action;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

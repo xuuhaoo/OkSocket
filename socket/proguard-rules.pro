@@ -29,7 +29,7 @@
 -keep class com.xuhao.android.libsocket.impl.client.EnvironmentalManager { *; }
 -keep class com.xuhao.android.libsocket.impl.client.BlockConnectionManager { *; }
 -keep class com.xuhao.android.libsocket.impl.UnBlockConnectionManager { *; }
--keep class com.xuhao.android.libsocket.impl.client.SocketActionHandler { *; }
+-keep class com.xuhao.android.libsocket.impl.client.action.SocketActionHandler { *; }
 -keep class com.xuhao.android.libsocket.impl.client.PulseManager { *; }
 -keep class com.xuhao.android.libsocket.impl.client.ManagerHolder { *; }
 -keep class com.xuhao.android.libsocket.interfaces.** { *; }

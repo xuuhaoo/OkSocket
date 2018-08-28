@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 
 import com.xuhao.android.libsocket.impl.client.abilities.IConnectionSwitchListener;
+import com.xuhao.android.libsocket.impl.client.action.ActionDispatcher;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 import com.xuhao.android.libsocket.sdk.client.action.ISocketActionListener;
