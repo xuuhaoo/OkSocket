@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.xuhao.android.libsocket.utils;
+package com.xuhao.android.common.utils;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

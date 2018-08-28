@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.utils;
+package com.xuhao.android.common.utils;
 
 import android.app.Activity;
 import android.app.Application;

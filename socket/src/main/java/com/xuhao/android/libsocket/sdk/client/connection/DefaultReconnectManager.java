@@ -5,9 +5,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import com.xuhao.android.common.utils.SLog;
 import com.xuhao.android.libsocket.impl.exceptions.PurifyException;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
-import com.xuhao.android.libsocket.utils.SLog;
 
 import java.util.Iterator;
 

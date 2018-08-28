@@ -2,6 +2,7 @@ package com.xuhao.android.libsocket.impl.io;
 
 import android.support.annotation.MainThread;
 
+import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.libsocket.impl.abilities.IReader;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 

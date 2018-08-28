@@ -2,7 +2,7 @@ package com.xuhao.android.libsocket.impl;
 
 import android.content.Context;
 
-import com.xuhao.android.libsocket.utils.SLog;
+import com.xuhao.android.common.utils.SLog;
 
 /**
  * Created by xuhao on 15/6/18.

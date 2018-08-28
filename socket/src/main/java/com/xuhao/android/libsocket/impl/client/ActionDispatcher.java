@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import com.xuhao.android.common.interfacies.client.msg.ISendable;
+import com.xuhao.android.common.interfacies.dispatcher.IRegister;
+import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
+import com.xuhao.android.common.utils.SocketBroadcastManager;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
-import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
+import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.client.connection.interfacies.ISocketActionListener;
-import com.xuhao.android.libsocket.utils.SocketBroadcastManager;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -30,7 +33,7 @@ import static com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAct
  * 状态机
  * Created by didi on 2018/4/19.
  */
-public class ActionDispatcher implements IRegister, IStateSender {
+public class ActionDispatcher implements IRegister<ISocketActionListener>, IStateSender {
     /**
      * 每个连接一个广播管理器不会串
      */

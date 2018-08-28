@@ -1,8 +1,6 @@
-package com.xuhao.android.libsocket.utils;
+package com.xuhao.android.common.utils;
 
 import android.util.Log;
-
-import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 
 /**
  * Created by xuhao on 2017/6/9.
@@ -10,20 +8,26 @@ import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 
 public class SLog {
 
+    private static boolean isDebug;
+
+    public static void setIsDebug(boolean isDebug) {
+        SLog.isDebug = isDebug;
+    }
+
     public static void e(String msg) {
-        if (OkSocketOptions.isDebug()) {
+        if (isDebug) {
             Log.e("OkSocket", msg);
         }
     }
 
     public static void i(String msg) {
-        if (OkSocketOptions.isDebug()) {
+        if (isDebug) {
             Log.i("OkSocket", msg);
         }
     }
 
     public static void w(String msg) {
-        if (OkSocketOptions.isDebug()) {
+        if (isDebug) {
             Log.w("OkSocket", msg);
         }
     }

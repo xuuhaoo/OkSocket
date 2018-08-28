@@ -4,13 +4,13 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
+import com.xuhao.android.common.interfacies.server.IServerManager;
+import com.xuhao.android.common.utils.SLog;
+import com.xuhao.android.common.utils.SpiUtils;
 import com.xuhao.android.libsocket.impl.client.abilities.IConnectionSwitchListener;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
-import com.xuhao.android.libsocket.utils.SLog;
-import com.xuhao.android.common.interfacies.server.IServerManager;
-import com.xuhao.android.common.utils.SpiUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

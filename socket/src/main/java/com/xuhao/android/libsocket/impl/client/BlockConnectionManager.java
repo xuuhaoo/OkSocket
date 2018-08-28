@@ -7,6 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 import android.text.TextUtils;
 
+import com.xuhao.android.common.interfacies.client.msg.ISendable;
+import com.xuhao.android.common.utils.NetUtils;
+import com.xuhao.android.common.utils.SLog;
 import com.xuhao.android.libsocket.impl.client.abilities.IIOManager;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.impl.exceptions.UnconnectException;
@@ -17,8 +20,6 @@ import com.xuhao.android.libsocket.sdk.client.connection.AbsReconnectionManager;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 import com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction;
 import com.xuhao.android.libsocket.sdk.protocol.DefaultX509ProtocolTrustManager;
-import com.xuhao.android.libsocket.utils.NetUtils;
-import com.xuhao.android.libsocket.utils.SLog;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

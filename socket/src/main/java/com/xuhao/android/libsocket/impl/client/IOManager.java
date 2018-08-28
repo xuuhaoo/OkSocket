@@ -3,18 +3,21 @@ package com.xuhao.android.libsocket.impl.client;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.xuhao.android.common.interfacies.IReaderProtocol;
+import com.xuhao.android.common.interfacies.client.msg.ISendable;
+import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
+import com.xuhao.android.common.utils.SLog;
 import com.xuhao.android.libsocket.impl.LoopThread;
-import com.xuhao.android.libsocket.impl.client.abilities.IIOManager;
 import com.xuhao.android.libsocket.impl.abilities.IReader;
 import com.xuhao.android.libsocket.impl.abilities.IWriter;
-import com.xuhao.android.libsocket.impl.io.ReaderImpl;
-import com.xuhao.android.libsocket.impl.io.WriterImpl;
+import com.xuhao.android.libsocket.impl.client.abilities.IIOManager;
 import com.xuhao.android.libsocket.impl.client.iothreads.DuplexReadThread;
 import com.xuhao.android.libsocket.impl.client.iothreads.DuplexWriteThread;
 import com.xuhao.android.libsocket.impl.client.iothreads.SimplexIOThread;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
+import com.xuhao.android.libsocket.impl.io.ReaderImpl;
+import com.xuhao.android.libsocket.impl.io.WriterImpl;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
-import com.xuhao.android.libsocket.utils.SLog;
 
 import java.io.InputStream;
 import java.io.OutputStream;

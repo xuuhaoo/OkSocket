@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.utils;
+package com.xuhao.android.common.utils;
 
 /**
  * Created by xuhao on 15/12/9.

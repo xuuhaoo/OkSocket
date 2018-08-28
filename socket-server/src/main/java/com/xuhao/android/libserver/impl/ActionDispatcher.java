@@ -5,10 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import com.xuhao.android.libserver.impl.abilities.IStateSender;
-import com.xuhao.android.common.interfacies.dispatcher.IRegister;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
+import com.xuhao.android.common.interfacies.dispatcher.IRegister;
+import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.interfacies.server.IServerActionListener;
+import com.xuhao.android.common.utils.SocketBroadcastManager;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -31,15 +32,10 @@ public class ActionDispatcher implements IRegister, IStateSender {
      * 上下文
      */
     private Context mContext;
-    /**
-     * 连接信息
-     */
-    private ConnectionInfo mConnectionInfo;
 
 
     public ActionDispatcher(Context context, ConnectionInfo info) {
         mContext = context.getApplicationContext();
-        mConnectionInfo = info;
         mSocketBroadcastManager = new SocketBroadcastManager(mContext);
     }
 

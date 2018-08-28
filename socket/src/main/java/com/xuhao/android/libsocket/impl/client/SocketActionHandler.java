@@ -2,11 +2,13 @@ package com.xuhao.android.libsocket.impl.client;
 
 import android.content.Context;
 
+import com.xuhao.android.common.interfacies.dispatcher.IRegister;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.SocketActionAdapter;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
+import com.xuhao.android.libsocket.sdk.client.connection.interfacies.ISocketActionListener;
 
 /**
  * Created by xuhao on 2017/5/18.
@@ -23,7 +25,7 @@ public class SocketActionHandler extends SocketActionAdapter {
 
     }
 
-    public void attach(IConnectionManager manager, IRegister register) {
+    public void attach(IConnectionManager manager, IRegister<ISocketActionListener> register) {
         this.mManager = manager;
         register.registerReceiver(this);
     }
