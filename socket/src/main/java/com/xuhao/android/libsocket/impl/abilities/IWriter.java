@@ -1,7 +1,6 @@
 package com.xuhao.android.libsocket.impl.abilities;
 
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
-import com.xuhao.android.libsocket.sdk.bean.ISendable;
 
 /**
  * Created by xuhao on 2017/5/16.

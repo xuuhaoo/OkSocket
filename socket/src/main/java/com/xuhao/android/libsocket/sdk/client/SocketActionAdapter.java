@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
-import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction;
 import com.xuhao.android.libsocket.sdk.client.connection.interfacies.ISocketActionListener;

@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocket;
-import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.SocketActionAdapter;
@@ -134,7 +133,6 @@ public class SimpleDemoActivity extends AppCompatActivity {
                 .setWritePackageBytes(1024)
                 .build();
         mManager = OkSocket.open(mInfo).option(mOkOptions);
-        OkSocket.server().acceptOn(1000);
     }
 
     private void setListener() {

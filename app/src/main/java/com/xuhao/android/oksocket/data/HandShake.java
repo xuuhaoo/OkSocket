@@ -1,13 +1,7 @@
 package com.xuhao.android.oksocket.data;
 
-import com.xuhao.android.libsocket.sdk.bean.ISendable;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.charset.Charset;
 
 /**
  * Created by xuhao on 2017/5/22.

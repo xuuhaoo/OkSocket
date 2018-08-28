@@ -4,7 +4,6 @@ import android.support.annotation.MainThread;
 
 import com.xuhao.android.libsocket.impl.abilities.IReader;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
-import com.xuhao.android.libsocket.sdk.client.connection.abilities.IStateSender;
 
 import java.io.IOException;
 import java.io.InputStream;

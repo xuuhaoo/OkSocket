@@ -1,6 +1,4 @@
-package com.xuhao.android.libsocket.sdk.client.connection.abilities;
-
-import com.xuhao.android.libsocket.sdk.bean.ISendable;
+package com.xuhao.android.common.interfacies;
 
 /**
  * Created by xuhao on 2017/5/16.

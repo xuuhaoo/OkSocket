@@ -3,7 +3,6 @@ package com.xuhao.android.libsocket.impl.io;
 import com.xuhao.android.libsocket.impl.exceptions.ReadException;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
-import com.xuhao.android.libsocket.sdk.client.connection.abilities.IStateSender;
 import com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction;
 import com.xuhao.android.libsocket.sdk.protocol.IReaderProtocol;
 import com.xuhao.android.libsocket.utils.BytesUtils;

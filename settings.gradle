@@ -1,1 +1,1 @@
-include ':app', ':socket', ':socket-server', ':server-interface'
+include ':app', ':socket', ':socket-server', ':common-interface'

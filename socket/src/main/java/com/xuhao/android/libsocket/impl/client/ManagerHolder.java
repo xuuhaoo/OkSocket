@@ -2,11 +2,15 @@ package com.xuhao.android.libsocket.impl.client;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.SparseArray;
 
 import com.xuhao.android.libsocket.impl.client.abilities.IConnectionSwitchListener;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
+import com.xuhao.android.libsocket.utils.SLog;
+import com.xuhao.android.common.interfacies.IServerManager;
+import com.xuhao.android.common.utils.SpiUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +23,10 @@ import java.util.Map;
  */
 
 public class ManagerHolder {
+
     private Map<ConnectionInfo, IConnectionManager> mConnectionManagerMap = new HashMap<>();
+
+    private SparseArray<IServerManager> mServerManagerMap = new SparseArray<>();
 
     private static class InstanceHolder {
         private static final ManagerHolder INSTANCE = new ManagerHolder();
@@ -33,16 +40,34 @@ public class ManagerHolder {
         mConnectionManagerMap.clear();
     }
 
-    public IConnectionManager get(ConnectionInfo info, Context context) {
+    public IServerManager getServer(int localPort, Context context) {
+        IServerManager manager = mServerManagerMap.get(localPort);
+        if (manager == null) {
+            manager = SpiUtils.load(IServerManager.class);
+            if (manager == null) {
+                SLog.e("Server load error. Server plug-in are required!" +
+                        " For details link to https://github.com/xuuhaoo/OkSocket");
+            } else {
+                synchronized (mServerManagerMap) {
+                    mServerManagerMap.append(localPort, manager);
+                }
+                manager.initLocalPortPrivate(localPort);
+                return manager;
+            }
+        }
+        return manager;
+    }
+
+    public IConnectionManager getConnection(ConnectionInfo info, Context context) {
         IConnectionManager manager = mConnectionManagerMap.get(info);
         if (manager == null) {
-            return get(info, context, OkSocketOptions.getDefault());
+            return getConnection(info, context, OkSocketOptions.getDefault());
         } else {
-            return get(info, context, manager.getOption());
+            return getConnection(info, context, manager.getOption());
         }
     }
 
-    public IConnectionManager get(ConnectionInfo info, Context context, OkSocketOptions okOptions) {
+    public IConnectionManager getConnection(ConnectionInfo info, Context context, OkSocketOptions okOptions) {
         IConnectionManager manager = mConnectionManagerMap.get(info);
         if (manager != null) {
             if (!okOptions.isConnectionHolden()) {

@@ -1,30 +1,18 @@
-package com.xuhao.android.libsocket.impl.client;
+package com.xuhao.android.libserver.impl;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import com.xuhao.android.libsocket.sdk.ConnectionInfo;
-import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
-import com.xuhao.android.libsocket.sdk.bean.OriginalData;
-import com.xuhao.android.libsocket.sdk.client.connection.interfacies.ISocketActionListener;
-import com.xuhao.android.libsocket.utils.SocketBroadcastManager;
+import com.xuhao.android.libserver.impl.abilities.IStateSender;
+import com.xuhao.android.common.interfacies.IRegister;
+import com.xuhao.android.common.interfacies.ISendable;
+import com.xuhao.android.common.interfacies.ISocketActionListener;
 
 import java.io.Serializable;
 import java.util.HashMap;
 
-import static com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction.ACTION_CONNECTION_FAILED;
-import static com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction.ACTION_CONNECTION_SUCCESS;
-import static com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction.ACTION_DATA;
-import static com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction.ACTION_DISCONNECTION;
-import static com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction.ACTION_PULSE_REQUEST;
-import static com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction.ACTION_READ_COMPLETE;
-import static com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction.ACTION_READ_THREAD_SHUTDOWN;
-import static com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction.ACTION_READ_THREAD_START;
-import static com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction.ACTION_WRITE_COMPLETE;
-import static com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction.ACTION_WRITE_THREAD_SHUTDOWN;
-import static com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction.ACTION_WRITE_THREAD_START;
 
 /**
  * 状态机

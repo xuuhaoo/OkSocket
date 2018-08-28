@@ -21,7 +21,6 @@ import com.xuhao.android.libsocket.sdk.OkSocket;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.SocketActionAdapter;
 import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
-import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 import com.xuhao.android.libsocket.sdk.client.connection.NoneReconnect;

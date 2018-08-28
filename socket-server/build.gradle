@@ -2,5 +2,5 @@ apply from: '../lib_configuration.gradle'
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation project(':server-interface')
+    implementation project(':common-interface')
 }

@@ -6,7 +6,6 @@ import com.xuhao.android.libsocket.impl.LoopThread;
 import com.xuhao.android.libsocket.impl.abilities.IReader;
 import com.xuhao.android.libsocket.impl.abilities.IWriter;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
-import com.xuhao.android.libsocket.sdk.client.connection.abilities.IStateSender;
 import com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction;
 import com.xuhao.android.libsocket.utils.SLog;
 

@@ -15,8 +15,6 @@ import com.xuhao.android.libsocket.impl.client.iothreads.SimplexIOThread;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.protocol.IReaderProtocol;
-import com.xuhao.android.libsocket.sdk.bean.ISendable;
-import com.xuhao.android.libsocket.sdk.client.connection.abilities.IStateSender;
 import com.xuhao.android.libsocket.utils.SLog;
 
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.sdk.client.connection.abilities;
+package com.xuhao.android.libserver.impl.abilities;
 
 import java.io.Serializable;
 

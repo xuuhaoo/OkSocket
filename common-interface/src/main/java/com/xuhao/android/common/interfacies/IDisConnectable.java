@@ -1,9 +1,4 @@
-package com.xuhao.android.libsocket.sdk.client.connection.abilities;
-
-import android.content.Context;
-
-import com.xuhao.android.libsocket.sdk.ConnectionInfo;
-import com.xuhao.android.libsocket.sdk.client.SocketActionAdapter;
+package com.xuhao.android.common.interfacies;
 
 /**
  * Created by xuhao on 2017/5/16.
@@ -12,7 +7,6 @@ import com.xuhao.android.libsocket.sdk.client.SocketActionAdapter;
 public interface IDisConnectable {
     /**
      * 断开当前连接管理器的链接,并伴随着一个异常<br>
-     * 该异常信息将回调在{@link SocketActionAdapter#onSocketDisconnection(Context, ConnectionInfo, String, Exception)}<br>
      *
      * @param e 断开时希望伴随的异常对象
      */

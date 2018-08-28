@@ -1,4 +1,6 @@
-package com.xuhao.android.spi.utils;
+package com.xuhao.android.common.utils;
+
+import android.util.Log;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
@@ -14,7 +16,7 @@ public class SpiUtils {
                 return service;
             }
         } catch (Throwable throwable) {
-            throwable.printStackTrace();
+            Log.e("SpiLoader", "error! " + throwable.getMessage());
         }
         return null;
     }

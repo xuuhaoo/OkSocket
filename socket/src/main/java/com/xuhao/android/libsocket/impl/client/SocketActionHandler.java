@@ -7,7 +7,6 @@ import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.SocketActionAdapter;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
-import com.xuhao.android.libsocket.sdk.client.connection.abilities.IRegister;
 
 /**
  * Created by xuhao on 2017/5/18.

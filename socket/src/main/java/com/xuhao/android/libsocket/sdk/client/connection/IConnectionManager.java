@@ -4,9 +4,10 @@ import com.xuhao.android.libsocket.impl.client.PulseManager;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.connection.abilities.IConfiguration;
 import com.xuhao.android.libsocket.sdk.client.connection.abilities.IConnectable;
-import com.xuhao.android.libsocket.sdk.client.connection.abilities.IRegister;
-import com.xuhao.android.libsocket.sdk.client.connection.abilities.ISender;
-import com.xuhao.android.libsocket.sdk.client.connection.abilities.IDisConnectable;
+import com.xuhao.android.libsocket.sdk.client.connection.interfacies.ISocketActionListener;
+import com.xuhao.android.common.interfacies.IDisConnectable;
+import com.xuhao.android.common.interfacies.IRegister;
+import com.xuhao.android.common.interfacies.ISender;
 
 /**
  * Created by xuhao on 2017/5/16.
@@ -17,7 +18,7 @@ public interface IConnectionManager extends
         IConnectable,
         IDisConnectable,
         ISender<IConnectionManager>,
-        IRegister {
+        IRegister<ISocketActionListener> {
     /**
      * 是否连接
      *

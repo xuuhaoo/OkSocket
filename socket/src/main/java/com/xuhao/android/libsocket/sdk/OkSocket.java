@@ -9,9 +9,7 @@ import com.xuhao.android.libsocket.impl.client.ManagerHolder;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 import com.xuhao.android.libsocket.utils.ActivityStack;
-import com.xuhao.android.libsocket.utils.SLog;
-import com.xuhao.android.spi.interfacies.IAcceptManager;
-import com.xuhao.android.spi.utils.SpiUtils;
+import com.xuhao.android.common.interfacies.IServerManager;
 
 /**
  * OkSocket是一款轻量级的Socket通讯框架,可以提供单工,双工的TCP通讯.
@@ -49,15 +47,15 @@ public class OkSocket {
         EnvironmentalManager.getIns().init(holder);
     }
 
-    public static IAcceptManager server() {
-        IAcceptManager manager = SpiUtils.load(IAcceptManager.class);
-        if (manager == null) {
-            SLog.e("server init Error.Server plug-in are required!" +
-                    " For details link to https://github.com/xuuhaoo/OkSocket");
-        } else {
-            return manager;
-        }
-        return null;
+    /**
+     * 获得一个SocketServer服务器.
+     *
+     * @param localPort
+     * @return
+     */
+    public static IServerManager server(int localPort) {
+        assertIsInit();
+        return holder.getServer(localPort, app);
     }
 
     /**
@@ -68,7 +66,7 @@ public class OkSocket {
      */
     public static IConnectionManager open(ConnectionInfo connectInfo) {
         assertIsInit();
-        return holder.get(connectInfo, app);
+        return holder.getConnection(connectInfo, app);
     }
 
     /**
@@ -81,7 +79,7 @@ public class OkSocket {
     public static IConnectionManager open(String ip, int port) {
         assertIsInit();
         ConnectionInfo info = new ConnectionInfo(ip, port);
-        return holder.get(info, app);
+        return holder.getConnection(info, app);
     }
 
     /**
@@ -95,7 +93,7 @@ public class OkSocket {
      */
     public static IConnectionManager open(ConnectionInfo connectInfo, OkSocketOptions okOptions) {
         assertIsInit();
-        return holder.get(connectInfo, app, okOptions);
+        return holder.getConnection(connectInfo, app, okOptions);
     }
 
     /**
@@ -111,7 +109,7 @@ public class OkSocket {
     public static IConnectionManager open(String ip, int port, OkSocketOptions okOptions) {
         assertIsInit();
         ConnectionInfo info = new ConnectionInfo(ip, port);
-        return holder.get(info, app, okOptions);
+        return holder.getConnection(info, app, okOptions);
     }
 
     /**
