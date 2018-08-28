@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.sdk.protocol;
+package com.xuhao.android.libsocket.sdk.client.protocol;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;

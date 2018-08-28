@@ -3,9 +3,9 @@ package com.xuhao.android.libsocket.impl.client;
 import android.os.Handler;
 import android.os.Message;
 
+import com.xuhao.android.common.utils.ActivityStack;
 import com.xuhao.android.libsocket.impl.exceptions.PurifyException;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
-import com.xuhao.android.libsocket.utils.ActivityStack;
 
 import java.util.ArrayList;
 import java.util.List;

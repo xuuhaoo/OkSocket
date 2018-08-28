@@ -1,13 +1,11 @@
-package com.xuhao.android.libsocket.sdk.client;
+package com.xuhao.android.libsocket.sdk.client.action;
 
 import android.content.Context;
 
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
-import com.xuhao.android.libsocket.sdk.bean.OriginalData;
+import com.xuhao.android.libsocket.sdk.client.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
-import com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction;
-import com.xuhao.android.libsocket.sdk.client.connection.interfacies.ISocketActionListener;
 
 /**
  * Socket行为适配器,是行为监听器的一个Simple版本,详情请见{@link ISocketActionListener}

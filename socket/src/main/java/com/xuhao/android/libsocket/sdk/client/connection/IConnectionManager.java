@@ -4,7 +4,7 @@ import com.xuhao.android.libsocket.impl.client.PulseManager;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.connection.abilities.IConfiguration;
 import com.xuhao.android.libsocket.sdk.client.connection.abilities.IConnectable;
-import com.xuhao.android.libsocket.sdk.client.connection.interfacies.ISocketActionListener;
+import com.xuhao.android.libsocket.sdk.client.action.ISocketActionListener;
 import com.xuhao.android.common.interfacies.client.IDisConnectable;
 import com.xuhao.android.common.interfacies.dispatcher.IRegister;
 import com.xuhao.android.common.interfacies.client.msg.ISender;

@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.impl;
+package com.xuhao.android.libsocket.impl.client.iothreads;
 
 import android.content.Context;
 
@@ -7,7 +7,7 @@ import com.xuhao.android.common.utils.SLog;
 /**
  * Created by xuhao on 15/6/18.
  */
-public abstract class LoopThread implements Runnable {
+public abstract class AbsLoopThread implements Runnable {
     public Thread thread = null;
 
     protected String threadName = "";
@@ -20,13 +20,13 @@ public abstract class LoopThread implements Runnable {
 
     private long loopTimes = 0;
 
-    public LoopThread(Context context) {
+    public AbsLoopThread(Context context) {
         this.context = context;
         isStop = true;
         threadName = this.getClass().getSimpleName();
     }
 
-    public LoopThread(Context context, String name) {
+    public AbsLoopThread(Context context, String name) {
         this.context = context;
         isStop = true;
         threadName = name;

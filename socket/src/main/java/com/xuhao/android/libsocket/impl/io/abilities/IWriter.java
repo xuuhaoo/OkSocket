@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.impl.abilities;
+package com.xuhao.android.libsocket.impl.io.abilities;
 
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;

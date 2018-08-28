@@ -6,9 +6,9 @@ import com.xuhao.android.common.interfacies.dispatcher.IRegister;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
-import com.xuhao.android.libsocket.sdk.client.SocketActionAdapter;
+import com.xuhao.android.libsocket.sdk.client.action.SocketActionAdapter;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
-import com.xuhao.android.libsocket.sdk.client.connection.interfacies.ISocketActionListener;
+import com.xuhao.android.libsocket.sdk.client.action.ISocketActionListener;
 
 /**
  * Created by xuhao on 2017/5/18.

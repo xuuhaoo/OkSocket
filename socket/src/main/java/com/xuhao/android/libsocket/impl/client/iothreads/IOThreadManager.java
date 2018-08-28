@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.impl.client;
+package com.xuhao.android.libsocket.impl.client.iothreads;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,13 +7,9 @@ import com.xuhao.android.common.interfacies.IReaderProtocol;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.utils.SLog;
-import com.xuhao.android.libsocket.impl.LoopThread;
-import com.xuhao.android.libsocket.impl.abilities.IReader;
-import com.xuhao.android.libsocket.impl.abilities.IWriter;
+import com.xuhao.android.libsocket.impl.io.abilities.IReader;
+import com.xuhao.android.libsocket.impl.io.abilities.IWriter;
 import com.xuhao.android.libsocket.impl.client.abilities.IIOManager;
-import com.xuhao.android.libsocket.impl.client.iothreads.DuplexReadThread;
-import com.xuhao.android.libsocket.impl.client.iothreads.DuplexWriteThread;
-import com.xuhao.android.libsocket.impl.client.iothreads.SimplexIOThread;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.impl.io.ReaderImpl;
 import com.xuhao.android.libsocket.impl.io.WriterImpl;
@@ -26,7 +22,7 @@ import java.io.OutputStream;
  * Created by xuhao on 2017/5/31.
  */
 
-public class IOManager implements IIOManager {
+public class IOThreadManager implements IIOManager {
 
     private Context mContext;
 
@@ -42,7 +38,7 @@ public class IOManager implements IIOManager {
 
     private IWriter mWriter;
 
-    private LoopThread mSimplexThread;
+    private AbsLoopThread mSimplexThread;
 
     private DuplexReadThread mDuplexReadThread;
 
@@ -50,11 +46,11 @@ public class IOManager implements IIOManager {
 
     private OkSocketOptions.IOThreadMode mCurrentThreadMode;
 
-    public IOManager(@NonNull Context context,
-                     @NonNull InputStream inputStream,
-                     @NonNull OutputStream outputStream,
-                     @NonNull OkSocketOptions okOptions,
-                     @NonNull IStateSender stateSender) {
+    public IOThreadManager(@NonNull Context context,
+                           @NonNull InputStream inputStream,
+                           @NonNull OutputStream outputStream,
+                           @NonNull OkSocketOptions okOptions,
+                           @NonNull IStateSender stateSender) {
         mContext = context;
         mInputStream = inputStream;
         mOutputStream = outputStream;

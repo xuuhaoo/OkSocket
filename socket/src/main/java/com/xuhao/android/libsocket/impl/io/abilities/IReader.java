@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.impl.abilities;
+package com.xuhao.android.libsocket.impl.io.abilities;
 
 import android.support.annotation.MainThread;
 import android.support.annotation.WorkerThread;

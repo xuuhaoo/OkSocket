@@ -4,10 +4,9 @@ import android.content.Context;
 
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.utils.SLog;
-import com.xuhao.android.libsocket.impl.LoopThread;
-import com.xuhao.android.libsocket.impl.abilities.IWriter;
+import com.xuhao.android.libsocket.impl.io.abilities.IWriter;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
-import com.xuhao.android.libsocket.sdk.client.connection.interfacies.IAction;
+import com.xuhao.android.libsocket.sdk.client.action.IAction;
 
 import java.io.IOException;
 
@@ -15,7 +14,7 @@ import java.io.IOException;
  * Created by xuhao on 2017/5/17.
  */
 
-public class DuplexWriteThread extends LoopThread {
+public class DuplexWriteThread extends AbsLoopThread {
     private IStateSender mStateSender;
 
     private IWriter mWriter;

@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.sdk.client.connection.interfacies;
+package com.xuhao.android.libsocket.sdk.client.action;
 
 public interface IAction {
     //数据key

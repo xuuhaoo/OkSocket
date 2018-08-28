@@ -5,7 +5,7 @@ import com.xuhao.android.libsocket.sdk.client.connection.AbsReconnectionManager;
 import com.xuhao.android.libsocket.sdk.client.connection.DefaultReconnectManager;
 import com.xuhao.android.libsocket.sdk.client.connection.NoneReconnect;
 import com.xuhao.android.libsocket.sdk.client.connection.abilities.IConfiguration;
-import com.xuhao.android.libsocket.sdk.protocol.DefaultNormalReaderProtocol;
+import com.xuhao.android.libsocket.sdk.client.protocol.DefaultNormalReaderProtocol;
 
 import java.nio.ByteOrder;
 

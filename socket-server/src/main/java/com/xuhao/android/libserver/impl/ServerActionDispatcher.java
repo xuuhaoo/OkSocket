@@ -16,10 +16,10 @@ import java.util.HashMap;
 
 
 /**
- * 状态机
+ * 服务器状态机
  * Created by didi on 2018/4/19.
  */
-public class ActionDispatcher implements IRegister, IStateSender {
+public class ServerActionDispatcher implements IRegister<IServerActionListener>, IStateSender {
     /**
      * 每个连接一个广播管理器不会串
      */
@@ -32,10 +32,15 @@ public class ActionDispatcher implements IRegister, IStateSender {
      * 上下文
      */
     private Context mContext;
+    /**
+     * 服务器端口
+     */
+    private int mLocalPort;
 
 
-    public ActionDispatcher(Context context, ConnectionInfo info) {
+    public ServerActionDispatcher(Context context, int localPort) {
         mContext = context.getApplicationContext();
+        mLocalPort = localPort;
         mSocketBroadcastManager = new SocketBroadcastManager(mContext);
     }
 
@@ -182,10 +187,6 @@ public class ActionDispatcher implements IRegister, IStateSender {
         Intent intent = new Intent(action);
         intent.putExtra(ACTION_DATA, serializable);
         mSocketBroadcastManager.sendBroadcast(intent);
-    }
-
-    void setConnectionInfo(ConnectionInfo connectionInfo) {
-        mConnectionInfo = connectionInfo;
     }
 
     @Override
