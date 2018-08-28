@@ -51,7 +51,7 @@ public class ManagerHolder {
                 synchronized (mServerManagerMap) {
                     mServerManagerMap.append(localPort, manager);
                 }
-                manager.initLocalPortPrivate(localPort);
+                manager.initServerPortPrivate(localPort);
                 return manager;
             }
         }

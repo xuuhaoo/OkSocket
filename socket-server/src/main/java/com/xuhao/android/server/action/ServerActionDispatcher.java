@@ -50,11 +50,17 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
      */
     private IClientPool<IClient, String> mClientPool;
 
-    public ServerActionDispatcher(Context context, int localPort, IClientPool<IClient, String> clientPool) {
+    public ServerActionDispatcher(Context context, IClientPool<IClient, String> clientPool) {
         mContext = context.getApplicationContext();
-        mLocalPort = localPort;
-        mClientPool = clientPool;
         mSocketBroadcastManager = new SocketBroadcastManager(mContext);
+    }
+
+    public void setLocalPort(int localPort) {
+        mLocalPort = localPort;
+    }
+
+    public void setClientPool(IClientPool<IClient, String> clientPool) {
+        mClientPool = clientPool;
     }
 
     @Override
