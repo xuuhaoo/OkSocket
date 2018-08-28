@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.sdk.protocol;
+package com.xuhao.android.common.interfacies;
 
 import java.nio.ByteOrder;
 

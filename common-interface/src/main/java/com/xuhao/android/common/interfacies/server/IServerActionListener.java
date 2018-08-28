@@ -1,6 +1,9 @@
-package com.xuhao.android.common.interfacies;
+package com.xuhao.android.common.interfacies.server;
 
-public interface ISocketActionListener {
+import com.xuhao.android.common.interfacies.client.IClient;
+import com.xuhao.android.common.interfacies.client.IClientPool;
+
+public interface IServerActionListener {
     void onServerListenerSuccess(int localPort);
 
     void onServerListenerFailed(int localPort, Throwable throwable);

@@ -9,7 +9,7 @@ import com.xuhao.android.libsocket.impl.client.ManagerHolder;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 import com.xuhao.android.libsocket.utils.ActivityStack;
-import com.xuhao.android.common.interfacies.IServerManager;
+import com.xuhao.android.common.interfacies.server.IServerManager;
 
 /**
  * OkSocket是一款轻量级的Socket通讯框架,可以提供单工,双工的TCP通讯.

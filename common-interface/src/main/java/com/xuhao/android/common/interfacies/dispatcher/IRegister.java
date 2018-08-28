@@ -1,4 +1,4 @@
-package com.xuhao.android.common.interfacies;
+package com.xuhao.android.common.interfacies.dispatcher;
 
 import android.content.BroadcastReceiver;
 

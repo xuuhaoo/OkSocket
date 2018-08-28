@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.xuhao.android.libserver.impl.abilities.IStateSender;
-import com.xuhao.android.common.interfacies.IRegister;
-import com.xuhao.android.common.interfacies.ISendable;
-import com.xuhao.android.common.interfacies.ISocketActionListener;
+import com.xuhao.android.common.interfacies.dispatcher.IRegister;
+import com.xuhao.android.common.interfacies.client.msg.ISendable;
+import com.xuhao.android.common.interfacies.server.IServerActionListener;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class ActionDispatcher implements IRegister, IStateSender {
     /**
      * 除了广播还支持回调
      */
-    private HashMap<ISocketActionListener, BroadcastReceiver> mResponseHandlerMap = new HashMap<>();
+    private HashMap<IServerActionListener, BroadcastReceiver> mResponseHandlerMap = new HashMap<>();
     /**
      * 上下文
      */
@@ -55,7 +55,7 @@ public class ActionDispatcher implements IRegister, IStateSender {
     }
 
     @Override
-    public void registerReceiver(final ISocketActionListener socketResponseHandler) {
+    public void registerReceiver(final IServerActionListener socketResponseHandler) {
         if (socketResponseHandler != null) {
             if (!mResponseHandlerMap.containsKey(socketResponseHandler)) {
                 BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -88,7 +88,7 @@ public class ActionDispatcher implements IRegister, IStateSender {
     }
 
     @Override
-    public void unRegisterReceiver(ISocketActionListener socketResponseHandler) {
+    public void unRegisterReceiver(IServerActionListener socketResponseHandler) {
         synchronized (mResponseHandlerMap) {
             BroadcastReceiver broadcastReceiver = mResponseHandlerMap.get(socketResponseHandler);
             mResponseHandlerMap.remove(socketResponseHandler);
@@ -103,7 +103,7 @@ public class ActionDispatcher implements IRegister, IStateSender {
      * @param intent
      * @param responseHandler
      */
-    private void dispatchActionToListener(Context context, Intent intent, ISocketActionListener responseHandler) {
+    private void dispatchActionToListener(Context context, Intent intent, IServerActionListener responseHandler) {
         String action = intent.getAction();
         switch (action) {
             case ACTION_CONNECTION_SUCCESS: {

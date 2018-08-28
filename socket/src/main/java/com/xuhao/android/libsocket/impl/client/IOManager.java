@@ -14,7 +14,6 @@ import com.xuhao.android.libsocket.impl.client.iothreads.DuplexWriteThread;
 import com.xuhao.android.libsocket.impl.client.iothreads.SimplexIOThread;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
-import com.xuhao.android.libsocket.sdk.protocol.IReaderProtocol;
 import com.xuhao.android.libsocket.utils.SLog;
 
 import java.io.InputStream;

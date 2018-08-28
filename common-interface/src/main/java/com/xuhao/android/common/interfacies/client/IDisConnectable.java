@@ -1,4 +1,4 @@
-package com.xuhao.android.common.interfacies;
+package com.xuhao.android.common.interfacies.client;
 
 /**
  * Created by xuhao on 2017/5/16.

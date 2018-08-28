@@ -1,6 +1,7 @@
 package com.xuhao.android.libsocket.sdk.protocol;
 
-import com.xuhao.android.libsocket.utils.BytesUtils;
+
+import com.xuhao.android.common.interfacies.IReaderProtocol;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

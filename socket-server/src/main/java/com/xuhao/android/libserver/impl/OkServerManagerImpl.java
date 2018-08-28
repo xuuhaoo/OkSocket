@@ -1,6 +1,6 @@
 package com.xuhao.android.libserver.impl;
 
-import com.xuhao.android.common.interfacies.IServerManager;
+import com.xuhao.android.common.interfacies.server.IServerManager;
 
 import java.io.IOException;
 import java.net.ServerSocket;
