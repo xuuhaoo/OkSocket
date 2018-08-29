@@ -1,9 +1,10 @@
-package com.xuhao.android.libsocket.impl.io;
+package com.xuhao.android.libsocket.impl.iocore;
 
 import android.support.annotation.MainThread;
 
+import com.xuhao.android.common.interfacies.IIOCoreOptions;
+import com.xuhao.android.common.interfacies.client.io.IReader;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
-import com.xuhao.android.libsocket.impl.io.abilities.IReader;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 
 import java.io.IOException;
@@ -13,9 +14,9 @@ import java.io.InputStream;
  * Created by Tony on 2017/12/26.
  */
 
-public abstract class AbsReader implements IReader {
+public abstract class AbsReader implements IReader<IIOCoreOptions> {
 
-    protected OkSocketOptions mOkOptions;
+    protected IIOCoreOptions mOkOptions;
 
     protected IStateSender mStateSender;
 
@@ -28,7 +29,7 @@ public abstract class AbsReader implements IReader {
 
     @Override
     @MainThread
-    public void setOption(OkSocketOptions option) {
+    public void setOption(IIOCoreOptions option) {
         mOkOptions = option;
     }
 

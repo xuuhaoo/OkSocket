@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.impl.io;
+package com.xuhao.android.libsocket.impl.iocore;
 
 import com.xuhao.android.common.interfacies.IReaderProtocol;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;

@@ -2,10 +2,11 @@ package com.xuhao.android.libsocket.impl.client.iothreads;
 
 import android.content.Context;
 
+import com.xuhao.android.common.basic.AbsLoopThread;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.utils.SLog;
-import com.xuhao.android.libsocket.impl.io.abilities.IReader;
-import com.xuhao.android.libsocket.impl.io.abilities.IWriter;
+import com.xuhao.android.libsocket.impl.iocore.abilities.IReader;
+import com.xuhao.android.libsocket.impl.iocore.abilities.IWriter;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.sdk.client.action.IAction;
 

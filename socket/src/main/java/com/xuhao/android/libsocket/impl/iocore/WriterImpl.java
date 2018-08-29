@@ -1,10 +1,11 @@
-package com.xuhao.android.libsocket.impl.io;
+package com.xuhao.android.libsocket.impl.iocore;
 
+import com.xuhao.android.common.interfacies.IIOCoreOptions;
+import com.xuhao.android.common.interfacies.client.io.IWriter;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.utils.BytesUtils;
 import com.xuhao.android.common.utils.SLog;
-import com.xuhao.android.libsocket.impl.io.abilities.IWriter;
 import com.xuhao.android.libsocket.impl.exceptions.WriteException;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
@@ -20,9 +21,9 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Created by xuhao on 2017/5/31.
  */
 
-public class WriterImpl implements IWriter {
+public class WriterImpl implements IWriter<IIOCoreOptions> {
 
-    private OkSocketOptions mOkOptions;
+    private IIOCoreOptions mOkOptions;
 
     private IStateSender mStateSender;
 
@@ -87,7 +88,7 @@ public class WriterImpl implements IWriter {
     }
 
     @Override
-    public void setOption(OkSocketOptions option) {
+    public void setOption(IIOCoreOptions option) {
         mOkOptions = option;
     }
 

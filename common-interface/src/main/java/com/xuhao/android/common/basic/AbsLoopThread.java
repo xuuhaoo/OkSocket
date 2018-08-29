@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.impl.client.iothreads;
+package com.xuhao.android.common.basic;
 
 import android.content.Context;
 

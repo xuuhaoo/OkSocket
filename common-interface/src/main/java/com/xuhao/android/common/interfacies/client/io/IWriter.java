@@ -1,16 +1,15 @@
-package com.xuhao.android.libsocket.impl.io.abilities;
+package com.xuhao.android.common.interfacies.client.io;
 
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
-import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 
 /**
  * Created by xuhao on 2017/5/16.
  */
 
-public interface IWriter {
+public interface IWriter<T> {
     boolean write() throws RuntimeException;
 
-    void setOption(OkSocketOptions option);
+    void setOption(T option);
 
     void offer(ISendable sendable);
 

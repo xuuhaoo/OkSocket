@@ -2,7 +2,7 @@ package com.xuhao.android.common.interfacies.client;
 
 public interface IClientPool<T, K> {
 
-    void pool(T t);
+    void cache(T t);
 
     T find(K key);
 

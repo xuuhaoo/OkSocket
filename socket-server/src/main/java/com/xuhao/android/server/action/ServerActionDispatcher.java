@@ -44,19 +44,19 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
     /**
      * 服务器端口
      */
-    private int mLocalPort;
+    private int mServerPort;
     /**
      * 客户端池子
      */
     private IClientPool<IClient, String> mClientPool;
 
-    public ServerActionDispatcher(Context context, IClientPool<IClient, String> clientPool) {
+    public ServerActionDispatcher(Context context) {
         mContext = context.getApplicationContext();
         mSocketBroadcastManager = new SocketBroadcastManager(mContext);
     }
 
-    public void setLocalPort(int localPort) {
-        mLocalPort = localPort;
+    public void setServerPort(int localPort) {
+        mServerPort = localPort;
     }
 
     public void setClientPool(IClientPool<IClient, String> clientPool) {
@@ -124,7 +124,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
         switch (action) {
             case ACTION_SERVER_LISTEN_SUCCESS: {
                 try {
-                    responseHandler.onServerListenSuccess(context, mLocalPort);
+                    responseHandler.onServerListenSuccess(context, mServerPort);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -133,7 +133,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
             case ACTION_SERVER_LISTEN_FAILED: {
                 try {
                     Throwable throwable = (Throwable) intent.getSerializableExtra(SERVER_ACTION_DATA);
-                    responseHandler.onServerListenFailed(context, mLocalPort, throwable);
+                    responseHandler.onServerListenFailed(context, mServerPort, throwable);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -142,7 +142,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
             case ACTION_CLIENT_CONNECTED: {
                 try {
                     IClient client = (IClient) intent.getSerializableExtra(SERVER_ACTION_DATA);
-                    responseHandler.onClientConnected(context, client, mLocalPort, mClientPool);
+                    responseHandler.onClientConnected(context, client, mServerPort, mClientPool);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -151,7 +151,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
             case ACTION_CLIENT_DISCONNECTED: {
                 try {
                     IClient client = (IClient) intent.getSerializableExtra(SERVER_ACTION_DATA);
-                    responseHandler.onClientDisconnected(context, client, mLocalPort, mClientPool);
+                    responseHandler.onClientDisconnected(context, client, mServerPort, mClientPool);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -159,7 +159,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
             }
             case ACTION_SERVER_WILL_BE_SHUTDOWN: {
                 try {
-                    responseHandler.onServerWillBeShutdown(context, mLocalPort, mClientPool);
+                    responseHandler.onServerWillBeShutdown(context, mServerPort, mClientPool);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -168,7 +168,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
             case ACTION_SERVER_ALLREADY_SHUTDOWN: {
                 try {
                     Throwable throwable = (Throwable) intent.getSerializableExtra(SERVER_ACTION_DATA);
-                    responseHandler.onServerAllreadyShutdown(context, mLocalPort, throwable);
+                    responseHandler.onServerAllreadyShutdown(context, mServerPort, throwable);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
