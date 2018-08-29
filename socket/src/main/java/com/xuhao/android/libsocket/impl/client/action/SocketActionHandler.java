@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.xuhao.android.common.interfacies.dispatcher.IRegister;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
-import com.xuhao.android.libsocket.sdk.ConnectionInfo;
+import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.action.ISocketActionListener;
 import com.xuhao.android.libsocket.sdk.client.action.SocketActionAdapter;

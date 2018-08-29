@@ -9,6 +9,7 @@ import com.xuhao.android.common.utils.ActivityStack;
 import com.xuhao.android.common.utils.SLog;
 import com.xuhao.android.libsocket.impl.client.EnvironmentalManager;
 import com.xuhao.android.libsocket.impl.client.ManagerHolder;
+import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 

@@ -1,6 +1,6 @@
 package com.xuhao.android.oksocket;
 
-import com.xuhao.android.libsocket.sdk.ConnectionInfo;
+import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
 
 /**
  * Created by xuhao on 2017/6/30.

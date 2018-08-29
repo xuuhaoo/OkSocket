@@ -1,6 +1,6 @@
 package com.xuhao.android.libsocket.impl.client.abilities;
 
-import com.xuhao.android.libsocket.sdk.ConnectionInfo;
+import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 
 /**

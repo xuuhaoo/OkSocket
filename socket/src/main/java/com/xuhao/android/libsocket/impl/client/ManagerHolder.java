@@ -8,7 +8,7 @@ import com.xuhao.android.common.interfacies.server.IServerManager;
 import com.xuhao.android.common.utils.SLog;
 import com.xuhao.android.common.utils.SpiUtils;
 import com.xuhao.android.libsocket.impl.client.abilities.IConnectionSwitchListener;
-import com.xuhao.android.libsocket.sdk.ConnectionInfo;
+import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 

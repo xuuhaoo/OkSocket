@@ -2,7 +2,7 @@ package com.xuhao.android.libsocket.sdk.client.connection;
 
 import android.content.Context;
 
-import com.xuhao.android.libsocket.sdk.ConnectionInfo;
+import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
 
 /**
  * 不进行重新连接的重连管理器

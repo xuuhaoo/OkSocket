@@ -9,7 +9,7 @@ import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.common.interfacies.dispatcher.IRegister;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.utils.SocketBroadcastManager;
-import com.xuhao.android.libsocket.sdk.ConnectionInfo;
+import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.client.action.ISocketActionListener;

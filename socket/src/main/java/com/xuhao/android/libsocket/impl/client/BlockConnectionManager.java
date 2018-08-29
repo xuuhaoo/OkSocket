@@ -15,7 +15,7 @@ import com.xuhao.android.libsocket.impl.client.action.SocketActionHandler;
 import com.xuhao.android.libsocket.impl.client.iothreads.IOThreadManager;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.impl.exceptions.UnconnectException;
-import com.xuhao.android.libsocket.sdk.ConnectionInfo;
+import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.OkSocketSSLConfig;
 import com.xuhao.android.libsocket.sdk.client.action.IAction;

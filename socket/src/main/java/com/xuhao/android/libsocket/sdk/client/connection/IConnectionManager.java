@@ -1,7 +1,7 @@
 package com.xuhao.android.libsocket.sdk.client.connection;
 
 import com.xuhao.android.libsocket.impl.client.PulseManager;
-import com.xuhao.android.libsocket.sdk.ConnectionInfo;
+import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.connection.abilities.IConfiguration;
 import com.xuhao.android.libsocket.sdk.client.connection.abilities.IConnectable;
 import com.xuhao.android.libsocket.sdk.client.action.ISocketActionListener;
