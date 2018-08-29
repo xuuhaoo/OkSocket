@@ -13,9 +13,6 @@ import android.widget.Toast;
 
 import com.xuhao.android.common.basic.bean.OriginalData;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
-import com.xuhao.android.common.interfacies.server.IClient;
-import com.xuhao.android.common.interfacies.server.IClientPool;
-import com.xuhao.android.common.interfacies.server.IServerActionListener;
 import com.xuhao.android.libsocket.sdk.OkSocket;
 import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
@@ -137,32 +134,6 @@ public class SimpleDemoActivity extends AppCompatActivity {
                 .setWritePackageBytes(1024)
                 .build();
         mManager = OkSocket.open(mInfo).option(mOkOptions);
-     OkSocket.server(8080).registerReceiver(new IServerActionListener() {
-         @Override
-         public void onServerListening(Context context, int serverPort) {
-
-         }
-
-         @Override
-         public void onClientConnected(Context context, IClient client, int serverPort, IClientPool clientPool) {
-
-         }
-
-         @Override
-         public void onClientDisconnected(Context context, IClient client, int serverPort, IClientPool clientPool) {
-
-         }
-
-         @Override
-         public void onServerWillBeShutdown(Context context, int serverPort, IClientPool clientPool) {
-
-         }
-
-         @Override
-         public void onServerAlreadyShutdown(Context context, int serverPort, Throwable throwable) {
-
-         }
-     }).listen();
     }
 
     private void setListener() {

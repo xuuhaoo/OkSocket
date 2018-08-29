@@ -22,6 +22,8 @@ public abstract class AbsClient implements IClient, ClientActionDispatcher.Clien
 
     protected String mUniqueTag;
 
+    private boolean isCallDead;
+
     private boolean[] isReady = new boolean[]{false, false};
 
     public AbsClient(@NonNull Socket socket, @NonNull OkServerOptions okServerOptions) {
@@ -43,7 +45,7 @@ public abstract class AbsClient implements IClient, ClientActionDispatcher.Clien
 
     @Override
     public String getUniqueTag() {
-        if(TextUtils.isEmpty(mUniqueTag)){
+        if (TextUtils.isEmpty(mUniqueTag)) {
             return getHostName();
         }
         return mUniqueTag;
@@ -52,8 +54,10 @@ public abstract class AbsClient implements IClient, ClientActionDispatcher.Clien
     private void judge(Exception e) {
         if (isReady[0] && isReady[1]) {
             onClientReady();
-        } else if (!isReady[0] && !isReady[1]) {
+            isCallDead = false;
+        } else if (!isReady[0] || !isReady[1] && !isCallDead) {
             onClientDead(e);
+            isCallDead = true;
         }
     }
 

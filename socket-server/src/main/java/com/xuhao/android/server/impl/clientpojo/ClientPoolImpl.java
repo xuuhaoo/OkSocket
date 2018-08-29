@@ -44,6 +44,15 @@ public class ClientPoolImpl extends AbsClientPool<String, IClient> implements IC
         });
     }
 
+    public void serverDown(){
+        echoRun(new Echo<String, IClient>(){
+            @Override
+            public void onEcho(String key, IClient value) {
+                value.disconnect();
+            }
+        });
+    }
+
     @Override
     void onCacheFull(String key, IClient lastOne) {
         lastOne.disconnect(new CacheException("cache is full,you need remove"));

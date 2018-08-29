@@ -4,12 +4,15 @@ import android.content.Context;
 
 import com.xuhao.android.common.basic.AbsLoopThread;
 import com.xuhao.android.common.interfacies.server.IServerManagerPrivate;
+import com.xuhao.android.common.utils.NetUtils;
 import com.xuhao.android.common.utils.SLog;
 import com.xuhao.android.server.action.IAction;
 import com.xuhao.android.server.exceptions.IllegalAccessException;
+import com.xuhao.android.server.exceptions.InitiativeDisconnectException;
 import com.xuhao.android.server.impl.clientpojo.ClientImpl;
 import com.xuhao.android.server.impl.clientpojo.ClientPoolImpl;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -60,7 +63,10 @@ public class ServerManagerImpl extends AbsServerRegisterProxy implements IServer
 
     @Override
     public void listen() {
-        listen(OkServerOptions.getDefault());
+        if (mServerOptions == null) {
+            mServerOptions = OkServerOptions.getDefault();
+        }
+        listen(mServerOptions);
     }
 
     @Override
@@ -80,6 +86,12 @@ public class ServerManagerImpl extends AbsServerRegisterProxy implements IServer
         } catch (Exception e) {
             sendBroadcast(IAction.Server.ACTION_SERVER_ALLREADY_SHUTDOWN, e);
         }
+    }
+
+    @Override
+    public boolean isLive() {
+        return isInit && mServerSocket != null && !mServerSocket.isClosed() && mAcceptThread != null && !mAcceptThread
+                .isShutdown() && NetUtils.netIsAvailable(mContext);
     }
 
     private class AcceptThread extends AbsLoopThread {
@@ -106,13 +118,15 @@ public class ServerManagerImpl extends AbsServerRegisterProxy implements IServer
 
         @Override
         protected void loopFinish(Exception e) {
-            sendBroadcast(IAction.Server.ACTION_SERVER_ALLREADY_SHUTDOWN, e);
+            if (!(e instanceof InitiativeDisconnectException)) {
+                sendBroadcast(IAction.Server.ACTION_SERVER_WILL_BE_SHUTDOWN, e);
+            }
         }
     }
 
 
     private void configuration(ServerSocket serverSocket) {
-
+        //TODO 待细化配置
     }
 
     @Override
@@ -121,9 +135,20 @@ public class ServerManagerImpl extends AbsServerRegisterProxy implements IServer
             return;
         }
 
+        if (mClientPoolImpl != null) {
+            mClientPoolImpl.serverDown();
+        }
+
+        try {
+            mServerSocket.close();
+        } catch (IOException e) {
+        }
+
         mServerSocket = null;
         mClientPoolImpl = null;
-        mServerActionDispatcher = null;
+        mAcceptThread.shutdown(new InitiativeDisconnectException());
+        mAcceptThread = null;
+        sendBroadcast(IAction.Server.ACTION_SERVER_ALLREADY_SHUTDOWN);
     }
 
 }

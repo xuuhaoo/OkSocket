@@ -159,7 +159,8 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener, 
             }
             case ACTION_SERVER_WILL_BE_SHUTDOWN: {
                 try {
-                    responseHandler.onServerWillBeShutdown(context, mServerPort, mClientPool);
+                    Throwable throwable = (Throwable) intent.getSerializableExtra(SERVER_ACTION_DATA);
+                    responseHandler.onServerWillBeShutdown(context, mServerPort, mServerManager, mClientPool, throwable);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -167,8 +168,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener, 
             }
             case ACTION_SERVER_ALLREADY_SHUTDOWN: {
                 try {
-                    Throwable throwable = (Throwable) intent.getSerializableExtra(SERVER_ACTION_DATA);
-                    responseHandler.onServerAlreadyShutdown(context, mServerPort, throwable);
+                    responseHandler.onServerAlreadyShutdown(context, mServerPort);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

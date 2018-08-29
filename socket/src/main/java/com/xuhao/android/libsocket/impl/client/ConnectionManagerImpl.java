@@ -290,19 +290,19 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
                 }
             }
 
-            isDisconnecting = false;
+            if (mActionHandler != null) {
+                mActionHandler.detach(ConnectionManagerImpl.this);
+                mActionHandler = null;
+            }
 
+            isDisconnecting = false;
+            canConnect = true;
             if (!(mException instanceof UnconnectException) && mSocket != null) {
                 mException = mException instanceof ManuallyDisconnectException ? null : mException;
                 sendBroadcast(IAction.ACTION_DISCONNECTION, mException);
             }
 
-            if (mActionHandler != null) {
-                mActionHandler.detach(ConnectionManagerImpl.this);
-                mActionHandler = null;
-            }
             mSocket = null;
-            canConnect = true;
 
             if (mException != null) {
                 SLog.e("socket is disconnecting because: " + mException.getMessage());

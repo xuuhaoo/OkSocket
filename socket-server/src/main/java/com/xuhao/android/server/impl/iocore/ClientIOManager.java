@@ -56,6 +56,7 @@ public class ClientIOManager implements IIOManager<OkServerOptions> {
         if (mReader == null || mWriter == null) {
             throw new IllegalStateException("this library depends on <com.tonystark.android:socket:3.X>");
         }
+        setOkOptions(mOptions);
 
         mReader.initialize(mInputStream, mClientStateSender);
         mWriter.initialize(mOutputStream, mClientStateSender);

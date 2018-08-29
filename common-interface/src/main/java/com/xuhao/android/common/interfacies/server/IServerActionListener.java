@@ -9,8 +9,8 @@ public interface IServerActionListener {
 
     void onClientDisconnected(Context context, IClient client, int serverPort, IClientPool clientPool);
 
-    void onServerWillBeShutdown(Context context, int serverPort, IClientPool clientPool);
+    void onServerWillBeShutdown(Context context, int serverPort, IServerShutdown shutdown, IClientPool clientPool, Throwable throwable);
 
-    void onServerAlreadyShutdown(Context context, int serverPort, Throwable throwable);
+    void onServerAlreadyShutdown(Context context, int serverPort);
 
 }
