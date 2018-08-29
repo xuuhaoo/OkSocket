@@ -2,9 +2,9 @@ package com.xuhao.android.libsocket.sdk.client.action;
 
 import android.content.Context;
 
+import com.xuhao.android.common.basic.bean.OriginalData;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
-import com.xuhao.android.libsocket.sdk.client.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
 
 /**

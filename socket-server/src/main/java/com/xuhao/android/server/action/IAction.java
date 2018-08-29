@@ -18,8 +18,6 @@ public interface IAction {
     }
 
     interface Client {
-        String CLIENT_ACTION_DATA = "client_action_data";
-
         String ACTION_READ_THREAD_START = "action_read_thread_start";
 
         String ACTION_READ_THREAD_SHUTDOWN = "action_read_thread_shutdown";
@@ -27,6 +25,10 @@ public interface IAction {
         String ACTION_WRITE_THREAD_START = "action_write_thread_start";
 
         String ACTION_WRITE_THREAD_SHUTDOWN = "action_write_thread_shutdown";
+
+        String ACTION_READ_COMPLETE = "action_read_complete";
+
+        String ACTION_WRITE_COMPLETE = "action_write_complete";
     }
 
 }

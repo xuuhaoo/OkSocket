@@ -1,12 +1,12 @@
 package com.xuhao.android.libsocket.impl.iocore;
 
+import com.xuhao.android.common.basic.bean.OriginalData;
 import com.xuhao.android.common.interfacies.IReaderProtocol;
 import com.xuhao.android.common.utils.BytesUtils;
 import com.xuhao.android.common.utils.SLog;
 import com.xuhao.android.libsocket.impl.exceptions.ReadException;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.action.IAction;
-import com.xuhao.android.libsocket.sdk.client.bean.OriginalData;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

@@ -5,14 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import com.xuhao.android.common.basic.bean.OriginalData;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.common.interfacies.dispatcher.IRegister;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.utils.SocketBroadcastManager;
 import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
-import com.xuhao.android.libsocket.sdk.client.bean.OriginalData;
-import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.client.action.ISocketActionListener;
+import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 
 import java.io.Serializable;

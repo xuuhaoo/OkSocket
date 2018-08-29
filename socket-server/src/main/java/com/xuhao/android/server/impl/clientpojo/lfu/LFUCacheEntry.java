@@ -1,10 +1,10 @@
 package com.xuhao.android.server.impl.clientpojo.lfu;
 
-class LFUCacheEntry<K, V> extends Node {
+public class LFUCacheEntry<K, V> extends Node {
 
-    K mKey;
+    public K mKey;
 
-    V mValue;
+    public V mValue;
 
     FrequencyNode mFrequencyNode;
 

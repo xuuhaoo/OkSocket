@@ -3,12 +3,12 @@ package com.xuhao.android.libsocket.sdk.client.connection;
 import android.content.Context;
 import android.support.annotation.CallSuper;
 
+import com.xuhao.android.common.basic.bean.OriginalData;
+import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.libsocket.impl.client.PulseManager;
 import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
-import com.xuhao.android.libsocket.sdk.client.bean.OriginalData;
-import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.client.action.ISocketActionListener;
-import com.xuhao.android.common.interfacies.client.msg.ISendable;
+import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

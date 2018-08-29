@@ -22,7 +22,7 @@ public class Client extends AbsClient {
 
     public Client(Context context, @NonNull Socket socket, @NonNull OkServerOptions okServerOptions) throws IOException {
         super(socket, okServerOptions);
-        mActionDispatcher = new ClientActionDispatcher();
+//        mActionDispatcher = new ClientActionDispatcher();
 
         initIOManager(context);
     }

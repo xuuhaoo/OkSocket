@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import com.xuhao.android.common.interfacies.server.IClient;
-import com.xuhao.android.common.interfacies.server.IClientPool;
 import com.xuhao.android.common.interfacies.dispatcher.IRegister;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
+import com.xuhao.android.common.interfacies.server.IClient;
+import com.xuhao.android.common.interfacies.server.IClientPool;
 import com.xuhao.android.common.interfacies.server.IServerActionListener;
 import com.xuhao.android.common.interfacies.server.IServerManager;
 import com.xuhao.android.common.utils.SocketBroadcastManager;
@@ -17,12 +17,12 @@ import com.xuhao.android.server.impl.OkServerOptions;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import static com.xuhao.android.server.action.IAction.ACTION_CLIENT_CONNECTED;
-import static com.xuhao.android.server.action.IAction.ACTION_CLIENT_DISCONNECTED;
-import static com.xuhao.android.server.action.IAction.ACTION_SERVER_ALLREADY_SHUTDOWN;
-import static com.xuhao.android.server.action.IAction.ACTION_SERVER_LISTENING;
-import static com.xuhao.android.server.action.IAction.ACTION_SERVER_WILL_BE_SHUTDOWN;
-import static com.xuhao.android.server.action.IAction.SERVER_ACTION_DATA;
+import static com.xuhao.android.server.action.IAction.Server.ACTION_CLIENT_CONNECTED;
+import static com.xuhao.android.server.action.IAction.Server.ACTION_CLIENT_DISCONNECTED;
+import static com.xuhao.android.server.action.IAction.Server.ACTION_SERVER_ALLREADY_SHUTDOWN;
+import static com.xuhao.android.server.action.IAction.Server.ACTION_SERVER_LISTENING;
+import static com.xuhao.android.server.action.IAction.Server.ACTION_SERVER_WILL_BE_SHUTDOWN;
+import static com.xuhao.android.server.action.IAction.Server.SERVER_ACTION_DATA;
 
 
 /**

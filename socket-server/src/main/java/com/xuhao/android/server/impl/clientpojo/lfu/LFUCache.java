@@ -1,6 +1,6 @@
 package com.xuhao.android.server.impl.clientpojo.lfu;
 
-import java.util.*;
+import java.util.HashMap;
 
 public class LFUCache<K, V> {
     /**
@@ -35,7 +35,7 @@ public class LFUCache<K, V> {
     /**
      * callback when cache changed
      */
-    LFUCacheCallback<V> mCallback;
+    LFUCacheCallback mCallback;
 
     public LFUCache(int capacity) {
         this.mCapacity = capacity;
@@ -43,6 +43,11 @@ public class LFUCache<K, V> {
         mKvStore = new HashMap<K, LFUCacheEntry<K, V>>();
         mFreqList = new NodeList();
         mFrequencyMap = new HashMap<Integer, FrequencyNode>();
+    }
+
+    protected void delete(K key) {
+        LFUCacheEntry<K, V> entry = mKvStore.get(key);
+        delete(entry);
     }
 
     protected void delete(LFUCacheEntry<K, V> entry) {
@@ -143,7 +148,7 @@ public class LFUCache<K, V> {
         return mSize;
     }
 
-    protected void setLFUChangedCallback(LFUCacheCallback<V> callback) {
+    protected void setLFUChangedCallback(LFUCacheCallback callback) {
         mCallback = callback;
     }
 }

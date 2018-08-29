@@ -60,7 +60,7 @@ public class OkSocket {
      */
     public static IRegister<IServerActionListener, IServerManager> server(int serverPort) {
         assertIsInit();
-        return holder.getServer(serverPort, app);
+        return (IRegister<IServerActionListener, IServerManager>) holder.getServer(serverPort, app);
     }
 
     /**
