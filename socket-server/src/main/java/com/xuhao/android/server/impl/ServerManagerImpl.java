@@ -3,13 +3,19 @@ package com.xuhao.android.server.impl;
 import android.content.Context;
 
 import com.xuhao.android.common.basic.AbsLoopThread;
-import com.xuhao.android.common.interfacies.server.IServerManager;
-import com.xuhao.android.server.impl.client.ClientPool;
+import com.xuhao.android.common.interfacies.server.IServerManagerPrivate;
+import com.xuhao.android.common.utils.SLog;
+import com.xuhao.android.server.action.IAction;
+import com.xuhao.android.server.exceptions.IllegalAccessException;
+import com.xuhao.android.server.impl.clientpojo.ClientPool;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.nio.channels.IllegalBlockingModeException;
 
-public class ServerManagerImpl extends AbsServerRegister implements IServerManager {
+public class ServerManagerImpl extends AbsServerRegisterProxy implements IServerManagerPrivate<OkServerOptions> {
+
+    private boolean isInit = false;
 
     private int mServerPort = -999;
 
@@ -23,21 +29,56 @@ public class ServerManagerImpl extends AbsServerRegister implements IServerManag
 
     private Context mContext;
 
-    public ServerManagerImpl(Context context, OkServerOptions options) {
-        super(context);
-        mContext = context;
-        mServerOptions = options;
-        mClientPool = new ClientPool(mServerOptions.getConnectCapcity());
-        mServerActionDispatcher.setClientPool(mClientPool);
+    @Override
+    public void initServerPrivate(Context context, int serverPort) {
+        checkCallStack();
+        if (!isInit && mServerPort == -999 && mContext == null) {
+            mContext = context;
+            init(mContext, this);
+
+            mServerPort = serverPort;
+            mServerActionDispatcher.setServerPort(mServerPort);
+            isInit = true;
+            SLog.w("server manager initiation");
+        } else {
+            SLog.e("duplicate init server manager!");
+        }
+    }
+
+    private void checkCallStack() {
+        StackTraceElement[] elementsArray = Thread.currentThread().getStackTrace();
+        boolean isValid = false;
+        for (StackTraceElement e : elementsArray) {
+            if (e.getClassName().contains("ManagerHolder") && e.getMethodName().equals("getServer")) {
+                isValid = true;
+            }
+        }
+        if (!isValid) {
+            throw new IllegalAccessException("You can't call this method directly.This is privately function! ");
+        }
     }
 
     @Override
-    public void initServerPortPrivate(int serverPort) {
-        if (mServerPort == -999) {
-            mServerPort = serverPort;
-            mServerActionDispatcher.setServerPort(mServerPort);
-        } else {
-            throw new IllegalStateException("You can't call this method directly.Should call OkSocket.server(" + serverPort + ")");
+    public void listen() {
+        listen(OkServerOptions.getDefault());
+    }
+
+    @Override
+    public void listen(OkServerOptions options) {
+        if (options == null) {
+            throw new IllegalArgumentException("option can not be null");
+        }
+        if (!(options instanceof OkServerOptions)) {
+            throw new IllegalArgumentException("option must instanceof OkServerOptions");
+        }
+        try {
+            mServerOptions = options;
+            mServerSocket = new ServerSocket(mServerPort);
+            configuration(mServerSocket);
+            mAcceptThread = new AcceptThread(mContext, "server accepting in " + mServerPort);
+            mAcceptThread.start();
+        } catch (IOException e) {
+            sendBroadcast(IAction.ACTION_SERVER_LISTEN_FAILED, e);
         }
     }
 
@@ -49,30 +90,30 @@ public class ServerManagerImpl extends AbsServerRegister implements IServerManag
 
         @Override
         protected void beforeLoop() throws Exception {
-            super.beforeLoop();
+            mClientPool = new ClientPool(mServerOptions.getConnectCapacity());
+            mServerActionDispatcher.setClientPool(mClientPool);
+            sendBroadcast(IAction.ACTION_SERVER_LISTEN_SUCCESS);
         }
 
         @Override
         protected void runInLoopThread() throws Exception {
             mServerSocket.accept();
+
         }
 
         @Override
         protected void loopFinish(Exception e) {
-
+            if (e instanceof IOException || e instanceof SecurityException || e instanceof IllegalBlockingModeException) {
+                sendBroadcast(IAction.ACTION_SERVER_LISTEN_FAILED, e);
+            } else {
+                sendBroadcast(IAction.ACTION_SERVER_WILL_BE_SHUTDOWN);
+            }
         }
     }
 
-    @Override
-    public void listen() {
-        try {
-            mServerSocket = new ServerSocket(mServerPort);
-            mAcceptThread = new AcceptThread(mContext, "server accepting in " + mServerPort);
-            mAcceptThread.start();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void configuration(ServerSocket serverSocket) {
+
     }
 
     @Override
@@ -82,7 +123,7 @@ public class ServerManagerImpl extends AbsServerRegister implements IServerManag
         }
 
         mServerSocket = null;
-
+        mClientPool = null;
     }
 
 }

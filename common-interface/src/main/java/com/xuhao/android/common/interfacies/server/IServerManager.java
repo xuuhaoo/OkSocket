@@ -1,11 +1,12 @@
 package com.xuhao.android.common.interfacies.server;
 
-import com.xuhao.android.common.interfacies.dispatcher.IRegister;
+import com.xuhao.android.common.interfacies.IIOCoreOptions;
 
-public interface IServerManager extends IRegister<IServerActionListener> {
-    void initServerPortPrivate(int localPort);
+public interface IServerManager<E extends IIOCoreOptions> {
 
     void listen();
+
+    void listen(E options);
 
     void shutdown();
 }

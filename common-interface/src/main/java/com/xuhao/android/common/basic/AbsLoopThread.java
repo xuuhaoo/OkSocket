@@ -1,6 +1,7 @@
 package com.xuhao.android.common.basic;
 
 import android.content.Context;
+import android.os.Process;
 
 import com.xuhao.android.common.utils.SLog;
 
@@ -44,6 +45,8 @@ public abstract class AbsLoopThread implements Runnable {
 
     @Override
     public final void run() {
+        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+
         try {
             beforeLoop();
             while (!isStop) {

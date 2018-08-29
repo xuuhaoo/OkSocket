@@ -4,6 +4,8 @@ package com.xuhao.android.libsocket.sdk;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
+import com.xuhao.android.common.interfacies.dispatcher.IRegister;
+import com.xuhao.android.common.interfacies.server.IServerActionListener;
 import com.xuhao.android.common.interfacies.server.IServerManager;
 import com.xuhao.android.common.utils.ActivityStack;
 import com.xuhao.android.common.utils.SLog;
@@ -53,12 +55,12 @@ public class OkSocket {
     /**
      * 获得一个SocketServer服务器.
      *
-     * @param localPort
+     * @param serverPort
      * @return
      */
-    public static IServerManager server(int localPort) {
+    public static IRegister<IServerActionListener, IServerManager> server(int serverPort) {
         assertIsInit();
-        return holder.getServer(localPort, app);
+        return holder.getServer(serverPort, app);
     }
 
     /**

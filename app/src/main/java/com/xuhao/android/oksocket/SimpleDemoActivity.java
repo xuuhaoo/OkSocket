@@ -11,7 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.xuhao.android.common.interfacies.client.IClient;
+import com.xuhao.android.common.interfacies.client.IClientPool;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
+import com.xuhao.android.common.interfacies.server.IServerActionListener;
+import com.xuhao.android.common.interfacies.server.IServerManager;
 import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocket;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
@@ -24,6 +28,7 @@ import com.xuhao.android.oksocket.adapter.LogAdapter;
 import com.xuhao.android.oksocket.data.HandShake;
 import com.xuhao.android.oksocket.data.LogBean;
 import com.xuhao.android.oksocket.data.MsgDataBean;
+import com.xuhao.android.server.impl.OkServerOptions;
 
 import java.nio.charset.Charset;
 
@@ -134,6 +139,37 @@ public class SimpleDemoActivity extends AppCompatActivity {
                 .setWritePackageBytes(1024)
                 .build();
         mManager = OkSocket.open(mInfo).option(mOkOptions);
+     OkSocket.server(8080).registerReceiver(new IServerActionListener() {
+         @Override
+         public void onServerListenSuccess(Context context, int serverPort) {
+
+         }
+
+         @Override
+         public void onServerListenFailed(Context context, int serverPort, Throwable throwable) {
+
+         }
+
+         @Override
+         public void onClientConnected(Context context, IClient client, int serverPort, IClientPool clientPool) {
+
+         }
+
+         @Override
+         public void onClientDisconnected(Context context, IClient client, int serverPort, IClientPool clientPool) {
+
+         }
+
+         @Override
+         public void onServerWillBeShutdown(Context context, int serverPort, IClientPool clientPool) {
+
+         }
+
+         @Override
+         public void onServerAllreadyShutdown(Context context, int serverPort, Throwable throwable) {
+
+         }
+     }).listen();
     }
 
     private void setListener() {

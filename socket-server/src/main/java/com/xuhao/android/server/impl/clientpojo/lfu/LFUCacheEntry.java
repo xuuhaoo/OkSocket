@@ -1,4 +1,4 @@
-package com.xuhao.android.server.impl.client.lfu;
+package com.xuhao.android.server.impl.clientpojo.lfu;
 
 class LFUCacheEntry<K, V> extends Node {
 

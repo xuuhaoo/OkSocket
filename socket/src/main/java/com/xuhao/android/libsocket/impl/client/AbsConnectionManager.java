@@ -37,24 +37,28 @@ public abstract class AbsConnectionManager implements IConnectionManager {
     public AbsConnectionManager(Context context, ConnectionInfo info) {
         mContext = context;
         mConnectionInfo = info;
-        mActionDispatcher = new ActionDispatcher(mContext, info);
+        mActionDispatcher = new ActionDispatcher(mContext, info, this);
     }
 
-    public void registerReceiver(BroadcastReceiver broadcastReceiver, String... action) {
+    public IConnectionManager registerReceiver(BroadcastReceiver broadcastReceiver, String... action) {
         mActionDispatcher.registerReceiver(broadcastReceiver, action);
+        return this;
     }
 
-    public void registerReceiver(final ISocketActionListener socketResponseHandler) {
+    public IConnectionManager registerReceiver(final ISocketActionListener socketResponseHandler) {
         mActionDispatcher.registerReceiver(socketResponseHandler);
+        return this;
     }
 
 
-    public void unRegisterReceiver(BroadcastReceiver broadcastReceiver) {
+    public IConnectionManager unRegisterReceiver(BroadcastReceiver broadcastReceiver) {
         mActionDispatcher.unRegisterReceiver(broadcastReceiver);
+        return this;
     }
 
-    public void unRegisterReceiver(ISocketActionListener socketResponseHandler) {
+    public IConnectionManager unRegisterReceiver(ISocketActionListener socketResponseHandler) {
         mActionDispatcher.unRegisterReceiver(socketResponseHandler);
+        return this;
     }
 
     protected void sendBroadcast(String action, Serializable serializable) {
@@ -78,7 +82,7 @@ public abstract class AbsConnectionManager implements IConnectionManager {
         if (info != null) {
             ConnectionInfo tempOldInfo = mConnectionInfo;
             mConnectionInfo = info.clone();
-            if(mActionDispatcher != null){
+            if (mActionDispatcher != null) {
                 mActionDispatcher.setConnectionInfo(mConnectionInfo);
             }
             if (mConnectionSwitchListener != null) {

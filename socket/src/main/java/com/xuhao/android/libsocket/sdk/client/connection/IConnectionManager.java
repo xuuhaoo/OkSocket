@@ -18,7 +18,7 @@ public interface IConnectionManager extends
         IConnectable,
         IDisConnectable,
         ISender<IConnectionManager>,
-        IRegister<ISocketActionListener> {
+        IRegister<ISocketActionListener, IConnectionManager> {
     /**
      * 是否连接
      *

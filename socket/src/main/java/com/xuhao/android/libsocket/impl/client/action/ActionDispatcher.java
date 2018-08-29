@@ -13,6 +13,7 @@ import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.client.action.ISocketActionListener;
+import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -33,7 +34,7 @@ import static com.xuhao.android.libsocket.sdk.client.action.IAction.ACTION_WRITE
  * 状态机
  * Created by didi on 2018/4/19.
  */
-public class ActionDispatcher implements IRegister<ISocketActionListener>, IStateSender {
+public class ActionDispatcher implements IRegister<ISocketActionListener, IConnectionManager>, IStateSender {
     /**
      * 每个连接一个广播管理器不会串
      */
@@ -50,16 +51,21 @@ public class ActionDispatcher implements IRegister<ISocketActionListener>, IStat
      * 连接信息
      */
     private ConnectionInfo mConnectionInfo;
+    /**
+     * 连接管理器
+     */
+    private IConnectionManager mManager;
 
 
-    public ActionDispatcher(Context context, ConnectionInfo info) {
+    public ActionDispatcher(Context context, ConnectionInfo info, IConnectionManager manager) {
         mContext = context.getApplicationContext();
+        mManager = manager;
         mConnectionInfo = info;
         mSocketBroadcastManager = new SocketBroadcastManager(mContext);
     }
 
     @Override
-    public void registerReceiver(BroadcastReceiver broadcastReceiver, String... action) {
+    public IConnectionManager registerReceiver(BroadcastReceiver broadcastReceiver, String... action) {
         IntentFilter intentFilter = new IntentFilter();
         if (action != null) {
             for (int i = 0; i < action.length; i++) {
@@ -67,10 +73,11 @@ public class ActionDispatcher implements IRegister<ISocketActionListener>, IStat
             }
         }
         mSocketBroadcastManager.registerReceiver(broadcastReceiver, intentFilter);
+        return mManager;
     }
 
     @Override
-    public void registerReceiver(final ISocketActionListener socketResponseHandler) {
+    public IConnectionManager registerReceiver(final ISocketActionListener socketResponseHandler) {
         if (socketResponseHandler != null) {
             if (!mResponseHandlerMap.containsKey(socketResponseHandler)) {
                 BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -95,20 +102,23 @@ public class ActionDispatcher implements IRegister<ISocketActionListener>, IStat
                 }
             }
         }
+        return mManager;
     }
 
     @Override
-    public void unRegisterReceiver(BroadcastReceiver broadcastReceiver) {
+    public IConnectionManager unRegisterReceiver(BroadcastReceiver broadcastReceiver) {
         mSocketBroadcastManager.unregisterReceiver(broadcastReceiver);
+        return mManager;
     }
 
     @Override
-    public void unRegisterReceiver(ISocketActionListener socketResponseHandler) {
+    public IConnectionManager unRegisterReceiver(ISocketActionListener socketResponseHandler) {
         synchronized (mResponseHandlerMap) {
             BroadcastReceiver broadcastReceiver = mResponseHandlerMap.get(socketResponseHandler);
             mResponseHandlerMap.remove(socketResponseHandler);
             unRegisterReceiver(broadcastReceiver);
         }
+        return mManager;
     }
 
     /**

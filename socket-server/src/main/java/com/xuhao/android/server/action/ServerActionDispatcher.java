@@ -10,7 +10,9 @@ import com.xuhao.android.common.interfacies.client.IClientPool;
 import com.xuhao.android.common.interfacies.dispatcher.IRegister;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.interfacies.server.IServerActionListener;
+import com.xuhao.android.common.interfacies.server.IServerManager;
 import com.xuhao.android.common.utils.SocketBroadcastManager;
+import com.xuhao.android.server.impl.OkServerOptions;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -28,7 +30,7 @@ import static com.xuhao.android.server.action.IAction.SERVER_ACTION_DATA;
  * 服务器状态机
  * Created by didi on 2018/4/19.
  */
-public class ServerActionDispatcher implements IRegister<IServerActionListener>, IStateSender {
+public class ServerActionDispatcher implements IRegister<IServerActionListener, IServerManager>, IStateSender {
     /**
      * 每个连接一个广播管理器不会串
      */
@@ -49,9 +51,14 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
      * 客户端池子
      */
     private IClientPool<IClient, String> mClientPool;
+    /**
+     * 服务器管理器实例
+     */
+    private IServerManager<OkServerOptions> mServerManager;
 
-    public ServerActionDispatcher(Context context) {
+    public ServerActionDispatcher(Context context, IServerManager<OkServerOptions> manager) {
         mContext = context.getApplicationContext();
+        this.mServerManager = manager;
         mSocketBroadcastManager = new SocketBroadcastManager(mContext);
     }
 
@@ -64,7 +71,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
     }
 
     @Override
-    public void registerReceiver(BroadcastReceiver broadcastReceiver, String... action) {
+    public IServerManager<OkServerOptions> registerReceiver(BroadcastReceiver broadcastReceiver, String... action) {
         IntentFilter intentFilter = new IntentFilter();
         if (action != null) {
             for (int i = 0; i < action.length; i++) {
@@ -72,10 +79,11 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
             }
         }
         mSocketBroadcastManager.registerReceiver(broadcastReceiver, intentFilter);
+        return mServerManager;
     }
 
     @Override
-    public void registerReceiver(final IServerActionListener socketResponseHandler) {
+    public IServerManager<OkServerOptions> registerReceiver(final IServerActionListener socketResponseHandler) {
         if (socketResponseHandler != null) {
             if (!mResponseHandlerMap.containsKey(socketResponseHandler)) {
                 BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -96,20 +104,23 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener>,
                 }
             }
         }
+        return mServerManager;
     }
 
     @Override
-    public void unRegisterReceiver(BroadcastReceiver broadcastReceiver) {
+    public IServerManager<OkServerOptions> unRegisterReceiver(BroadcastReceiver broadcastReceiver) {
         mSocketBroadcastManager.unregisterReceiver(broadcastReceiver);
+        return mServerManager;
     }
 
     @Override
-    public void unRegisterReceiver(IServerActionListener socketResponseHandler) {
+    public IServerManager<OkServerOptions> unRegisterReceiver(IServerActionListener socketResponseHandler) {
         synchronized (mResponseHandlerMap) {
             BroadcastReceiver broadcastReceiver = mResponseHandlerMap.get(socketResponseHandler);
             mResponseHandlerMap.remove(socketResponseHandler);
             unRegisterReceiver(broadcastReceiver);
         }
+        return mServerManager;
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.xuhao.android.server.impl.client;
+package com.xuhao.android.server.impl.clientpojo;
 
 import com.xuhao.android.common.interfacies.client.IClient;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;

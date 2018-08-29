@@ -1,10 +1,12 @@
 package com.xuhao.android.libsocket.impl.client;
 
 import android.content.Context;
+import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
 import com.xuhao.android.common.interfacies.server.IServerManager;
+import com.xuhao.android.common.interfacies.server.IServerManagerPrivate;
 import com.xuhao.android.common.utils.SLog;
 import com.xuhao.android.common.utils.SpiUtils;
 import com.xuhao.android.libsocket.impl.client.abilities.IConnectionSwitchListener;
@@ -21,12 +23,12 @@ import java.util.Map;
 /**
  * Created by xuhao on 2017/5/16.
  */
-
+@Keep
 public class ManagerHolder {
 
     private Map<ConnectionInfo, IConnectionManager> mConnectionManagerMap = new HashMap<>();
 
-    private SparseArray<IServerManager> mServerManagerMap = new SparseArray<>();
+    private SparseArray<IServerManagerPrivate> mServerManagerMap = new SparseArray<>();
 
     private static class InstanceHolder {
         private static final ManagerHolder INSTANCE = new ManagerHolder();
@@ -41,9 +43,9 @@ public class ManagerHolder {
     }
 
     public IServerManager getServer(int localPort, Context context) {
-        IServerManager manager = mServerManagerMap.get(localPort);
+        IServerManagerPrivate manager = mServerManagerMap.get(localPort);
         if (manager == null) {
-            manager = SpiUtils.load(IServerManager.class);
+            manager = (IServerManagerPrivate) SpiUtils.load(IServerManager.class);
             if (manager == null) {
                 SLog.e("Server load error. Server plug-in are required!" +
                         " For details link to https://github.com/xuuhaoo/OkSocket");
@@ -51,7 +53,7 @@ public class ManagerHolder {
                 synchronized (mServerManagerMap) {
                     mServerManagerMap.append(localPort, manager);
                 }
-                manager.initServerPortPrivate(localPort);
+                manager.initServerPrivate(context, localPort);
                 return manager;
             }
         }

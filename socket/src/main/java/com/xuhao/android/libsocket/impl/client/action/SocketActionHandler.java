@@ -25,7 +25,7 @@ public class SocketActionHandler extends SocketActionAdapter {
 
     }
 
-    public void attach(IConnectionManager manager, IRegister<ISocketActionListener> register) {
+    public void attach(IConnectionManager manager, IRegister<ISocketActionListener,IConnectionManager> register) {
         this.mManager = manager;
         register.registerReceiver(this);
     }
