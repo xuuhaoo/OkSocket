@@ -1,12 +1,12 @@
 package com.xuhao.android.libsocket.sdk.client;
 
+import com.xuhao.android.common.basic.protocol.DefaultNormalReaderProtocol;
 import com.xuhao.android.common.interfacies.IIOCoreOptions;
 import com.xuhao.android.common.interfacies.IReaderProtocol;
 import com.xuhao.android.libsocket.sdk.client.connection.AbsReconnectionManager;
 import com.xuhao.android.libsocket.sdk.client.connection.DefaultReconnectManager;
 import com.xuhao.android.libsocket.sdk.client.connection.NoneReconnect;
 import com.xuhao.android.libsocket.sdk.client.connection.abilities.IConfiguration;
-import com.xuhao.android.libsocket.sdk.client.protocol.DefaultNormalReaderProtocol;
 
 import java.nio.ByteOrder;
 
@@ -334,7 +334,7 @@ public class OkSocketOptions implements IIOCoreOptions {
     }
 
     @Override
-    public ByteOrder getWriteOrder() {
+    public ByteOrder getWriteByteOrder() {
         return mWriteOrder;
     }
 

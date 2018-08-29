@@ -1,4 +1,4 @@
-package com.xuhao.android.libsocket.sdk.client.protocol;
+package com.xuhao.android.common.basic.protocol;
 
 
 import com.xuhao.android.common.interfacies.IReaderProtocol;

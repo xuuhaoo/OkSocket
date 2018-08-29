@@ -10,7 +10,7 @@ public interface IIOCoreOptions {
 
     IReaderProtocol getReaderProtocol();
 
-    ByteOrder getWriteOrder();
+    ByteOrder getWriteByteOrder();
 
     int getReadPackageBytes();
 

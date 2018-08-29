@@ -83,7 +83,6 @@ public class ClientIOManager implements IIOManager<OkServerOptions> {
         }
     }
 
-
     @Override
     public void setOkOptions(OkServerOptions options) {
         mOptions = options;
@@ -99,6 +98,7 @@ public class ClientIOManager implements IIOManager<OkServerOptions> {
     public void send(ISendable sendable) {
         mWriter.offer(sendable);
     }
+
     @Override
     public void close() {
         close(new InitiativeDisconnectException());

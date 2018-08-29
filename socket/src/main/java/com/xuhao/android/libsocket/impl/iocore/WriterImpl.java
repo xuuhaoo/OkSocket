@@ -52,7 +52,7 @@ public class WriterImpl implements IWriter<IIOCoreOptions> {
                 int packageSize = mOkOptions.getWritePackageBytes();
                 int remainingCount = sendBytes.length;
                 ByteBuffer writeBuf = ByteBuffer.allocate(packageSize);
-                writeBuf.order(mOkOptions.getWriteOrder());
+                writeBuf.order(mOkOptions.getWriteByteOrder());
                 int index = 0;
                 while (remainingCount > 0) {
                     int realWriteLength = Math.min(packageSize, remainingCount);

@@ -3,7 +3,6 @@ package com.xuhao.android.server.action;
 import com.xuhao.android.common.basic.bean.OriginalData;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
-import com.xuhao.android.server.impl.clientpojo.Client;
 
 import java.io.Serializable;
 
@@ -18,15 +17,12 @@ public class ClientActionDispatcher implements IStateSender {
 
     private ClientActionListener mActionListener;
 
-    private Client mClient;
-
-    public ClientActionDispatcher(Client client, ClientActionListener actionListener) {
+    public ClientActionDispatcher(ClientActionListener actionListener) {
         mActionListener = actionListener;
-        mClient = client;
     }
 
     @Override
-    public void sendBroadcast(String action, Serializable serializable) {
+    public void sendBroadcast(final String action, final Serializable serializable) {
         if (mActionListener == null) {
             return;
         }
@@ -42,7 +38,7 @@ public class ClientActionDispatcher implements IStateSender {
         switch (action) {
             case ACTION_READ_THREAD_START: {
                 try {
-                    mActionListener.onClientReadReady(mClient.getUniqueTag());
+                    mActionListener.onClientReadReady();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -51,7 +47,7 @@ public class ClientActionDispatcher implements IStateSender {
             case ACTION_READ_THREAD_SHUTDOWN: {
                 try {
                     Exception exception = (Exception) serializable;
-                    mActionListener.onClientReadDead(exception, mClient.getUniqueTag());
+                    mActionListener.onClientReadDead(exception);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -59,7 +55,7 @@ public class ClientActionDispatcher implements IStateSender {
             }
             case ACTION_WRITE_THREAD_START: {
                 try {
-                    mActionListener.onClientWriteReady(mClient.getUniqueTag());
+                    mActionListener.onClientWriteReady();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -68,7 +64,7 @@ public class ClientActionDispatcher implements IStateSender {
             case ACTION_WRITE_THREAD_SHUTDOWN: {
                 try {
                     Exception exception = (Exception) serializable;
-                    mActionListener.onClientWriteDead(exception, mClient.getUniqueTag());
+                    mActionListener.onClientWriteDead(exception);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -77,7 +73,7 @@ public class ClientActionDispatcher implements IStateSender {
             case ACTION_READ_COMPLETE: {
                 try {
                     OriginalData data = (OriginalData) serializable;
-                    mActionListener.onClientRead(data, mClient.getUniqueTag());
+                    mActionListener.onClientRead(data);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -86,7 +82,7 @@ public class ClientActionDispatcher implements IStateSender {
             case ACTION_WRITE_COMPLETE: {
                 try {
                     ISendable data = (ISendable) serializable;
-                    mActionListener.onClientWrite(data, mClient.getUniqueTag());
+                    mActionListener.onClientWrite(data);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -96,16 +92,16 @@ public class ClientActionDispatcher implements IStateSender {
     }
 
     public interface ClientActionListener {
-        void onClientReadReady(String tag);
+        void onClientReadReady();
 
-        void onClientWriteReady(String tag);
+        void onClientWriteReady();
 
-        void onClientReadDead(Exception e, String tag);
+        void onClientReadDead(Exception e);
 
-        void onClientWriteDead(Exception e, String tag);
+        void onClientWriteDead(Exception e);
 
-        void onClientRead(OriginalData originalData, String tag);
+        void onClientRead(OriginalData originalData);
 
-        void onClientWrite(ISendable sendable, String tag);
+        void onClientWrite(ISendable sendable);
     }
 }

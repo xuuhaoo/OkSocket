@@ -7,6 +7,7 @@ import com.xuhao.android.common.interfacies.server.IServerManagerPrivate;
 import com.xuhao.android.common.utils.SLog;
 import com.xuhao.android.server.action.IAction;
 import com.xuhao.android.server.exceptions.IllegalAccessException;
+import com.xuhao.android.server.impl.clientpojo.ClientImpl;
 import com.xuhao.android.server.impl.clientpojo.ClientPoolImpl;
 
 import java.net.ServerSocket;
@@ -97,7 +98,10 @@ public class ServerManagerImpl extends AbsServerRegisterProxy implements IServer
         @Override
         protected void runInLoopThread() throws Exception {
             Socket socket = mServerSocket.accept();
-
+            ClientImpl client = new ClientImpl(mContext, socket, mServerOptions);
+            client.setClientPool(mClientPoolImpl);
+            client.setServerStateSender(ServerManagerImpl.this);
+            client.startIOEngine();
         }
 
         @Override
@@ -119,6 +123,7 @@ public class ServerManagerImpl extends AbsServerRegisterProxy implements IServer
 
         mServerSocket = null;
         mClientPoolImpl = null;
+        mServerActionDispatcher = null;
     }
 
 }
