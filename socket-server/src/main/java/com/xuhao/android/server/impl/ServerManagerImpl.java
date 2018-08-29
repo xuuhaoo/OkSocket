@@ -2,13 +2,14 @@ package com.xuhao.android.server.impl;
 
 import android.content.Context;
 
+import com.xuhao.android.common.basic.AbsLoopThread;
 import com.xuhao.android.common.interfacies.server.IServerManager;
 import com.xuhao.android.server.impl.client.ClientPool;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 
-public class OkServerManagerImpl extends AbsServerRegister implements IServerManager {
+public class ServerManagerImpl extends AbsServerRegister implements IServerManager {
 
     private int mServerPort = -999;
 
@@ -18,8 +19,13 @@ public class OkServerManagerImpl extends AbsServerRegister implements IServerMan
 
     private OkServerOptions mServerOptions;
 
-    public OkServerManagerImpl(Context context, OkServerOptions options) {
+    private AbsLoopThread mAcceptThread;
+
+    private Context mContext;
+
+    public ServerManagerImpl(Context context, OkServerOptions options) {
         super(context);
+        mContext = context;
         mServerOptions = options;
         mClientPool = new ClientPool(mServerOptions.getConnectCapcity());
         mServerActionDispatcher.setClientPool(mClientPool);
@@ -35,11 +41,34 @@ public class OkServerManagerImpl extends AbsServerRegister implements IServerMan
         }
     }
 
+    private class AcceptThread extends AbsLoopThread {
+
+        public AcceptThread(Context context, String name) {
+            super(context, name);
+        }
+
+        @Override
+        protected void beforeLoop() throws Exception {
+            super.beforeLoop();
+        }
+
+        @Override
+        protected void runInLoopThread() throws Exception {
+            mServerSocket.accept();
+        }
+
+        @Override
+        protected void loopFinish(Exception e) {
+
+        }
+    }
+
     @Override
     public void listen() {
         try {
             mServerSocket = new ServerSocket(mServerPort);
-            mServerSocket.accept();
+            mAcceptThread = new AcceptThread(mContext, "server accepting in " + mServerPort);
+            mAcceptThread.start();
 
         } catch (IOException e) {
             e.printStackTrace();

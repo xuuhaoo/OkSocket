@@ -36,7 +36,7 @@ import javax.net.ssl.TrustManager;
  * Created by xuhao on 2017/5/16.
  */
 
-public class BlockConnectionManager extends AbsConnectionManager {
+public class ConnectionManagerImpl extends AbsConnectionManager {
     /**
      * 套接字
      */
@@ -106,7 +106,7 @@ public class BlockConnectionManager extends AbsConnectionManager {
         }
     };
 
-    protected BlockConnectionManager(Context context, ConnectionInfo info) {
+    protected ConnectionManagerImpl(Context context, ConnectionInfo info) {
         super(context, info);
         SLog.i("block connection init");
     }
@@ -298,7 +298,7 @@ public class BlockConnectionManager extends AbsConnectionManager {
             }
 
             if (mActionHandler != null) {
-                mActionHandler.detach(BlockConnectionManager.this);
+                mActionHandler.detach(ConnectionManagerImpl.this);
                 mActionHandler = null;
             }
             mSocket = null;

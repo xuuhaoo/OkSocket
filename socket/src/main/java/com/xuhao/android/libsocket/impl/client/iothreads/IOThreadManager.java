@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 
 import com.xuhao.android.common.basic.AbsLoopThread;
 import com.xuhao.android.common.interfacies.IReaderProtocol;
+import com.xuhao.android.common.interfacies.client.io.IReader;
+import com.xuhao.android.common.interfacies.client.io.IWriter;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.utils.SLog;
@@ -12,8 +14,6 @@ import com.xuhao.android.libsocket.impl.client.abilities.IIOManager;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.impl.iocore.ReaderImpl;
 import com.xuhao.android.libsocket.impl.iocore.WriterImpl;
-import com.xuhao.android.libsocket.impl.iocore.abilities.IReader;
-import com.xuhao.android.libsocket.impl.iocore.abilities.IWriter;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 
 import java.io.InputStream;
