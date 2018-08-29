@@ -9,9 +9,8 @@ import com.xuhao.android.server.action.IAction;
 import com.xuhao.android.server.exceptions.IllegalAccessException;
 import com.xuhao.android.server.impl.clientpojo.ClientPool;
 
-import java.io.IOException;
 import java.net.ServerSocket;
-import java.nio.channels.IllegalBlockingModeException;
+import java.net.Socket;
 
 public class ServerManagerImpl extends AbsServerRegisterProxy implements IServerManagerPrivate<OkServerOptions> {
 
@@ -77,8 +76,8 @@ public class ServerManagerImpl extends AbsServerRegisterProxy implements IServer
             configuration(mServerSocket);
             mAcceptThread = new AcceptThread(mContext, "server accepting in " + mServerPort);
             mAcceptThread.start();
-        } catch (IOException e) {
-            sendBroadcast(IAction.ACTION_SERVER_LISTEN_FAILED, e);
+        } catch (Exception e) {
+            sendBroadcast(IAction.Server.ACTION_SERVER_ALLREADY_SHUTDOWN, e);
         }
     }
 
@@ -92,22 +91,18 @@ public class ServerManagerImpl extends AbsServerRegisterProxy implements IServer
         protected void beforeLoop() throws Exception {
             mClientPool = new ClientPool(mServerOptions.getConnectCapacity());
             mServerActionDispatcher.setClientPool(mClientPool);
-            sendBroadcast(IAction.ACTION_SERVER_LISTEN_SUCCESS);
+            sendBroadcast(IAction.Server.ACTION_SERVER_LISTENING);
         }
 
         @Override
         protected void runInLoopThread() throws Exception {
-            mServerSocket.accept();
+            Socket socket = mServerSocket.accept();
 
         }
 
         @Override
         protected void loopFinish(Exception e) {
-            if (e instanceof IOException || e instanceof SecurityException || e instanceof IllegalBlockingModeException) {
-                sendBroadcast(IAction.ACTION_SERVER_LISTEN_FAILED, e);
-            } else {
-                sendBroadcast(IAction.ACTION_SERVER_WILL_BE_SHUTDOWN);
-            }
+            sendBroadcast(IAction.Server.ACTION_SERVER_ALLREADY_SHUTDOWN, e);
         }
     }
 

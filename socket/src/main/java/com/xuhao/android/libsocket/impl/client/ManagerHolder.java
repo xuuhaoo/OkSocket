@@ -8,7 +8,7 @@ import android.util.SparseArray;
 import com.xuhao.android.common.interfacies.server.IServerManager;
 import com.xuhao.android.common.interfacies.server.IServerManagerPrivate;
 import com.xuhao.android.common.utils.SLog;
-import com.xuhao.android.common.utils.SpiUtils;
+import com.xuhao.android.common.utils.SPIUtils;
 import com.xuhao.android.libsocket.impl.client.abilities.IConnectionSwitchListener;
 import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
@@ -45,7 +45,7 @@ public class ManagerHolder {
     public IServerManager getServer(int localPort, Context context) {
         IServerManagerPrivate manager = mServerManagerMap.get(localPort);
         if (manager == null) {
-            manager = (IServerManagerPrivate) SpiUtils.load(IServerManager.class);
+            manager = (IServerManagerPrivate) SPIUtils.load(IServerManager.class);
             if (manager == null) {
                 SLog.e("Server load error. Server plug-in are required!" +
                         " For details link to https://github.com/xuuhaoo/OkSocket");

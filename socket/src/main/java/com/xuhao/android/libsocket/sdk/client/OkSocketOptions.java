@@ -2,7 +2,6 @@ package com.xuhao.android.libsocket.sdk.client;
 
 import com.xuhao.android.common.interfacies.IIOCoreOptions;
 import com.xuhao.android.common.interfacies.IReaderProtocol;
-import com.xuhao.android.libsocket.impl.client.abilities.IIOManager;
 import com.xuhao.android.libsocket.sdk.client.connection.AbsReconnectionManager;
 import com.xuhao.android.libsocket.sdk.client.connection.DefaultReconnectManager;
 import com.xuhao.android.libsocket.sdk.client.connection.NoneReconnect;

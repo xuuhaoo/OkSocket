@@ -7,10 +7,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 import android.text.TextUtils;
 
+import com.xuhao.android.common.interfacies.IIOManager;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.common.utils.NetUtils;
 import com.xuhao.android.common.utils.SLog;
-import com.xuhao.android.libsocket.impl.client.abilities.IIOManager;
 import com.xuhao.android.libsocket.impl.client.action.SocketActionHandler;
 import com.xuhao.android.libsocket.impl.client.iothreads.IOThreadManager;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
@@ -235,7 +235,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
                 mSocket.getOutputStream(),
                 mOptions,
                 mActionDispatcher);
-        mManager.resolve();
+        mManager.startEngine();
     }
 
     @Override

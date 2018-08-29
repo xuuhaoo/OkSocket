@@ -8,8 +8,8 @@ import com.xuhao.android.common.utils.BytesUtils;
 import com.xuhao.android.common.utils.SLog;
 import com.xuhao.android.libsocket.impl.exceptions.WriteException;
 import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
-import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.client.action.IAction;
+import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -31,7 +31,8 @@ public class WriterImpl implements IWriter<IIOCoreOptions> {
 
     private LinkedBlockingQueue<ISendable> mQueue = new LinkedBlockingQueue<>();
 
-    public WriterImpl(OutputStream outputStream, IStateSender stateSender) {
+    @Override
+    public void initialize(OutputStream outputStream, IStateSender stateSender) {
         mStateSender = stateSender;
         mOutputStream = outputStream;
     }

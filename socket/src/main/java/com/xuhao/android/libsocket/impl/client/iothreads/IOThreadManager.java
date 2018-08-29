@@ -4,13 +4,13 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.xuhao.android.common.basic.AbsLoopThread;
+import com.xuhao.android.common.interfacies.IIOManager;
 import com.xuhao.android.common.interfacies.IReaderProtocol;
 import com.xuhao.android.common.interfacies.client.io.IReader;
 import com.xuhao.android.common.interfacies.client.io.IWriter;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.utils.SLog;
-import com.xuhao.android.libsocket.impl.client.abilities.IIOManager;
 import com.xuhao.android.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.android.libsocket.impl.iocore.ReaderImpl;
 import com.xuhao.android.libsocket.impl.iocore.WriterImpl;
@@ -23,7 +23,7 @@ import java.io.OutputStream;
  * Created by xuhao on 2017/5/31.
  */
 
-public class IOThreadManager implements IIOManager {
+public class IOThreadManager implements IIOManager<OkSocketOptions> {
 
     private Context mContext;
 
@@ -62,12 +62,14 @@ public class IOThreadManager implements IIOManager {
 
     private void initIO() {
         assertHeaderProtocolNotEmpty();
-        mReader = new ReaderImpl(mInputStream, mSender);
-        mWriter = new WriterImpl(mOutputStream, mSender);
+        mReader = new ReaderImpl();
+        mReader.initialize(mInputStream, mSender);
+        mWriter = new WriterImpl();
+        mWriter.initialize(mOutputStream, mSender);
     }
 
     @Override
-    public void resolve() {
+    public void startEngine() {
         mCurrentThreadMode = mOkOptions.getIOThreadMode();
         //初始化读写工具类
         mReader.setOption(mOkOptions);

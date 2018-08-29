@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import com.xuhao.android.common.interfacies.client.IClient;
-import com.xuhao.android.common.interfacies.client.IClientPool;
+import com.xuhao.android.common.interfacies.server.IClient;
+import com.xuhao.android.common.interfacies.server.IClientPool;
 import com.xuhao.android.common.interfacies.dispatcher.IRegister;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.interfacies.server.IServerActionListener;
@@ -20,8 +20,7 @@ import java.util.HashMap;
 import static com.xuhao.android.server.action.IAction.ACTION_CLIENT_CONNECTED;
 import static com.xuhao.android.server.action.IAction.ACTION_CLIENT_DISCONNECTED;
 import static com.xuhao.android.server.action.IAction.ACTION_SERVER_ALLREADY_SHUTDOWN;
-import static com.xuhao.android.server.action.IAction.ACTION_SERVER_LISTEN_FAILED;
-import static com.xuhao.android.server.action.IAction.ACTION_SERVER_LISTEN_SUCCESS;
+import static com.xuhao.android.server.action.IAction.ACTION_SERVER_LISTENING;
 import static com.xuhao.android.server.action.IAction.ACTION_SERVER_WILL_BE_SHUTDOWN;
 import static com.xuhao.android.server.action.IAction.SERVER_ACTION_DATA;
 
@@ -93,8 +92,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener, 
                     }
                 };
                 registerReceiver(broadcastReceiver,
-                        ACTION_SERVER_LISTEN_SUCCESS,
-                        ACTION_SERVER_LISTEN_FAILED,
+                        ACTION_SERVER_LISTENING,
                         ACTION_CLIENT_CONNECTED,
                         ACTION_CLIENT_DISCONNECTED,
                         ACTION_SERVER_WILL_BE_SHUTDOWN,
@@ -133,18 +131,9 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener, 
     private void dispatchActionToListener(Context context, Intent intent, IServerActionListener responseHandler) {
         String action = intent.getAction();
         switch (action) {
-            case ACTION_SERVER_LISTEN_SUCCESS: {
+            case ACTION_SERVER_LISTENING: {
                 try {
-                    responseHandler.onServerListenSuccess(context, mServerPort);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-            case ACTION_SERVER_LISTEN_FAILED: {
-                try {
-                    Throwable throwable = (Throwable) intent.getSerializableExtra(SERVER_ACTION_DATA);
-                    responseHandler.onServerListenFailed(context, mServerPort, throwable);
+                    responseHandler.onServerListening(context, mServerPort);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -179,7 +168,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener, 
             case ACTION_SERVER_ALLREADY_SHUTDOWN: {
                 try {
                     Throwable throwable = (Throwable) intent.getSerializableExtra(SERVER_ACTION_DATA);
-                    responseHandler.onServerAllreadyShutdown(context, mServerPort, throwable);
+                    responseHandler.onServerAlreadyShutdown(context, mServerPort, throwable);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -1,4 +1,4 @@
-package com.xuhao.android.common.interfacies.client;
+package com.xuhao.android.common.interfacies.server;
 
 public interface IClientPool<T, K> {
 

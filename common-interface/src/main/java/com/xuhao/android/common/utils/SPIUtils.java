@@ -5,9 +5,13 @@ import android.util.Log;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-public class SpiUtils {
+public class SPIUtils {
 
     public static <E> E load(Class<E> clz) {
+        if (clz == null) {
+            Log.e("Loader", "load null clz error!");
+            return null;
+        }
         ServiceLoader<E> serviceLoader = ServiceLoader.load(clz, clz.getClassLoader());
         Iterator<E> it = serviceLoader.iterator();
         try {
@@ -16,7 +20,7 @@ public class SpiUtils {
                 return service;
             }
         } catch (Throwable throwable) {
-            Log.e("SpiLoader", "error! " + throwable.getMessage());
+            Log.e("Loader", "load " + clz.getSimpleName() + " error! " + throwable.getMessage());
         }
         return null;
     }

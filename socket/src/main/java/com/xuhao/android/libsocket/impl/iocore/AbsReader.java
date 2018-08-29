@@ -1,11 +1,11 @@
 package com.xuhao.android.libsocket.impl.iocore;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
 
 import com.xuhao.android.common.interfacies.IIOCoreOptions;
 import com.xuhao.android.common.interfacies.client.io.IReader;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
-import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +22,12 @@ public abstract class AbsReader implements IReader<IIOCoreOptions> {
 
     protected InputStream mInputStream;
 
-    public AbsReader(InputStream inputStream, IStateSender stateSender) {
+    public AbsReader() {
+    }
+
+    @CallSuper
+    @Override
+    public void initialize(InputStream inputStream, IStateSender stateSender) {
         mStateSender = stateSender;
         mInputStream = inputStream;
     }
