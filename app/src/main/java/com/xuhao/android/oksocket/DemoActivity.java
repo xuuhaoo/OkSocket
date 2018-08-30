@@ -2,12 +2,15 @@ package com.xuhao.android.oksocket;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -42,6 +45,10 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
 
     private IServerManager mServerManager;
 
+    private TextView mIPTv;
+
+    private int mPort = 8080;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +56,9 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
         mSimpleBtn = findViewById(R.id.btn1);
         mComplexBtn = findViewById(R.id.btn2);
         mServerBtn = findViewById(R.id.btn3);
+        mIPTv = findViewById(R.id.ip);
 
+        mIPTv.setText("当前IP:" + getlocalip());
         mSimpleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +74,7 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
             }
         });
 
-        mServerManager = OkSocket.server(8080).registerReceiver(new ServerActionAdapter() {
+        mServerManager = OkSocket.server(mPort).registerReceiver(new ServerActionAdapter() {
             @Override
             public void onServerListening(Context context, int serverPort) {
                 super.onServerListening(context, serverPort);
@@ -99,7 +108,7 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
             public void onServerAlreadyShutdown(Context context, int serverPort) {
                 super.onServerAlreadyShutdown(context, serverPort);
                 Log.i("ServerCallback", "onServerAlreadyShutdown,serverPort:" + serverPort);
-                mServerBtn.setText("127.0.0.1/8080服务器启动");
+                mServerBtn.setText(mPort + "服务器启动");
             }
         });
 
@@ -119,9 +128,9 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
 
     private void flushServerText() {
         if (mServerManager.isLive()) {
-            mServerBtn.setText("127.0.0.1/8080服务器关闭");
+            mServerBtn.setText(mPort + "服务器关闭");
         } else {
-            mServerBtn.setText("127.0.0.1/8080服务器启动");
+            mServerBtn.setText(mPort + "服务器启动");
         }
     }
 
@@ -168,6 +177,15 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
         } catch (Exception e) {
             Log.i("onClientIOServer", client.getHostIp() + ": " + str);
         }
-
     }
+
+    private String getlocalip() {
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        int ipAddress = wifiInfo.getIpAddress();
+        if (ipAddress == 0) return "未连接wifi";
+        return ((ipAddress & 0xff) + "." + (ipAddress >> 8 & 0xff) + "."
+                + (ipAddress >> 16 & 0xff) + "." + (ipAddress >> 24 & 0xff));
+    }
+
 }

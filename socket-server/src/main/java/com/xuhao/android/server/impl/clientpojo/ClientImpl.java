@@ -2,6 +2,7 @@ package com.xuhao.android.server.impl.clientpojo;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.xuhao.android.common.basic.bean.OriginalData;
 import com.xuhao.android.common.interfacies.IReaderProtocol;
@@ -9,6 +10,7 @@ import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.interfacies.server.IClient;
 import com.xuhao.android.common.interfacies.server.IClientIOCallback;
+import com.xuhao.android.common.utils.SLog;
 import com.xuhao.android.server.action.ClientActionDispatcher;
 import com.xuhao.android.server.action.IAction;
 import com.xuhao.android.server.exceptions.CacheException;
@@ -24,7 +26,9 @@ import java.util.List;
 
 public class ClientImpl extends AbsClient {
 
-    private boolean isDead;
+    private volatile boolean isDead;
+
+    private volatile boolean isReadEngineStarted;
 
     private ClientIOManager mIOManager;
 
@@ -66,7 +70,7 @@ public class ClientImpl extends AbsClient {
     public void startIOEngine() {
         if (mIOManager != null) {
             synchronized (mIOManager) {
-                mIOManager.startEngine();
+                mIOManager.startWriteEngin();
             }
         }
     }
@@ -87,6 +91,7 @@ public class ClientImpl extends AbsClient {
         } catch (IOException e1) {
         }
         removeAllIOCallback();
+        isReadEngineStarted = false;
     }
 
     @Override
@@ -105,6 +110,7 @@ public class ClientImpl extends AbsClient {
         } catch (IOException e1) {
         }
         removeAllIOCallback();
+        isReadEngineStarted = false;
     }
 
     @Override
@@ -137,7 +143,9 @@ public class ClientImpl extends AbsClient {
         }
         disconnect(e);
         mServerStateSender.sendBroadcast(IAction.Server.ACTION_CLIENT_DISCONNECTED, this);
-        isDead = true;
+        synchronized (this) {
+            isDead = true;
+        }
     }
 
     @Override
@@ -156,6 +164,10 @@ public class ClientImpl extends AbsClient {
     public void addIOCallback(IClientIOCallback clientIOCallback) {
         synchronized (mCallbackList) {
             mCallbackList.add(clientIOCallback);
+            if (!isReadEngineStarted) {
+                isReadEngineStarted = true;
+                startRead();
+            }
         }
     }
 
@@ -170,6 +182,15 @@ public class ClientImpl extends AbsClient {
     public void removeAllIOCallback() {
         synchronized (mCallbackList) {
             mCallbackList.clear();
+        }
+    }
+
+    private void startRead() {
+        if (isDead) {
+            return;
+        }
+        if (mIOManager != null) {
+            mIOManager.startReadEngine();
         }
     }
 

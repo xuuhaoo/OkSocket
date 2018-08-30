@@ -3,6 +3,7 @@ package com.xuhao.android.server.impl.clientpojo;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.xuhao.android.common.basic.bean.OriginalData;
 import com.xuhao.android.common.interfacies.IReaderProtocol;
 import com.xuhao.android.common.interfacies.server.IClient;
 import com.xuhao.android.server.action.ClientActionDispatcher;
@@ -10,6 +11,8 @@ import com.xuhao.android.server.impl.OkServerOptions;
 
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbsClient implements IClient, ClientActionDispatcher.ClientActionListener {
     protected IReaderProtocol mReaderProtocol;
@@ -22,9 +25,11 @@ public abstract class AbsClient implements IClient, ClientActionDispatcher.Clien
 
     protected String mUniqueTag;
 
-    private boolean isCallDead;
+    private volatile boolean isCallDead;
 
-    private boolean[] isReady = new boolean[]{false, false};
+    private volatile boolean isCallReady;
+
+    private List<OriginalData> mCacheForNotPrepare = new ArrayList<>();
 
     public AbsClient(@NonNull Socket socket, @NonNull OkServerOptions okServerOptions) {
         this.mOkServerOptions = okServerOptions;
@@ -45,7 +50,7 @@ public abstract class AbsClient implements IClient, ClientActionDispatcher.Clien
 
     @Override
     public void setUniqueTag(String uniqueTag) {
-        synchronized (AbsClient.class) {
+        synchronized (this) {
             mUniqueTag = uniqueTag;
         }
     }
@@ -60,44 +65,44 @@ public abstract class AbsClient implements IClient, ClientActionDispatcher.Clien
 
     @Override
     public final void onClientReadReady() {
-        synchronized (isReady) {
-            isReady[0] = true;
-            if (isReady[0] && isReady[1]) {
+        synchronized (this) {
+            if (!isCallReady) {
                 onClientReady();
                 isCallDead = false;
+                isCallReady = true;
             }
         }
     }
 
     @Override
-    public final void onClientWriteReady() {
-        synchronized (isReady) {
-            isReady[1] = true;
-            if (isReady[0] && isReady[1]) {
+    public void onClientWriteReady() {
+        synchronized (this) {
+            if (!isCallReady) {
                 onClientReady();
                 isCallDead = false;
+                isCallReady = true;
             }
         }
     }
 
     @Override
     public final void onClientReadDead(Exception e) {
-        synchronized (isReady) {
-            isReady[0] = false;
-            if ((!isReady[0] || !isReady[1]) && !isCallDead) {
+        synchronized (this) {
+            if (!isCallDead) {
                 onClientDead(e);
                 isCallDead = true;
+                isCallReady = false;
             }
         }
     }
 
     @Override
     public final void onClientWriteDead(Exception e) {
-        synchronized (isReady) {
-            isReady[1] = false;
-            if ((!isReady[0] || !isReady[1]) && !isCallDead) {
+        synchronized (this) {
+            if (!isCallDead) {
                 onClientDead(e);
                 isCallDead = true;
+                isCallReady = false;
             }
         }
     }

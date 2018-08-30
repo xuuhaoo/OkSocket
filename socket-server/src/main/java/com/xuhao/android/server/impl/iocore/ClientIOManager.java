@@ -73,6 +73,24 @@ public class ClientIOManager implements IIOManager<OkServerOptions> {
         mClientReadThread.start();
     }
 
+    public void startReadEngine() {
+        if (mClientReadThread != null) {
+            mClientReadThread.shutdown();
+            mClientReadThread = null;
+        }
+        mClientReadThread = new ClientReadThread(mContext, mReader, mClientStateSender);
+        mClientReadThread.start();
+    }
+
+    public void startWriteEngin() {
+        if (mClientWriteThread != null) {
+            mClientWriteThread.shutdown();
+            mClientWriteThread = null;
+        }
+        mClientWriteThread = new ClientWriteThread(mContext, mWriter, mClientStateSender);
+        mClientWriteThread.start();
+    }
+
     private void shutdownAllThread(Exception e) {
         if (mClientReadThread != null) {
             mClientReadThread.shutdown(e);

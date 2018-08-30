@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
 
     <Button
         android:id="@+id/btn1"
@@ -10,7 +11,7 @@
         android:layout_height="65dp"
         android:layout_marginTop="20dp"
         android:text="简单示例(Simple Demo)"
-        android:textAllCaps="false"/>
+        android:textAllCaps="false" />
 
     <Button
         android:id="@+id/btn2"
@@ -18,13 +19,22 @@
         android:layout_height="65dp"
         android:layout_marginTop="20dp"
         android:text="复杂示例(Complex Demo)"
-        android:textAllCaps="false"/>
+        android:textAllCaps="false" />
+
+    <TextView
+        android:id="@+id/ip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
+        android:text="当前IP:"
+        android:textSize="15sp" />
 
     <Button
         android:id="@+id/btn3"
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:layout_marginTop="20dp"
-        android:text="127.0.0.1/8080服务器启动"
-        android:textAllCaps="false"/>
+        android:text="8080服务器启动"
+        android:textAllCaps="false" />
+
 </LinearLayout>

@@ -37,6 +37,8 @@ public class SimpleDemoActivity extends AppCompatActivity {
     private ConnectionInfo mInfo;
 
     private Button mConnect;
+    private EditText mIPET;
+    private EditText mPortET;
     private IConnectionManager mManager;
     private EditText mSendET;
     private OkSocketOptions mOkOptions;
@@ -113,6 +115,8 @@ public class SimpleDemoActivity extends AppCompatActivity {
     private void findViews() {
         mSendList = findViewById(R.id.send_list);
         mReceList = findViewById(R.id.rece_list);
+        mIPET = findViewById(R.id.ip);
+        mPortET = findViewById(R.id.port);
         mClearLog = findViewById(R.id.clear_log);
         mConnect = findViewById(R.id.connect);
         mSendET = findViewById(R.id.send_et);
@@ -128,17 +132,20 @@ public class SimpleDemoActivity extends AppCompatActivity {
         mReceList.setLayoutManager(manager2);
         mReceList.setAdapter(mReceLogAdapter);
 
-        mInfo = new ConnectionInfo("127.0.0.1", 8080);
-//        mInfo = new ConnectionInfo("104.238.184.237", 8080);
+        initManager();
+    }
+
+    private void initManager() {
+        mInfo = new ConnectionInfo(mIPET.getText().toString(), Integer.parseInt(mPortET.getText().toString()));
         mOkOptions = new OkSocketOptions.Builder()
                 .setReconnectionManager(new NoneReconnect())
                 .setWritePackageBytes(1024)
                 .build();
         mManager = OkSocket.open(mInfo).option(mOkOptions);
+        mManager.registerReceiver(adapter);
     }
 
     private void setListener() {
-        mManager.registerReceiver(adapter);
         mConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,6 +153,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
                     return;
                 }
                 if (!mManager.isConnect()) {
+                    initManager();
                     mManager.connect();
                 } else {
                     mConnect.setText("DisConnecting");
