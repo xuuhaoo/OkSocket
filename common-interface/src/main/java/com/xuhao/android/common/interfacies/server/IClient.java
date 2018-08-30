@@ -18,4 +18,10 @@ public interface IClient extends IDisConnectable, ISender<IClient>, Serializable
 
     void setReaderProtocol(IReaderProtocol protocol);
 
+    void addIOCallback(IClientIOCallback clientIOCallback);
+
+    void removeIOCallback(IClientIOCallback clientIOCallback);
+
+    void removeAllIOCallback();
+
 }

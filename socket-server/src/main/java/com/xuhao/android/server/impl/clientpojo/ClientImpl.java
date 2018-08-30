@@ -8,6 +8,7 @@ import com.xuhao.android.common.interfacies.IReaderProtocol;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.interfacies.server.IClient;
+import com.xuhao.android.common.interfacies.server.IClientIOCallback;
 import com.xuhao.android.server.action.ClientActionDispatcher;
 import com.xuhao.android.server.action.IAction;
 import com.xuhao.android.server.exceptions.CacheException;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientImpl extends AbsClient {
 
@@ -30,6 +33,8 @@ public class ClientImpl extends AbsClient {
     private ClientPoolImpl mClientPool;
 
     private IStateSender mServerStateSender;
+
+    private List<IClientIOCallback> mCallbackList = new ArrayList<>();
 
     public ClientImpl(Context context,
                       @NonNull Socket socket,
@@ -60,34 +65,46 @@ public class ClientImpl extends AbsClient {
 
     public void startIOEngine() {
         if (mIOManager != null) {
-            mIOManager.startEngine();
+            synchronized (mIOManager) {
+                mIOManager.startEngine();
+            }
         }
     }
 
     @Override
     public void disconnect(Exception e) {
         if (mIOManager != null) {
-            mIOManager.close(e);
+            synchronized (mIOManager) {
+                mIOManager.close(e);
+            }
         } else {
             onClientDead(e);
         }
         try {
-            mSocket.close();
+            synchronized (mSocket) {
+                mSocket.close();
+            }
         } catch (IOException e1) {
         }
+        removeAllIOCallback();
     }
 
     @Override
     public void disconnect() {
         if (mIOManager != null) {
-            mIOManager.close();
+            synchronized (mIOManager) {
+                mIOManager.close();
+            }
         } else {
             onClientDead(null);
         }
         try {
-            mSocket.close();
+            synchronized (mSocket) {
+                mSocket.close();
+            }
         } catch (IOException e1) {
         }
+        removeAllIOCallback();
     }
 
     @Override
@@ -126,20 +143,61 @@ public class ClientImpl extends AbsClient {
     @Override
     public void setReaderProtocol(@NonNull IReaderProtocol protocol) {
         if (mIOManager != null) {
-            OkServerOptions.Builder builder = new OkServerOptions.Builder(mOkServerOptions);
-            builder.setReaderProtocol(protocol);
-            mOkServerOptions = builder.build();
-            mIOManager.setOkOptions(mOkServerOptions);
+            synchronized (mIOManager) {
+                OkServerOptions.Builder builder = new OkServerOptions.Builder(mOkServerOptions);
+                builder.setReaderProtocol(protocol);
+                mOkServerOptions = builder.build();
+                mIOManager.setOkOptions(mOkServerOptions);
+            }
+        }
+    }
+
+    @Override
+    public void addIOCallback(IClientIOCallback clientIOCallback) {
+        synchronized (mCallbackList) {
+            mCallbackList.add(clientIOCallback);
+        }
+    }
+
+    @Override
+    public void removeIOCallback(IClientIOCallback clientIOCallback) {
+        synchronized (mCallbackList) {
+            mCallbackList.remove(clientIOCallback);
+        }
+    }
+
+    @Override
+    public void removeAllIOCallback() {
+        synchronized (mCallbackList) {
+            mCallbackList.clear();
         }
     }
 
     @Override
     public void onClientRead(OriginalData originalData) {
+        List<IClientIOCallback> list = new ArrayList<>();
+        list.addAll(mCallbackList);
 
+        for (IClientIOCallback clientIOCallback : list) {
+            try {
+                clientIOCallback.onClientRead(originalData, this, mClientPool);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void onClientWrite(ISendable sendable) {
+        List<IClientIOCallback> list = new ArrayList<>();
+        list.addAll(mCallbackList);
 
+        for (IClientIOCallback clientIOCallback : list) {
+            try {
+                clientIOCallback.onClientWrite(sendable, this, mClientPool);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

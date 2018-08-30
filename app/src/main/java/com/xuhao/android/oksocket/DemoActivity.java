@@ -9,18 +9,30 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+import com.xuhao.android.common.basic.bean.OriginalData;
+import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.common.interfacies.server.IClient;
+import com.xuhao.android.common.interfacies.server.IClientIOCallback;
 import com.xuhao.android.common.interfacies.server.IClientPool;
 import com.xuhao.android.common.interfacies.server.IServerManager;
 import com.xuhao.android.common.interfacies.server.IServerShutdown;
 import com.xuhao.android.libsocket.sdk.OkSocket;
+import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
+import com.xuhao.android.oksocket.data.MsgDataBean;
+import com.xuhao.android.oksocket.data.PulseBean;
 import com.xuhao.android.server.action.ServerActionAdapter;
+
+import java.nio.charset.Charset;
+import java.util.Arrays;
 
 /**
  * Created by didi on 2018/4/20.
  */
 
-public class DemoActivity extends AppCompatActivity {
+public class DemoActivity extends AppCompatActivity implements IClientIOCallback {
 
     private Button mSimpleBtn;
 
@@ -55,13 +67,6 @@ public class DemoActivity extends AppCompatActivity {
 
         mServerManager = OkSocket.server(8080).registerReceiver(new ServerActionAdapter() {
             @Override
-            public void onClientConnected(Context context, IClient client, int serverPort, IClientPool clientPool) {
-                super.onClientConnected(context, client, serverPort, clientPool);
-                Log.i("ServerCallback", "onClientConnected,serverPort:" + serverPort + "--ClientNums:" + clientPool
-                        .size() + "--ClientTag:" + client.getUniqueTag());
-            }
-
-            @Override
             public void onServerListening(Context context, int serverPort) {
                 super.onServerListening(context, serverPort);
                 Log.i("ServerCallback", "onServerListening,serverPort:" + serverPort);
@@ -69,9 +74,17 @@ public class DemoActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onClientConnected(Context context, IClient client, int serverPort, IClientPool clientPool) {
+                super.onClientConnected(context, client, serverPort, clientPool);
+                Log.i("ServerCallback", "onClientConnected,serverPort:" + serverPort + "--ClientNums:" + clientPool.size() + "--ClientTag:" + client.getUniqueTag());
+                client.addIOCallback(DemoActivity.this);
+            }
+
+            @Override
             public void onClientDisconnected(Context context, IClient client, int serverPort, IClientPool clientPool) {
                 super.onClientDisconnected(context, client, serverPort, clientPool);
                 Log.i("ServerCallback", "onClientDisconnected,serverPort:" + serverPort + "--ClientNums:" + clientPool.size() + "--ClientTag:" + client.getUniqueTag());
+                client.removeIOCallback(DemoActivity.this);
             }
 
             @Override
@@ -110,5 +123,51 @@ public class DemoActivity extends AppCompatActivity {
         } else {
             mServerBtn.setText("127.0.0.1/8080服务器启动");
         }
+    }
+
+    @Override
+    public void onClientRead(OriginalData originalData, IClient client, IClientPool<IClient, String> clientPool) {
+        String str = new String(originalData.getBodyBytes(), Charset.forName("utf-8"));
+        JsonObject jsonObject = null;
+        try {
+            jsonObject = new JsonParser().parse(str).getAsJsonObject();
+            int cmd = jsonObject.get("cmd").getAsInt();
+            if (cmd == 54) {//登陆成功
+                String handshake = jsonObject.get("handshake").getAsString();
+                Log.i("onClientIOServer", client.getHostIp() + ": 握手成功! 握手信息:" + handshake + ". 开始心跳..");
+            } else if (cmd == 14) {//心跳
+                Log.i("onClientIOServer", client.getHostIp() + ": 收到心跳");
+            } else {
+                Log.i("onClientIOServer", client.getHostIp() + ": " + str);
+            }
+        } catch (Exception e) {
+            Log.i("onClientIOServer", client.getHostIp() + ": " + str);
+        }
+        MsgDataBean msgDataBean = new MsgDataBean(str);
+        clientPool.sendToAll(msgDataBean);
+    }
+
+    @Override
+    public void onClientWrite(ISendable sendable, IClient client, IClientPool<IClient, String> clientPool) {
+        byte[] bytes = sendable.parse();
+        bytes = Arrays.copyOfRange(bytes, 4, bytes.length);
+        String str = new String(bytes, Charset.forName("utf-8"));
+        JsonObject jsonObject = null;
+        try {
+            jsonObject = new JsonParser().parse(str).getAsJsonObject();
+            int cmd = jsonObject.get("cmd").getAsInt();
+            switch (cmd) {
+                case 54: {
+                    String handshake = jsonObject.get("handshake").getAsString();
+                    Log.i("onClientIOServer", client.getHostIp() + ": 发送握手数据:" + handshake);
+                    break;
+                }
+                default:
+                    Log.i("onClientIOServer", client.getHostIp() + ": " + str);
+            }
+        } catch (Exception e) {
+            Log.i("onClientIOServer", client.getHostIp() + ": " + str);
+        }
+
     }
 }
