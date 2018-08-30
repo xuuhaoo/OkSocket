@@ -44,17 +44,13 @@ dependencies {
 
 ```
 -dontwarn com.xuhao.android.libsocket.**
--keep class com.xuhao.android.socket.impl.abilities.** { *; }
--keep class com.xuhao.android.socket.impl.exceptions.** { *; }
--keep class com.xuhao.android.socket.impl.EnvironmentalManager { *; }
--keep class com.xuhao.android.socket.impl.BlockConnectionManager { *; }
--keep class com.xuhao.android.socket.impl.UnBlockConnectionManager { *; }
--keep class com.xuhao.android.socket.impl.SocketActionHandler { *; }
--keep class com.xuhao.android.socket.impl.PulseManager { *; }
--keep class com.xuhao.android.socket.impl.ManagerHolder { *; }
--keep class com.xuhao.android.socket.interfaces.** { *; }
--keep class com.xuhao.android.socket.sdk.** { *; }
- # 枚举类不能被混淆
+-dontwarn com.xuhao.android.common.**
+-dontwarn com.xuhao.android.server.**
+
+-keep class com.xuhao.android.common.** { *; }
+-keep class com.xuhao.android.server.** { *; }
+-keep class com.xuhao.android.libsocket.** { *; }
+
 -keepclassmembers enum * {
     public static **[] values();
     public static ** valueOf(java.lang.String);
@@ -62,7 +58,7 @@ dependencies {
 -keep class com.xuhao.android.socket.sdk.OkSocketOptions$* {
     *;
 }
--keep class com.xuhao.android.libsocket.sdk.OkSocketSSLConfig$* {
+-keep class com.xuhao.android.server.impl.OkServerOptions$* {
     *;
 }
 
