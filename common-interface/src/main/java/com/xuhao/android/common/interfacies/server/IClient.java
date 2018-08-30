@@ -8,6 +8,8 @@ import java.io.Serializable;
 
 public interface IClient extends IDisConnectable, ISender<IClient>, Serializable {
 
+    String getHostIp();
+
     String getHostName();
 
     void setUniqueTag(String uniqueTag);

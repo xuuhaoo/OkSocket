@@ -84,7 +84,7 @@ public class ServerManagerImpl extends AbsServerRegisterProxy implements IServer
             mAcceptThread = new AcceptThread(mContext, "server accepting in " + mServerPort);
             mAcceptThread.start();
         } catch (Exception e) {
-            sendBroadcast(IAction.Server.ACTION_SERVER_ALLREADY_SHUTDOWN, e);
+            shutdown();
         }
     }
 

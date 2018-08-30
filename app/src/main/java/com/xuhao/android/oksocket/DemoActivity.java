@@ -71,8 +71,7 @@ public class DemoActivity extends AppCompatActivity {
             @Override
             public void onClientDisconnected(Context context, IClient client, int serverPort, IClientPool clientPool) {
                 super.onClientDisconnected(context, client, serverPort, clientPool);
-                Log.i("ServerCallback", "onClientDisconnected,serverPort:" + serverPort + "--ClientNums:" + clientPool
-                        .size() + "--ClientTag:" + client.getUniqueTag());
+                Log.i("ServerCallback", "onClientDisconnected,serverPort:" + serverPort + "--ClientNums:" + clientPool.size() + "--ClientTag:" + client.getUniqueTag());
             }
 
             @Override
@@ -87,6 +86,7 @@ public class DemoActivity extends AppCompatActivity {
             public void onServerAlreadyShutdown(Context context, int serverPort) {
                 super.onServerAlreadyShutdown(context, serverPort);
                 Log.i("ServerCallback", "onServerAlreadyShutdown,serverPort:" + serverPort);
+                mServerBtn.setText("127.0.0.1/8080服务器启动");
             }
         });
 

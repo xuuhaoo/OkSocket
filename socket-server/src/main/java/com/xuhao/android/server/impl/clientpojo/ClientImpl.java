@@ -118,6 +118,7 @@ public class ClientImpl extends AbsClient {
         if (e != null) {
             e.printStackTrace();
         }
+        disconnect(e);
         mServerStateSender.sendBroadcast(IAction.Server.ACTION_CLIENT_DISCONNECTED, this);
         isDead = true;
     }

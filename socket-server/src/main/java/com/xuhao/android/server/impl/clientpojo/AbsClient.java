@@ -34,55 +34,72 @@ public abstract class AbsClient implements IClient, ClientActionDispatcher.Clien
     }
 
     @Override
+    public String getHostIp() {
+        return mInetAddress.getHostAddress();
+    }
+
+    @Override
     public String getHostName() {
         return mInetAddress.getCanonicalHostName();
     }
 
     @Override
     public void setUniqueTag(String uniqueTag) {
-        mUniqueTag = uniqueTag;
+        synchronized (AbsClient.class) {
+            mUniqueTag = uniqueTag;
+        }
     }
 
     @Override
     public String getUniqueTag() {
         if (TextUtils.isEmpty(mUniqueTag)) {
-            return getHostName();
+            return getHostIp();
         }
         return mUniqueTag;
     }
 
-    private void judge(Exception e) {
-        if (isReady[0] && isReady[1]) {
-            onClientReady();
-            isCallDead = false;
-        } else if (!isReady[0] || !isReady[1] && !isCallDead) {
-            onClientDead(e);
-            isCallDead = true;
+    @Override
+    public final void onClientReadReady() {
+        synchronized (isReady) {
+            isReady[0] = true;
+            if (isReady[0] && isReady[1]) {
+                onClientReady();
+                isCallDead = false;
+            }
         }
     }
 
     @Override
-    public final void onClientReadReady() {
-        isReady[0] = true;
-        judge(null);
-    }
-
-    @Override
     public final void onClientWriteReady() {
-        isReady[1] = true;
-        judge(null);
+        synchronized (isReady) {
+            isReady[1] = true;
+            if (isReady[0] && isReady[1]) {
+                onClientReady();
+                isCallDead = false;
+            }
+        }
     }
 
     @Override
     public final void onClientReadDead(Exception e) {
-        isReady[0] = false;
-        judge(e);
+        synchronized (isReady) {
+            isReady[0] = false;
+            if ((!isReady[0] || !isReady[1]) && !isCallDead) {
+                onClientDead(e);
+                isCallDead = true;
+            }
+        }
     }
 
     @Override
     public final void onClientWriteDead(Exception e) {
-        isReady[1] = false;
-        judge(e);
+        synchronized (isReady) {
+            isReady[1] = false;
+            if ((!isReady[0] || !isReady[1]) && !isCallDead) {
+                onClientDead(e);
+                isCallDead = true;
+            }
+        }
     }
 
     protected abstract void onClientReady();
