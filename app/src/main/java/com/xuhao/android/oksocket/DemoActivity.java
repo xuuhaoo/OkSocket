@@ -143,14 +143,14 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
             int cmd = jsonObject.get("cmd").getAsInt();
             if (cmd == 54) {//登陆成功
                 String handshake = jsonObject.get("handshake").getAsString();
-                Log.i("onClientIOServer", client.getHostIp() + ": 握手成功! 握手信息:" + handshake + ". 开始心跳..");
+                Log.i("onClientIOServer", "接收到:" + client.getHostIp() + " 握手信息:" + handshake);
             } else if (cmd == 14) {//心跳
-                Log.i("onClientIOServer", client.getHostIp() + ": 收到心跳");
+                Log.i("onClientIOServer", "接收到:" + client.getHostIp() + " 收到心跳");
             } else {
-                Log.i("onClientIOServer", client.getHostIp() + ": " + str);
+                Log.i("onClientIOServer", "接收到:" + client.getHostIp() + " " + str);
             }
         } catch (Exception e) {
-            Log.i("onClientIOServer", client.getHostIp() + ": " + str);
+            Log.i("onClientIOServer", "接收到:" + client.getHostIp() + " " + str);
         }
         MsgDataBean msgDataBean = new MsgDataBean(str);
         clientPool.sendToAll(msgDataBean);
@@ -168,14 +168,14 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
             switch (cmd) {
                 case 54: {
                     String handshake = jsonObject.get("handshake").getAsString();
-                    Log.i("onClientIOServer", client.getHostIp() + ": 发送握手数据:" + handshake);
+                    Log.i("onClientIOServer", "发送给:" + client.getHostIp() + " 握手数据:" + handshake);
                     break;
                 }
                 default:
-                    Log.i("onClientIOServer", client.getHostIp() + ": " + str);
+                    Log.i("onClientIOServer", "发送给:" + client.getHostIp() + " " + str);
             }
         } catch (Exception e) {
-            Log.i("onClientIOServer", client.getHostIp() + ": " + str);
+            Log.i("onClientIOServer", "发送给:" + client.getHostIp() + " " + str);
         }
     }
 

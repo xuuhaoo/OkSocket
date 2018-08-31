@@ -145,6 +145,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
         mManager.registerReceiver(adapter);
     }
 
+
     private void setListener() {
         mConnect.setOnClickListener(new View.OnClickListener() {
             @Override
