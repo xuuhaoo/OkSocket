@@ -29,7 +29,10 @@ files than you need put this into Module build.gradle file</font>
 
 ```groovy
 dependencies {
-        compile 'com.tonystark.android:socket:2.1.0'
+        //Basic Socket client functionality
+        compile 'com.tonystark.android:socket:3.0.0’
+	//If you want to use server functionality, you need compile the following libraries
+	compile 'com.tonystark.android:socket-server:3.0.0'
 }
 ```
 
