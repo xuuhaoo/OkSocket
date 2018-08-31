@@ -27,7 +27,7 @@ allprojects {
 ```groovy
 dependencies {
 	//基本Socket客户端功能
-        compile 'com.tonystark.android:socket:3.0.0’
+        compile 'com.tonystark.android:socket:3.0.0'
 	//如果您要使用server功能,需要依赖以下库.如果您只需要基本Socket客户端功能,不需要依赖以下server库
 	compile 'com.tonystark.android:socket-server:3.0.0'
 }
