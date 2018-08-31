@@ -2,6 +2,8 @@ package com.xuhao.android.oksocket;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -25,8 +27,13 @@ import com.xuhao.android.libsocket.sdk.OkSocket;
 import com.xuhao.android.oksocket.data.MsgDataBean;
 import com.xuhao.android.server.action.ServerActionAdapter;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Enumeration;
 
 /**
  * Created by didi on 2018/4/20.
@@ -55,7 +62,7 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
         mServerBtn = findViewById(R.id.btn3);
         mIPTv = findViewById(R.id.ip);
 
-        mIPTv.setText("当前IP:" + getlocalip());
+        mIPTv.setText("当前IP:" + getIPAddress());
         mSimpleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,6 +128,7 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
     protected void onResume() {
         super.onResume();
         flushServerText();
+        mIPTv.setText("当前IP:" + getIPAddress());
     }
 
     private void flushServerText() {
@@ -176,13 +184,39 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
         }
     }
 
-    private String getlocalip() {
-        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        int ipAddress = wifiInfo.getIpAddress();
-        if (ipAddress == 0) return "未连接wifi";
-        return ((ipAddress & 0xff) + "." + (ipAddress >> 8 & 0xff) + "."
-                + (ipAddress >> 16 & 0xff) + "." + (ipAddress >> 24 & 0xff));
+    public String getIPAddress() {
+        NetworkInfo info = ((ConnectivityManager)
+                getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        if (info != null && info.isConnected()) {
+            if (info.getType() == ConnectivityManager.TYPE_MOBILE) {//当前使用2G/3G/4G网络
+                try {
+                    //Enumeration<NetworkInterface> en=NetworkInterface.getNetworkInterfaces();
+                    for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+                        NetworkInterface intf = en.nextElement();
+                        for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                            InetAddress inetAddress = enumIpAddr.nextElement();
+                            if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+                                return inetAddress.getHostAddress();
+                            }
+                        }
+                    }
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (info.getType() == ConnectivityManager.TYPE_WIFI) {//当前使用无线网络
+                WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                int ipAddress = wifiInfo.getIpAddress();
+                if (ipAddress == 0) return "未连接wifi";
+                return ((ipAddress & 0xff) + "." + (ipAddress >> 8 & 0xff) + "."
+                        + (ipAddress >> 16 & 0xff) + "." + (ipAddress >> 24 & 0xff));
+            }
+        } else {
+            //当前无网络连接,请在设置中打开网络
+            return "当前无网络连接,请在设置中打开网络";
+        }
+        return "IP获取失败";
     }
 
 }
