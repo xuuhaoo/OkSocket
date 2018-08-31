@@ -4,8 +4,8 @@ buildscript {
     repositories {
         jcenter()
         google()
-        maven{
-           url 'https://dl.bintray.com/xuuhaoo/maven'
+        maven {
+            url 'https://dl.bintray.com/xuuhaoo/maven'
         }
     }
     dependencies {

@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 import com.xuhao.android.common.basic.bean.OriginalData;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
 import com.xuhao.android.common.interfacies.server.IClient;
@@ -23,9 +22,7 @@ import com.xuhao.android.common.interfacies.server.IClientPool;
 import com.xuhao.android.common.interfacies.server.IServerManager;
 import com.xuhao.android.common.interfacies.server.IServerShutdown;
 import com.xuhao.android.libsocket.sdk.OkSocket;
-import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.android.oksocket.data.MsgDataBean;
-import com.xuhao.android.oksocket.data.PulseBean;
 import com.xuhao.android.server.action.ServerActionAdapter;
 
 import java.nio.charset.Charset;
