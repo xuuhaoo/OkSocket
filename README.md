@@ -3,7 +3,7 @@ An blocking socket client for Android applications.
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Download](https://api.bintray.com/packages/xuuhaoo/maven/OkSocket/images/download.svg)](https://bintray.com/xuuhaoo/maven/OkSocket/_latestVersion)
-
+[![Download](https://api.bintray.com/packages/xuuhaoo/maven/ServerImpl/images/download.svg)](https://bintray.com/xuuhaoo/maven/ServerImpl/_latestVersion)
 Read this in other languages: [简体中文](https://github.com/xuuhaoo/OkSocket/blob/master/README-CN.md)
 
 ### <font id="1">OkSocket Introduce</font>
@@ -32,7 +32,7 @@ dependencies {
         //Basic Socket client functionality
         compile 'com.tonystark.android:socket:3.0.0'
 	//If you want to use server functionality, you need compile the following libraries
-	compile 'com.tonystark.android:socket-server:3.0.0'
+	compile 'com.tonystark.android:socket-server:3.0.1'
 }
 ```
 
