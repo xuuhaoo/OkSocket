@@ -10,14 +10,13 @@ Read this in other languages: [简体中文](https://github.com/xuuhaoo/OkSocket
 
 ### <font id="1">OkSocket Introduce</font>
 <font size=2>
-Android Oksocket Library is socket client solution base on java blocking socket.You can use it to develop line chat 
-rooms or data transmission etc.
+Android Oksocket Library is socket client solution base on java blocking socket. You can use it to develop line chat  or data transmission etc.
 </font>
 
 
 ### <font id="2">Maven Configuration</font>
 ##### <font id="2.1">Automatic Import(Recommend)</font>
-* <font size=2>OkSocket Library is uploaded in JCenter,please add the code into your project gradle file</font>
+* <font size=2>OkSocket Library is uploaded in JCenter, and please, and please add the code into your project.</font>
     
 ```groovy
 allprojects {
@@ -26,14 +25,13 @@ allprojects {
     }
 }
 ```
-* <font size=2>Make sure you already done with put JCenter into repositories blocking in project gradle 
-files than you need put this into Module build.gradle file</font>
+* <font size=2>Make sure you have already done with put JCenter into repositories blocking in project Gradle files than you need put this into Module `build.gradle` file.</font>
 
 ```groovy
 dependencies {
         //Basic Socket client functionality
         compile 'com.tonystark.android:socket:3.0.2'
-	//If you want to use server functionality, you need compile the following libraries
+	//If you want to use server functionality, you need to compile the following libraries
 	compile 'com.tonystark.android:socket-server:3.0.2'
 }
 ```
@@ -72,14 +70,14 @@ dependencies {
 ```
 
 ### <font id="5">OkSocket Initialization</font>
-* <font size=2>To copy the following code into the project Application class onCreate (), OkSocket will automatically detect the environment and complete the configuration</font>
+* <font size=2>To copy the following code into the project Application class onCreate (), OkSocket will automatically detect the environment and complete the configuration.</font>
 
 ```java
 public class MyApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		//The main process needs to be distinguished at the beginning of the primary process.
+		//The primary process needs to be distinguished at the beginning of the primary process.
 		OkSocket.initialize(this);
 		//If you need to open the Socket debug log, configure the following
 		//OkSocket.initialize(this,true);
@@ -89,27 +87,27 @@ public class MyApplication extends Application {
 ### <font id="6">Call The Demonstration</font>
 
 ##### Demo Connection Server
-<font size=2>The server is designed for beginners affiliated OkSocket library, beginners can install the project of the app to mobile phones, click the `Connect` button, the server is only familiar with communication methods and analytical way. The server does not support the heart back, not a commercial server. The server code in ` SocketServerDemo ` folder, please note that the reference reading.</font>
+<font size=2>The server is designed for beginners affiliated OkSocket library; beginners can install the project of the app to mobile phones, click the `Connect` button, the server is only familiar with communication methods and analytical way. The server does not support the heart back, not a commercial server. The server code in ` SocketServerDemo ` folder, please note that the reference was reading.</font>
 
 * IP:`104.238.184.237`
 * Port:`8080`
 
-<font size=2>You can also choose to download the JAR file to local and run it locally for debugging [Download JAR](https://github.com/xuuhaoo/OkSocket/blob/release-2.0.0-beta/server/out/artifacts/socketserver_jar/socketserver.jar?raw=true "download jar file")</font>
+<font size=2>You can also choose to download the JAR file to local and run it locally for debugging. [Download JAR](https://github.com/xuuhaoo/OkSocket/blob/release-2.0.0-beta/server/out/artifacts/socketserver_jar/socketserver.jar?raw=true "download jar file")</font>
 
 * <font size=2>You can use the following code to run it`java -jar SocketServerDemo.jar`</font>
 
 ##### <font id="6.1">Simple connections</font>
-* <font size=2> OkSocket will default to each Open new channels for cache management, only in the first call to the Open method is created when the ConnectionManager manager, after the caller can pass retrieves a reference to the ConnectionManager, continue to call the related method</font>
-* <font size=2> ConnectionManager is mainly responsible for the Socket connection, disconnect, send message, heartbeat management, etc.</font>
+* <font size=2>OkSocket will default to each Open new channels for cache management, only in the first call to the Open method is created when the ConnectionManager manager, after the caller can pass retrieves a reference to the ConnectionManager, continue to call the related method.</font>
+* <font size=2>ConnectionManager is mainly responsible for the Socket connection, disconnect, send the message, heartbeat management, etc.</font>
 
 ```java
-//Connection parameter Settings (IP, port number), which is also a unique identifier for a connection, with different connections, at least one of the two values in this parameter
+//Connection parameter Settings (IP, port number), which is also a unique identifier for a connection. 
 ConnectionInfo info = new ConnectionInfo("104.238.184.237", 8080);
-//Call OkSocket, open the channel for this connection, and call the channel's connection method for physical connections.
+//Call OkSocket open() the channel for this connection, and the physical connections will be connected.
 OkSocket.open(info).connect();
 ```
 ##### <font id="6.2">A connection with callback</font>
-* <font size=2> Registered Socket channel listener, each Socket channel listener in isolation from each other, so if in a project to connect multiple Socket channel, need to be registered in each Socket channel listeners own connections, connection listener OkSocket library is the the only way to interact with the caller</font>
+* <font size=2>Registered Socket channel listener, each Socket channel listener in isolation from each other, so if in a project, to connect multiple Socket channel, need to be registered in each Socket channel listeners own connections, connection listener OkSocket library is the only way to interact with the caller</font>
 
 ```java
 //After obtaining the connection manager from the above method...
@@ -119,11 +117,11 @@ manager.registerReceiver(new SocketActionAdapter(){
 	 Toast.makeText(context, "The connection is successful", LENGTH_SHORT).show();
 	}
 });
-//call the channel's connection method for physical connections.
+//call the channel's connection method to connect physical connections channel.
 manager.connect();
 ```
 ##### <font id="6.3">Configurable connections</font>
-* <font size=2> Obtain OkSocketOptions behavior belongs to the more advanced behavior, each Socket connection will correspond to a OkSocketOptions, if call Open for the first time is not specified OkSocketOptions, OkSocket library will use a default configuration object, the default configuration, please see the class documentation</font>
+* <font size=2>Obtain OkSocketOptions behavior belongs to the more advanced practice, each Socket connection will correspond to an OkSocketOptions, if call Open for the first time is not specified OkSocketOptions, OkSocket library will use a default configuration object, the default configuration, please see the class documentation</font>
 
 ```java
 ConnectionInfo info = new ConnectionInfo("104.238.184.237", 8080);
@@ -134,7 +132,7 @@ OkSocketOptions options= manager.getOption();
 OkSocketOptions.Builder builder = new OkSocketOptions.Builder(options);
 //Modify the parameter Settings (refer to the class documentation for other references)
 builder.setSinglePackageBytes(size);
-//Create a new reference object and set it to the channel
+//Create an option and set to the socket channel
 manager.option(builder.build());
 manager.connect();
 ```
@@ -186,9 +184,9 @@ public void onSocketConnectionSuccess(Context context, ConnectionInfo info, Stri
 }
 ```
 ##### <font id="6.4">How to receive data</font>
-* The OkSocket client receives server data in a certain format, and the client's OkSocketOptions provides the interface to modify the default header parsing rules. See below for the default package body parsing rules
+* The OkSocket client receives server data in a specific format, and the client's OkSocketOptions provides the interface for modifying the reader default header parsing rules. See below for the default package body parsing rules
 ![img](https://github.com/xuuhaoo/OkSocket/blob/master/package.png?raw=true)
-* As above, the contents of the header for 4 bytes of type int, the int value identifies the inclusions the length of the data area(body area), this is the default resolution, if you need custom header please according to the following method.
+* As above, the contents of the package headers for 4 bytes of type int, the int value identifies the inclusions the length of the data area(package body’s area), this is the default setting, if you need custom package reader header please according to the following method.
 
 ```java
 //Set the custom parsing protocol
@@ -202,7 +200,7 @@ okOptionsBuilder.setReaderProtocol(new IReaderProtocol() {
 
     @Override
     public int getBodyLength(byte[] header, ByteOrder byteOrder) {
-    	//The length of the body is parsed from the header, byteOrder is the sequence of bytes that you configured in the parameter, which can be easily parsed using ByteBuffer
+    	//The length of the package body is parsed from the header of the package, byteOrder is the sequence of bytes that you configured in the parameter, which can be easily parsed using ByteBuffer class
         return 0;
     }
 });
@@ -259,7 +257,7 @@ public void onSocketConnectionSuccess(Context context, ConnectionInfo info, Stri
 }
 ```
 ##### <font id="6.4">The heartbeat feed dog</font>
-* Feed the dog because our client needs to know the Socket server received the heart data, so the server after received my heartbeat data need to reply the client after receiving the response data,called it ACK. We need to be local dog operations, or when more than a certain number of times the heart data, but did not get feed the dog, the dog will connect the disconnect reconnection.
+* Feed the dog. Because our client needs to know the Socket server received the heartbeat data, so the server needs to reply the client after receiving the heartbeat data, called it ACK. We need to feed the dog, or when more than a certain number of times the heartbeat data, but did not supply the dog food, the dog will connect the disconnect reconnection, we call it dog dead.
 
 ```java
 private IConnectionManager mManager;
