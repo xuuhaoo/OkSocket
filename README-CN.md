@@ -2,7 +2,8 @@
 一个Android轻量级Socket通讯框架
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Download](https://api.bintray.com/packages/xuuhaoo/maven/OkSocket/images/download.svg)](https://bintray.com/xuuhaoo/maven/OkSocket/_latestVersion)
+[![Basic Socket Download](https://api.bintray.com/packages/xuuhaoo/maven/OkSocket/images/download.svg)](https://bintray.com/xuuhaoo/maven/OkSocket/_latestVersion)
+[![Socket Server Plugin Download](https://api.bintray.com/packages/xuuhaoo/maven/ServerImpl/images/download.svg)](https://bintray.com/xuuhaoo/maven/ServerImpl/_latestVersion)
 
 其他语言支持: [English](https://github.com/xuuhaoo/OkSocket/blob/master/README.md)
 
@@ -29,7 +30,7 @@ dependencies {
 	//基本Socket客户端功能
         compile 'com.tonystark.android:socket:3.0.0'
 	//如果您要使用server功能,需要依赖以下库.如果您只需要基本Socket客户端功能,不需要依赖以下server库
-	compile 'com.tonystark.android:socket-server:3.0.0'
+	compile 'com.tonystark.android:socket-server:3.0.1'
 }
 ```
 
