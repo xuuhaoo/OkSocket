@@ -1,7 +1,7 @@
 apply from: '../lib_configuration.gradle'
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation project(':common-interface')
-    implementation 'com.android.support:support-annotations:26.1.0'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':common-interface')
+    compile 'com.android.support:support-annotations:26.1.0'
 }

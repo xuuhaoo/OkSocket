@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'xuhao'
+            keyPassword '123456'
+            storeFile file('/Users/xuhao/Documents/publish_project/oksocket/keystore/release')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
@@ -19,7 +27,6 @@ android {
     lintOptions {
         abortOnError false
     }
-
 }
 
 dependencies {
@@ -28,8 +35,7 @@ dependencies {
     compile 'com.android.support:design:26.1.0'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.tonystark.android:socket:3.0.0'
-    compile 'com.tonystark.android:socket-server:3.0.0'
-//    compile project(path: ':socket')
-//    compile project(path: ':socket-server')
-
+    compile 'com.tonystark.android:socket-server:3.0.1'
+    //    compile project(path: ':socket')
+    //    compile project(path: ':socket-server')
 }

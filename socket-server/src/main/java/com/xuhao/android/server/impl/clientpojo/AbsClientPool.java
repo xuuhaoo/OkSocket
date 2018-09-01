@@ -2,11 +2,11 @@ package com.xuhao.android.server.impl.clientpojo;
 
 
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 public abstract class AbsClientPool<K, V> {
-    private LinkedHashMap<K, V> mHashMap = new LinkedHashMap<>();
+    private ConcurrentSkipListMap<K, V> mHashMap = new ConcurrentSkipListMap<>();
 
     private int mCapacity;
 
@@ -43,6 +43,10 @@ public abstract class AbsClientPool<K, V> {
         if (mHashMap.isEmpty()) {
             onCacheEmpty();
         }
+    }
+
+    void removeAll() {
+        mHashMap.clear();
     }
 
     int size() {

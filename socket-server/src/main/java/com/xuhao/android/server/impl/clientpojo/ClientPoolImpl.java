@@ -51,6 +51,7 @@ public class ClientPoolImpl extends AbsClientPool<String, IClient> implements IC
                 value.disconnect();
             }
         });
+        removeAll();
     }
 
     @Override

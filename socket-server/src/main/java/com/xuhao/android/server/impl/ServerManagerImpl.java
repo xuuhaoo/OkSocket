@@ -148,6 +148,7 @@ public class ServerManagerImpl extends AbsServerRegisterProxy implements IServer
         mClientPoolImpl = null;
         mAcceptThread.shutdown(new InitiativeDisconnectException());
         mAcceptThread = null;
+
         sendBroadcast(IAction.Server.ACTION_SERVER_ALLREADY_SHUTDOWN);
     }
 
