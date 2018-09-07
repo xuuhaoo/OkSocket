@@ -30,9 +30,9 @@ allprojects {
 ```groovy
 dependencies {
         //Basic Socket client functionality
-        compile 'com.tonystark.android:socket:3.0.2'
+        compile 'com.tonystark.android:socket:3.0.3'
 	//If you want to use server functionality, you need to compile the following libraries
-	compile 'com.tonystark.android:socket-server:3.0.2'
+	compile 'com.tonystark.android:socket-server:3.0.3'
 }
 ```
 
