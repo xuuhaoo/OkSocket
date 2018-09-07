@@ -55,6 +55,15 @@
                     android:textStyle="bold" />
 
                 <Button
+                    android:id="@+id/disconnect"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Disconnect"
+                    android:textStyle="bold" />
+
+                <Button
                     android:id="@+id/clear_log"
                     style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"

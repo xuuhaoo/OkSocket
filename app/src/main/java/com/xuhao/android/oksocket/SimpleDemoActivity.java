@@ -37,6 +37,8 @@ public class SimpleDemoActivity extends AppCompatActivity {
     private ConnectionInfo mInfo;
 
     private Button mConnect;
+    private Button mDisconnect;
+
     private EditText mIPET;
     private EditText mPortET;
     private IConnectionManager mManager;
@@ -73,6 +75,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
         public void onSocketConnectionFailed(Context context, ConnectionInfo info, String action, Exception e) {
             Toast.makeText(context, "连接失败" + e.getMessage(), LENGTH_SHORT).show();
             logSend("连接失败");
+            OkSocket.open(info).disconnect();
             mConnect.setText("Connect");
         }
 
@@ -114,6 +117,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
 
     private void findViews() {
         mSendList = findViewById(R.id.send_list);
+        mDisconnect = findViewById(R.id.disconnect);
         mReceList = findViewById(R.id.rece_list);
         mIPET = findViewById(R.id.ip);
         mPortET = findViewById(R.id.port);
@@ -138,7 +142,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
     private void initManager() {
         mInfo = new ConnectionInfo(mIPET.getText().toString(), Integer.parseInt(mPortET.getText().toString()));
         mOkOptions = new OkSocketOptions.Builder()
-                .setReconnectionManager(new NoneReconnect())
+//                .setReconnectionManager(new NoneReconnect())
                 .setWritePackageBytes(1024)
                 .build();
         mManager = OkSocket.open(mInfo).option(mOkOptions);
@@ -160,6 +164,15 @@ public class SimpleDemoActivity extends AppCompatActivity {
                     mConnect.setText("DisConnecting");
                     mManager.disconnect();
                 }
+            }
+        });
+        mDisconnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mManager == null) {
+                    return;
+                }
+                mManager.disconnect();
             }
         });
         mSendBtn.setOnClickListener(new View.OnClickListener() {

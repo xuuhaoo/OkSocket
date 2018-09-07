@@ -33,10 +33,15 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
      */
     private int mConnectionFailedTimes = 0;
 
+
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (mDetach) {
+                SLog.i("ReconnectionManager already detached by framework.We decide gave up this reconnection mission!");
+                return;
+            }
             boolean isHolden = mConnectionManager.getOption().isConnectionHolden();
 
             if (!isHolden) {
@@ -131,6 +136,7 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
 
     @Override
     public void detach() {
+        mDetach = true;
         reset();
         super.detach();
     }

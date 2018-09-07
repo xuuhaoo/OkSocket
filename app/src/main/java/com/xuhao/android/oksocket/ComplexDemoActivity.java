@@ -41,6 +41,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
     private ConnectionInfo mInfo;
 
     private Button mConnect;
+    private Button mDisConnect;
     private IConnectionManager mManager;
     private EditText mIPET;
     private EditText mPortET;
@@ -169,6 +170,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
 
     private void findViews() {
         mSendList = findViewById(R.id.send_list);
+        mDisConnect = findViewById(R.id.disconnect);
         mReceList = findViewById(R.id.rece_list);
         mClearLog = findViewById(R.id.clear_log);
         mSetFrequency = findViewById(R.id.set_pulse_frequency);
@@ -249,6 +251,16 @@ public class ComplexDemoActivity extends AppCompatActivity {
                     mConnect.setText("DisConnecting");
                     mManager.disconnect();
                 }
+            }
+        });
+
+        mDisConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mManager == null) {
+                    return;
+                }
+                mManager.disconnect();
             }
         });
 

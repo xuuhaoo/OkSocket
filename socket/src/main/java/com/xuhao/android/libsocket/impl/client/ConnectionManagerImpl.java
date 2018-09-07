@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.xuhao.android.common.interfacies.IIOManager;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.security.SecureRandom;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -108,7 +110,13 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
 
     protected ConnectionManagerImpl(Context context, ConnectionInfo info) {
         super(context, info);
-        SLog.i("block connection init");
+        String ip = "";
+        String port = "";
+        if (info != null) {
+            ip = info.getIp();
+            port = info.getPort() + "";
+        }
+        SLog.i("block connection init with:" + ip + ":" + port);
     }
 
     @Override
@@ -240,6 +248,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
 
     @Override
     public synchronized void disconnect(Exception exception) {
+        Log.i("disconnect_debug", "exception:" + exception.getClass().getSimpleName());
         if (isDisconnecting) {
             return;
         }

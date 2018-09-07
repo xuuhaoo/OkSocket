@@ -31,6 +31,10 @@ public abstract class AbsReconnectionManager implements ISocketActionListener {
      */
     protected PulseManager mPulseManager;
     /**
+     * 是否销毁
+     */
+    protected volatile boolean mDetach;
+    /**
      * 需要忽略的断开连接集合,当Exception在此集合中,忽略该类型的断开异常,不会自动重连
      */
     protected volatile Set<Class<? extends Exception>> mIgnoreDisconnectExceptionList = new LinkedHashSet<>();
@@ -48,6 +52,7 @@ public abstract class AbsReconnectionManager implements ISocketActionListener {
     @CallSuper
     public void attach(Context context, IConnectionManager manager) {
         detach();
+        mDetach = false;
         mContext = context.getApplicationContext();
         mConnectionManager = manager;
         mPulseManager = manager.getPulseManager();
@@ -59,6 +64,7 @@ public abstract class AbsReconnectionManager implements ISocketActionListener {
      */
     @CallSuper
     public void detach() {
+        mDetach = true;
         if (mConnectionManager != null) {
             mConnectionManager.unRegisterReceiver(this);
         }
