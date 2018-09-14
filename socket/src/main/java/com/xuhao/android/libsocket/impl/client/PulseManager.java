@@ -103,9 +103,6 @@ public class PulseManager implements IPulse {
     @Override
     public void pulse() {
         privateDead();
-        if (isDead) {
-            return;
-        }
         if (mCurrentThreadMode != OkSocketOptions.IOThreadMode.SIMPLEX) {
             mCurrentFrequency = mOkOptions.getPulseFrequency();
             mCurrentFrequency = mCurrentFrequency < 1000 ? 1000 : mCurrentFrequency;//间隔最小为一秒
