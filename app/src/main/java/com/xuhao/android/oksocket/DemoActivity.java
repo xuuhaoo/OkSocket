@@ -119,7 +119,11 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
         mServerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mServerManager.listen();
+                if (!mServerManager.isLive()) {
+                    mServerManager.listen();
+                } else {
+                    mServerManager.shutdown();
+                }
             }
         });
     }
