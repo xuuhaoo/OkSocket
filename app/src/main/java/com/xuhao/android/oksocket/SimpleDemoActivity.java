@@ -144,7 +144,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
         mOkOptions = new OkSocketOptions.Builder()
                 .setReconnectionManager(new NoneReconnect())
                 .setWritePackageBytes(1024)
-                .setCallbackInThread(true)
+                .setCallbackInThread(false)
                 .build();
         mManager = OkSocket.open(mInfo).option(mOkOptions);
         mManager.registerReceiver(adapter);
