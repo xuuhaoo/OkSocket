@@ -4,6 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Process;
+import android.text.TextUtils;
 
 import com.xuhao.android.common.basic.bean.OriginalData;
 import com.xuhao.android.common.interfacies.client.msg.ISendable;
@@ -11,12 +18,14 @@ import com.xuhao.android.common.interfacies.dispatcher.IRegister;
 import com.xuhao.android.common.interfacies.dispatcher.IStateSender;
 import com.xuhao.android.common.utils.SocketBroadcastManager;
 import com.xuhao.android.libsocket.sdk.client.ConnectionInfo;
+import com.xuhao.android.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.client.action.ISocketActionListener;
 import com.xuhao.android.libsocket.sdk.client.bean.IPulseSendable;
 import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import static com.xuhao.android.libsocket.sdk.client.action.IAction.ACTION_CONNECTION_FAILED;
 import static com.xuhao.android.libsocket.sdk.client.action.IAction.ACTION_CONNECTION_SUCCESS;
@@ -34,7 +43,7 @@ import static com.xuhao.android.libsocket.sdk.client.action.IAction.ACTION_WRITE
  * 状态机
  * Created by didi on 2018/4/19.
  */
-public class ActionDispatcher implements IRegister<ISocketActionListener, IConnectionManager>, IStateSender {
+public class ActionDispatcher implements IRegister<ISocketActionListener, IConnectionManager>, IStateSender, Handler.Callback {
     /**
      * 每个连接一个广播管理器不会串
      */
@@ -55,6 +64,14 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
      * 连接管理器
      */
     private IConnectionManager mManager;
+    /**
+     * 线程回调管理Handler
+     */
+    private HandlerThread mHandlerThread;
+    /**
+     * 处理线程回调
+     */
+    private Handler mHandleFromThread;
 
 
     public ActionDispatcher(Context context, ConnectionInfo info, IConnectionManager manager) {
@@ -64,8 +81,7 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
         mSocketBroadcastManager = new SocketBroadcastManager(mContext);
     }
 
-    @Override
-    public IConnectionManager registerReceiver(BroadcastReceiver broadcastReceiver, String... action) {
+    private IConnectionManager registerReceiver(BroadcastReceiver broadcastReceiver, String... action) {
         IntentFilter intentFilter = new IntentFilter();
         if (action != null) {
             for (int i = 0; i < action.length; i++) {
@@ -105,8 +121,7 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
         return mManager;
     }
 
-    @Override
-    public IConnectionManager unRegisterReceiver(BroadcastReceiver broadcastReceiver) {
+    private IConnectionManager unRegisterReceiver(BroadcastReceiver broadcastReceiver) {
         mSocketBroadcastManager.unregisterReceiver(broadcastReceiver);
         return mManager;
     }
@@ -208,9 +223,44 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
 
     @Override
     public void sendBroadcast(String action, Serializable serializable) {
-        Intent intent = new Intent(action);
-        intent.putExtra(ACTION_DATA, serializable);
-        mSocketBroadcastManager.sendBroadcast(intent);
+        OkSocketOptions option = mManager.getOption();
+        if (option != null && option.isCallbackInThread()) {
+            if (mHandlerThread == null) {
+                synchronized (this) {
+                    if (mHandlerThread == null) {
+                        mHandlerThread = new HandlerThread("dispatch_thread", Process.THREAD_PRIORITY_BACKGROUND);
+                        mHandlerThread.start();
+                    }
+                }
+            }
+            Message message = new Message();
+            message.getData().putSerializable("serializable", serializable);
+            message.getData().putString("action", action);
+            if (mHandleFromThread == null) {
+                synchronized (this) {
+                    if (mHandleFromThread == null) {
+                        mHandleFromThread = new Handler(mHandlerThread.getLooper(), this);
+                        mHandleFromThread.sendMessage(message);
+                    }
+                }
+            } else {
+                mHandleFromThread.sendMessage(message);
+            }
+        } else {
+            if (mHandlerThread != null && mHandlerThread.isAlive()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    mHandlerThread.quitSafely();
+                } else {
+                    mHandlerThread.quit();
+                }
+                synchronized (this) {
+                    mHandlerThread = null;
+                }
+            }
+            Intent intent = new Intent(action);
+            intent.putExtra(ACTION_DATA, serializable);
+            mSocketBroadcastManager.sendBroadcast(intent);
+        }
     }
 
     public void setConnectionInfo(ConnectionInfo connectionInfo) {
@@ -220,5 +270,25 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
     @Override
     public void sendBroadcast(String action) {
         sendBroadcast(action, null);
+    }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        if (msg == null) {
+            return false;
+        }
+        String action = msg.getData().getString("action", "");
+        if (TextUtils.isEmpty(action)) {
+            return false;
+        }
+        Serializable serializable = msg.getData().getSerializable("serializable");
+        Iterator<ISocketActionListener> it = mResponseHandlerMap.keySet().iterator();
+        while (it.hasNext()) {
+            ISocketActionListener listener = it.next();
+            Intent intent = new Intent(action);
+            intent.putExtra(ACTION_DATA, serializable);
+            dispatchActionToListener(mContext, intent, listener);
+        }
+        return true;
     }
 }

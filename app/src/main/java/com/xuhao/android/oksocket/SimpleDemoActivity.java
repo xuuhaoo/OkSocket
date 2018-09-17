@@ -2,6 +2,8 @@ package com.xuhao.android.oksocket;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -143,6 +145,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
         mOkOptions = new OkSocketOptions.Builder()
                 .setReconnectionManager(new NoneReconnect())
                 .setWritePackageBytes(1024)
+                .setCallbackInThread(false)
                 .build();
         mManager = OkSocket.open(mInfo).option(mOkOptions);
         mManager.registerReceiver(adapter);
@@ -204,16 +207,35 @@ public class SimpleDemoActivity extends AppCompatActivity {
         });
     }
 
-    private void logSend(String log) {
-        LogBean logBean = new LogBean(System.currentTimeMillis(), log);
-        mSendLogAdapter.getDataList().add(0, logBean);
-        mSendLogAdapter.notifyDataSetChanged();
+    private void logSend(final String log) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            LogBean logBean = new LogBean(System.currentTimeMillis(), log);
+            mSendLogAdapter.getDataList().add(0, logBean);
+            mSendLogAdapter.notifyDataSetChanged();
+        } else {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    logSend("非UI线程打印:" + log);
+                }
+            });
+        }
     }
 
-    private void logRece(String log) {
-        LogBean logBean = new LogBean(System.currentTimeMillis(), log);
-        mReceLogAdapter.getDataList().add(0, logBean);
-        mReceLogAdapter.notifyDataSetChanged();
+    private void logRece(final String log) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            LogBean logBean = new LogBean(System.currentTimeMillis(), log);
+            mReceLogAdapter.getDataList().add(0, logBean);
+            mReceLogAdapter.notifyDataSetChanged();
+        } else {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    logRece("非UI线程打印:" + log);
+                }
+            });
+        }
+
     }
 
     @Override

@@ -40,22 +40,11 @@ public abstract class AbsConnectionManager implements IConnectionManager {
         mActionDispatcher = new ActionDispatcher(mContext, info, this);
     }
 
-    public IConnectionManager registerReceiver(BroadcastReceiver broadcastReceiver, String... action) {
-        mActionDispatcher.registerReceiver(broadcastReceiver, action);
-        return this;
-    }
-
     public IConnectionManager registerReceiver(final ISocketActionListener socketResponseHandler) {
         mActionDispatcher.registerReceiver(socketResponseHandler);
         return this;
     }
-
-
-    public IConnectionManager unRegisterReceiver(BroadcastReceiver broadcastReceiver) {
-        mActionDispatcher.unRegisterReceiver(broadcastReceiver);
-        return this;
-    }
-
+    
     public IConnectionManager unRegisterReceiver(ISocketActionListener socketResponseHandler) {
         mActionDispatcher.unRegisterReceiver(socketResponseHandler);
         return this;

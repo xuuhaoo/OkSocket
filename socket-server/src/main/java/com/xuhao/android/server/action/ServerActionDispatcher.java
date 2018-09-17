@@ -69,8 +69,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener, 
         mClientPool = clientPool;
     }
 
-    @Override
-    public IServerManager<OkServerOptions> registerReceiver(BroadcastReceiver broadcastReceiver, String... action) {
+    private IServerManager<OkServerOptions> registerReceiver(BroadcastReceiver broadcastReceiver, String... action) {
         IntentFilter intentFilter = new IntentFilter();
         if (action != null) {
             for (int i = 0; i < action.length; i++) {
@@ -105,8 +104,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener, 
         return mServerManager;
     }
 
-    @Override
-    public IServerManager<OkServerOptions> unRegisterReceiver(BroadcastReceiver broadcastReceiver) {
+    private IServerManager<OkServerOptions> unRegisterReceiver(BroadcastReceiver broadcastReceiver) {
         mSocketBroadcastManager.unregisterReceiver(broadcastReceiver);
         return mServerManager;
     }

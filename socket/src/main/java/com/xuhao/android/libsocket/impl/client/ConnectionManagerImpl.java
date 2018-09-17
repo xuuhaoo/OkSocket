@@ -149,7 +149,11 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
             mReconnectionManager.attach(mContext, this);
             SLog.i("ReconnectionManager is attached.");
         }
-        mSocket = getSocketByConfig();
+        try {
+            mSocket = getSocketByConfig();
+        } catch (Exception e) {
+            throw new UnconnectException("创建Socket失败.", e);
+        }
 
         mConnectionTimeout
                 .sendMessageDelayed(mConnectionTimeout.obtainMessage(0), mOptions.getConnectTimeoutSecond() * 1000);
@@ -161,7 +165,13 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
     }
 
     @NonNull
-    private Socket getSocketByConfig() {
+    private Socket getSocketByConfig() throws Exception {
+        //自定义socket操作
+        if (mOptions.getOkSocketFactory() != null) {
+            return mOptions.getOkSocketFactory().createSocket(mConnectionInfo, mOptions);
+        }
+
+        //默认操作
         OkSocketSSLConfig config = mOptions.getSSLConfig();
         if (config == null) {
             return new Socket();

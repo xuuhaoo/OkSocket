@@ -23,18 +23,8 @@ public class AbsServerRegisterProxy implements IRegister<IServerActionListener, 
     }
 
     @Override
-    public IServerManager<OkServerOptions> registerReceiver(BroadcastReceiver broadcastReceiver, String... action) {
-        return mServerActionDispatcher.registerReceiver(broadcastReceiver, action);
-    }
-
-    @Override
     public IServerManager<OkServerOptions> registerReceiver(IServerActionListener socketActionListener) {
         return mServerActionDispatcher.registerReceiver(socketActionListener);
-    }
-
-    @Override
-    public IServerManager<OkServerOptions> unRegisterReceiver(BroadcastReceiver broadcastReceiver) {
-        return mServerActionDispatcher.unRegisterReceiver(broadcastReceiver);
     }
 
     @Override

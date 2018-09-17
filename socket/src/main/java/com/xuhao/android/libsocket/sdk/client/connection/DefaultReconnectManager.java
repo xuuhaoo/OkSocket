@@ -137,7 +137,7 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
     @Override
     public void detach() {
         mDetach = true;
-        reset();
+        mHandler.removeCallbacksAndMessages(null);
         super.detach();
     }
 }

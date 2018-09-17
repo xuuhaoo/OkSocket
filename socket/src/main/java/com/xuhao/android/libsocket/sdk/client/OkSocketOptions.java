@@ -83,6 +83,14 @@ public class OkSocketOptions implements IIOCoreOptions {
      * 安全套接字层配置
      */
     private OkSocketSSLConfig mSSLConfig;
+    /**
+     * 套接字工厂
+     */
+    private OkSocketFactory mOkSocketFactory;
+    /**
+     * 从线程进行回调.
+     */
+    private boolean isCallbackInThread;
 
     private OkSocketOptions() {
     }
@@ -117,6 +125,8 @@ public class OkSocketOptions implements IIOCoreOptions {
             mOptions.mPulseFeedLoseTimes = okOptions.mPulseFeedLoseTimes;
             mOptions.mReconnectionManager = okOptions.mReconnectionManager;
             mOptions.mSSLConfig = okOptions.mSSLConfig;
+            mOptions.mOkSocketFactory = okOptions.mOkSocketFactory;
+            mOptions.isCallbackInThread = okOptions.isCallbackInThread;
         }
 
         /**
@@ -286,6 +296,30 @@ public class OkSocketOptions implements IIOCoreOptions {
             return this;
         }
 
+        /**
+         * 设置Socket工厂类,用于提供一个可以连接的Socket.
+         * 可以是加密Socket,也可以是未加密的socket.
+         *
+         * @param factory socket工厂方法
+         * @return
+         */
+        public Builder setSocketFactory(OkSocketFactory factory) {
+            mOptions.mOkSocketFactory = factory;
+            return this;
+        }
+
+        /**
+         * 设置回调在线程中,不是在UI线程中.
+         *
+         * @param inThread true表示回调在非UI线程中,false表示回调在UI线程中
+         * @return
+         */
+        public Builder setCallbackInThread(boolean inThread) {
+            mOptions.isCallbackInThread = inThread;
+            return this;
+        }
+
+
         public OkSocketOptions build() {
             return mOptions;
         }
@@ -301,6 +335,10 @@ public class OkSocketOptions implements IIOCoreOptions {
 
     public OkSocketSSLConfig getSSLConfig() {
         return mSSLConfig;
+    }
+
+    public OkSocketFactory getOkSocketFactory() {
+        return mOkSocketFactory;
     }
 
     public int getConnectTimeoutSecond() {
@@ -353,12 +391,16 @@ public class OkSocketOptions implements IIOCoreOptions {
         return mReadByteOrder;
     }
 
+    public boolean isCallbackInThread() {
+        return isCallbackInThread;
+    }
+
     public static OkSocketOptions getDefault() {
         OkSocketOptions okOptions = new OkSocketOptions();
         okOptions.mPulseFrequency = 5 * 1000;
         okOptions.mIOThreadMode = IOThreadMode.DUPLEX;
         okOptions.mReaderProtocol = new DefaultNormalReaderProtocol();
-        okOptions.mMaxReadDataMB = 10;
+        okOptions.mMaxReadDataMB = 5;
         okOptions.mConnectTimeoutSecond = 3;
         okOptions.mWritePackageBytes = 100;
         okOptions.mReadPackageBytes = 50;
@@ -368,6 +410,8 @@ public class OkSocketOptions implements IIOCoreOptions {
         okOptions.mPulseFeedLoseTimes = 5;
         okOptions.mReconnectionManager = new DefaultReconnectManager();
         okOptions.mSSLConfig = null;
+        okOptions.mOkSocketFactory = null;
+        okOptions.isCallbackInThread = false;
         return okOptions;
     }
 
