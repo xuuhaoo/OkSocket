@@ -320,7 +320,6 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
                 mException = mException instanceof ManuallyDisconnectException ? null : mException;
                 sendBroadcast(IAction.ACTION_DISCONNECTION, mException);
             }
-
             mSocket = null;
 
             if (mException != null) {

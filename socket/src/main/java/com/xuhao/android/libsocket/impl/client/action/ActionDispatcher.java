@@ -4,10 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.text.TextUtils;
@@ -25,7 +23,7 @@ import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Set;
 
 import static com.xuhao.android.libsocket.sdk.client.action.IAction.ACTION_CONNECTION_FAILED;
 import static com.xuhao.android.libsocket.sdk.client.action.IAction.ACTION_CONNECTION_SUCCESS;
@@ -44,6 +42,16 @@ import static com.xuhao.android.libsocket.sdk.client.action.IAction.ACTION_WRITE
  * Created by didi on 2018/4/19.
  */
 public class ActionDispatcher implements IRegister<ISocketActionListener, IConnectionManager>, IStateSender, Handler.Callback {
+    /**
+     * 线程回调管理Handler
+     */
+    private static final HandlerThread HANDLE_THREAD = new HandlerThread("dispatch_thread", Process.THREAD_PRIORITY_BACKGROUND);
+
+    static {
+        //启动分发线程
+        HANDLE_THREAD.start();
+    }
+
     /**
      * 每个连接一个广播管理器不会串
      */
@@ -65,10 +73,6 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
      */
     private IConnectionManager mManager;
     /**
-     * 线程回调管理Handler
-     */
-    private HandlerThread mHandlerThread;
-    /**
      * 处理线程回调
      */
     private Handler mHandleFromThread;
@@ -79,6 +83,7 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
         mManager = manager;
         mConnectionInfo = info;
         mSocketBroadcastManager = new SocketBroadcastManager(mContext);
+        mHandleFromThread = new Handler(HANDLE_THREAD.getLooper(), this);
     }
 
     private IConnectionManager registerReceiver(BroadcastReceiver broadcastReceiver, String... action) {
@@ -225,38 +230,11 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
     public void sendBroadcast(String action, Serializable serializable) {
         OkSocketOptions option = mManager.getOption();
         if (option != null && option.isCallbackInThread()) {
-            if (mHandlerThread == null) {
-                synchronized (this) {
-                    if (mHandlerThread == null) {
-                        mHandlerThread = new HandlerThread("dispatch_thread", Process.THREAD_PRIORITY_BACKGROUND);
-                        mHandlerThread.start();
-                    }
-                }
-            }
             Message message = new Message();
             message.getData().putSerializable("serializable", serializable);
             message.getData().putString("action", action);
-            if (mHandleFromThread == null) {
-                synchronized (this) {
-                    if (mHandleFromThread == null) {
-                        mHandleFromThread = new Handler(mHandlerThread.getLooper(), this);
-                        mHandleFromThread.sendMessage(message);
-                    }
-                }
-            } else {
-                mHandleFromThread.sendMessage(message);
-            }
+            mHandleFromThread.sendMessage(message);
         } else {
-            if (mHandlerThread != null && mHandlerThread.isAlive()) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    mHandlerThread.quitSafely();
-                } else {
-                    mHandlerThread.quit();
-                }
-                synchronized (this) {
-                    mHandlerThread = null;
-                }
-            }
             Intent intent = new Intent(action);
             intent.putExtra(ACTION_DATA, serializable);
             mSocketBroadcastManager.sendBroadcast(intent);
@@ -282,13 +260,13 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
             return false;
         }
         Serializable serializable = msg.getData().getSerializable("serializable");
-        Iterator<ISocketActionListener> it = mResponseHandlerMap.keySet().iterator();
-        while (it.hasNext()) {
-            ISocketActionListener listener = it.next();
+        Set<ISocketActionListener> listeners = mResponseHandlerMap.keySet();
+        for (ISocketActionListener listener : listeners) {
             Intent intent = new Intent(action);
             intent.putExtra(ACTION_DATA, serializable);
             dispatchActionToListener(mContext, intent, listener);
         }
         return true;
     }
+
 }

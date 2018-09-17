@@ -75,7 +75,6 @@ public class SimpleDemoActivity extends AppCompatActivity {
 
         @Override
         public void onSocketConnectionFailed(Context context, ConnectionInfo info, String action, Exception e) {
-            Toast.makeText(context, "连接失败" + e.getMessage(), LENGTH_SHORT).show();
             logSend("连接失败");
             mConnect.setText("Connect");
         }
@@ -145,7 +144,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
         mOkOptions = new OkSocketOptions.Builder()
                 .setReconnectionManager(new NoneReconnect())
                 .setWritePackageBytes(1024)
-                .setCallbackInThread(false)
+                .setCallbackInThread(true)
                 .build();
         mManager = OkSocket.open(mInfo).option(mOkOptions);
         mManager.registerReceiver(adapter);
