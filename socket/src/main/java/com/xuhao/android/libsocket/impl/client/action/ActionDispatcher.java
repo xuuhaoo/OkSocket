@@ -24,6 +24,7 @@ import com.xuhao.android.libsocket.sdk.client.connection.IConnectionManager;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.xuhao.android.libsocket.sdk.client.action.IAction.ACTION_CONNECTION_FAILED;
 import static com.xuhao.android.libsocket.sdk.client.action.IAction.ACTION_CONNECTION_SUCCESS;
@@ -59,7 +60,7 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
     /**
      * 除了广播还支持回调
      */
-    private HashMap<ISocketActionListener, BroadcastReceiver> mResponseHandlerMap = new HashMap<>();
+    private ConcurrentHashMap<ISocketActionListener, BroadcastReceiver> mResponseHandlerMap = new ConcurrentHashMap<>();
     /**
      * 上下文
      */
@@ -118,9 +119,7 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
                         ACTION_WRITE_THREAD_SHUTDOWN,
                         ACTION_WRITE_THREAD_START,
                         ACTION_PULSE_REQUEST);
-                synchronized (mResponseHandlerMap) {
-                    mResponseHandlerMap.put(socketResponseHandler, broadcastReceiver);
-                }
+                mResponseHandlerMap.put(socketResponseHandler, broadcastReceiver);
             }
         }
         return mManager;
@@ -133,11 +132,9 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
 
     @Override
     public IConnectionManager unRegisterReceiver(ISocketActionListener socketResponseHandler) {
-        synchronized (mResponseHandlerMap) {
-            BroadcastReceiver broadcastReceiver = mResponseHandlerMap.get(socketResponseHandler);
-            mResponseHandlerMap.remove(socketResponseHandler);
-            unRegisterReceiver(broadcastReceiver);
-        }
+        BroadcastReceiver broadcastReceiver = mResponseHandlerMap.get(socketResponseHandler);
+        mResponseHandlerMap.remove(socketResponseHandler);
+        unRegisterReceiver(broadcastReceiver);
         return mManager;
     }
 
