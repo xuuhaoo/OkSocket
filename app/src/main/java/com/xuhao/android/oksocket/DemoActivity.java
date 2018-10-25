@@ -1,5 +1,7 @@
 package com.xuhao.android.oksocket;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -113,6 +116,16 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
                 super.onServerAlreadyShutdown(context, serverPort);
                 Log.i("ServerCallback", "onServerAlreadyShutdown,serverPort:" + serverPort);
                 mServerBtn.setText(mPort + "服务器启动");
+            }
+        });
+
+        mIPTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData myClip = ClipData.newPlainText("ip", mIPTv.getText().toString().substring(5));
+                myClipboard.setPrimaryClip(myClip);
+                Toast.makeText(DemoActivity.this, "复制到剪切板", Toast.LENGTH_LONG).show();
             }
         });
 
