@@ -1,8 +1,8 @@
 package com.xuhao.didi.server.impl.clientpojo;
 
-import com.xuhao.didi.common.interfacies.client.msg.ISendable;
-import com.xuhao.didi.common.interfacies.server.IClient;
-import com.xuhao.didi.common.interfacies.server.IClientPool;
+import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
+import com.xuhao.didi.common.common_interfacies.server.IClient;
+import com.xuhao.didi.common.common_interfacies.server.IClientPool;
 import com.xuhao.didi.server.exceptions.CacheException;
 
 public class ClientPoolImpl extends AbsClientPool<String, IClient> implements IClientPool<IClient, String> {

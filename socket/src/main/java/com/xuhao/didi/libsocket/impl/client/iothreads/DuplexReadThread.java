@@ -3,9 +3,9 @@ package com.xuhao.didi.libsocket.impl.client.iothreads;
 import android.content.Context;
 
 import com.xuhao.didi.common.basic.AbsLoopThread;
-import com.xuhao.didi.common.interfacies.client.io.IReader;
-import com.xuhao.didi.common.interfacies.dispatcher.IStateSender;
-import com.xuhao.didi.common.utils.SLog;
+import com.xuhao.didi.common.common_interfacies.client.io.IReader;
+import com.xuhao.didi.common.common_interfacies.dispatcher.IStateSender;
+import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.didi.libsocket.sdk.client.action.IAction;
 

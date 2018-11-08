@@ -1,9 +1,6 @@
 package com.xuhao.didi.common.basic;
 
-import android.content.Context;
-import android.os.Process;
-
-import com.xuhao.didi.common.utils.SLog;
+import com.xuhao.didi.core.utils.SLog;
 
 /**
  * Created by xuhao on 15/6/18.
@@ -13,22 +10,18 @@ public abstract class AbsLoopThread implements Runnable {
 
     protected String threadName = "";
 
-    protected Context context = null;
-
     private boolean isStop = false;
 
     private Exception ioException = null;
 
     private long loopTimes = 0;
 
-    public AbsLoopThread(Context context) {
-        this.context = context;
+    public AbsLoopThread() {
         isStop = true;
         threadName = this.getClass().getSimpleName();
     }
 
-    public AbsLoopThread(Context context, String name) {
-        this.context = context;
+    public AbsLoopThread(String name) {
         isStop = true;
         threadName = name;
     }
@@ -45,8 +38,6 @@ public abstract class AbsLoopThread implements Runnable {
 
     @Override
     public final void run() {
-        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
-
         try {
             beforeLoop();
             while (!isStop) {
@@ -74,7 +65,7 @@ public abstract class AbsLoopThread implements Runnable {
     }
 
     protected void beforeLoop() throws Exception {
-
+        //TODO need set process level in android sys
     }
 
     protected abstract void runInLoopThread() throws Exception;

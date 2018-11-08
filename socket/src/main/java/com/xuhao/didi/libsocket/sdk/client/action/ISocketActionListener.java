@@ -3,9 +3,9 @@ package com.xuhao.didi.libsocket.sdk.client.action;
 import android.content.Context;
 
 import com.xuhao.didi.common.basic.bean.OriginalData;
-import com.xuhao.didi.common.interfacies.client.msg.ISendable;
+import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
 import com.xuhao.didi.libsocket.sdk.client.ConnectionInfo;
-import com.xuhao.didi.libsocket.sdk.client.bean.IPulseSendable;
+import com.xuhao.didi.core.iocore.interfaces.IPulseSendable;
 
 public interface ISocketActionListener {
     /**

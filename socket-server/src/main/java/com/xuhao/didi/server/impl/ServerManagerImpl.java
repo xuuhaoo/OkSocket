@@ -3,9 +3,9 @@ package com.xuhao.didi.server.impl;
 import android.content.Context;
 
 import com.xuhao.didi.common.basic.AbsLoopThread;
-import com.xuhao.didi.common.interfacies.server.IServerManagerPrivate;
+import com.xuhao.didi.common.common_interfacies.server.IServerManagerPrivate;
 import com.xuhao.didi.common.utils.NetUtils;
-import com.xuhao.didi.common.utils.SLog;
+import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.server.action.IAction;
 import com.xuhao.didi.server.exceptions.IllegalAccessException;
 import com.xuhao.didi.server.exceptions.InitiativeDisconnectException;

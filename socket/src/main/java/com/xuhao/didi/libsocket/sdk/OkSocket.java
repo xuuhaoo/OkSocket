@@ -4,11 +4,11 @@ package com.xuhao.didi.libsocket.sdk;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
-import com.xuhao.didi.common.interfacies.dispatcher.IRegister;
-import com.xuhao.didi.common.interfacies.server.IServerActionListener;
-import com.xuhao.didi.common.interfacies.server.IServerManager;
-import com.xuhao.didi.common.utils.ActivityStack;
-import com.xuhao.didi.common.utils.SLog;
+import com.xuhao.didi.common.common_interfacies.dispatcher.IRegister;
+import com.xuhao.didi.common.common_interfacies.server.IServerActionListener;
+import com.xuhao.didi.common.common_interfacies.server.IServerManager;
+import com.xuhao.didi.libsocket.impl.utils.ActivityStack;
+import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.libsocket.impl.client.EnvironmentalManager;
 import com.xuhao.didi.libsocket.impl.client.ManagerHolder;
 import com.xuhao.didi.libsocket.sdk.client.ConnectionInfo;

@@ -2,15 +2,13 @@ package com.xuhao.didi.server.impl.clientpojo;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.xuhao.didi.common.basic.bean.OriginalData;
-import com.xuhao.didi.common.interfacies.IReaderProtocol;
-import com.xuhao.didi.common.interfacies.client.msg.ISendable;
-import com.xuhao.didi.common.interfacies.dispatcher.IStateSender;
-import com.xuhao.didi.common.interfacies.server.IClient;
-import com.xuhao.didi.common.interfacies.server.IClientIOCallback;
-import com.xuhao.didi.common.utils.SLog;
+import com.xuhao.didi.common.common_interfacies.IReaderProtocol;
+import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
+import com.xuhao.didi.common.common_interfacies.dispatcher.IStateSender;
+import com.xuhao.didi.common.common_interfacies.server.IClient;
+import com.xuhao.didi.common.common_interfacies.server.IClientIOCallback;
 import com.xuhao.didi.server.action.ClientActionDispatcher;
 import com.xuhao.didi.server.action.IAction;
 import com.xuhao.didi.server.exceptions.CacheException;

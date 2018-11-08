@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import com.xuhao.didi.common.utils.SLog;
+import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.libsocket.impl.exceptions.PurifyException;
 import com.xuhao.didi.libsocket.sdk.client.ConnectionInfo;
 

@@ -2,7 +2,7 @@ package com.xuhao.didi.libsocket.impl.client.action;
 
 import android.content.Context;
 
-import com.xuhao.didi.common.interfacies.dispatcher.IRegister;
+import com.xuhao.didi.common.common_interfacies.dispatcher.IRegister;
 import com.xuhao.didi.libsocket.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.didi.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.didi.libsocket.sdk.client.OkSocketOptions;

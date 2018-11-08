@@ -8,10 +8,10 @@ import android.support.annotation.WorkerThread;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.xuhao.didi.common.interfacies.IIOManager;
-import com.xuhao.didi.common.interfacies.client.msg.ISendable;
-import com.xuhao.didi.common.utils.NetUtils;
-import com.xuhao.didi.common.utils.SLog;
+import com.xuhao.didi.common.common_interfacies.IIOManager;
+import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
+import com.xuhao.didi.libsocket.impl.utils.NetUtils;
+import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.libsocket.impl.client.action.SocketActionHandler;
 import com.xuhao.didi.libsocket.impl.client.iothreads.IOThreadManager;
 import com.xuhao.didi.libsocket.impl.exceptions.ManuallyDisconnectException;
@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.security.SecureRandom;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;

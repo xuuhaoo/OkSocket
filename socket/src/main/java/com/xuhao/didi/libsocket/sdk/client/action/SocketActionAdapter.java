@@ -3,9 +3,9 @@ package com.xuhao.didi.libsocket.sdk.client.action;
 import android.content.Context;
 
 import com.xuhao.didi.common.basic.bean.OriginalData;
-import com.xuhao.didi.common.interfacies.client.msg.ISendable;
+import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
 import com.xuhao.didi.libsocket.sdk.client.ConnectionInfo;
-import com.xuhao.didi.libsocket.sdk.client.bean.IPulseSendable;
+import com.xuhao.didi.core.iocore.interfaces.IPulseSendable;
 
 /**
  * Socket行为适配器,是行为监听器的一个Simple版本,详情请见{@link ISocketActionListener}

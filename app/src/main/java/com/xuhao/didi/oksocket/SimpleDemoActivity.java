@@ -14,12 +14,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.xuhao.didi.common.basic.bean.OriginalData;
-import com.xuhao.didi.common.interfacies.client.msg.ISendable;
+import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
 import com.xuhao.didi.libsocket.sdk.OkSocket;
 import com.xuhao.didi.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.didi.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.didi.libsocket.sdk.client.action.SocketActionAdapter;
-import com.xuhao.didi.libsocket.sdk.client.bean.IPulseSendable;
+import com.xuhao.didi.core.iocore.interfaces.IPulseSendable;
 import com.xuhao.didi.libsocket.sdk.client.connection.IConnectionManager;
 import com.xuhao.didi.libsocket.sdk.client.connection.NoneReconnect;
 import com.xuhao.didi.oksocket.adapter.LogAdapter;

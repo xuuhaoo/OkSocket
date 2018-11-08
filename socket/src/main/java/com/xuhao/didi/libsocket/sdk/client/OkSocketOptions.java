@@ -1,8 +1,8 @@
 package com.xuhao.didi.libsocket.sdk.client;
 
 import com.xuhao.didi.common.basic.protocol.DefaultNormalReaderProtocol;
-import com.xuhao.didi.common.interfacies.IIOCoreOptions;
-import com.xuhao.didi.common.interfacies.IReaderProtocol;
+import com.xuhao.didi.common.common_interfacies.IIOCoreOptions;
+import com.xuhao.didi.common.common_interfacies.IReaderProtocol;
 import com.xuhao.didi.libsocket.sdk.client.connection.AbsReconnectionManager;
 import com.xuhao.didi.libsocket.sdk.client.connection.DefaultReconnectManager;
 import com.xuhao.didi.libsocket.sdk.client.connection.NoneReconnect;

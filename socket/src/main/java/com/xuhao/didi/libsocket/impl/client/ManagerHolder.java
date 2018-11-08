@@ -5,9 +5,9 @@ import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
-import com.xuhao.didi.common.interfacies.server.IServerManager;
-import com.xuhao.didi.common.interfacies.server.IServerManagerPrivate;
-import com.xuhao.didi.common.utils.SLog;
+import com.xuhao.didi.common.common_interfacies.server.IServerManager;
+import com.xuhao.didi.common.common_interfacies.server.IServerManagerPrivate;
+import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.common.utils.SPIUtils;
 import com.xuhao.didi.libsocket.impl.client.abilities.IConnectionSwitchListener;
 import com.xuhao.didi.libsocket.sdk.client.ConnectionInfo;

@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.xuhao.didi.common.basic.bean.OriginalData;
-import com.xuhao.didi.common.interfacies.IReaderProtocol;
-import com.xuhao.didi.common.interfacies.server.IClient;
+import com.xuhao.didi.common.common_interfacies.IReaderProtocol;
+import com.xuhao.didi.common.common_interfacies.server.IClient;
 import com.xuhao.didi.server.action.ClientActionDispatcher;
 import com.xuhao.didi.server.impl.OkServerOptions;
 

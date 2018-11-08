@@ -1,12 +1,11 @@
 package com.xuhao.didi.server.impl;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 
-import com.xuhao.didi.common.interfacies.dispatcher.IRegister;
-import com.xuhao.didi.common.interfacies.dispatcher.IStateSender;
-import com.xuhao.didi.common.interfacies.server.IServerActionListener;
-import com.xuhao.didi.common.interfacies.server.IServerManager;
+import com.xuhao.didi.common.common_interfacies.dispatcher.IRegister;
+import com.xuhao.didi.common.common_interfacies.dispatcher.IStateSender;
+import com.xuhao.didi.common.common_interfacies.server.IServerActionListener;
+import com.xuhao.didi.common.common_interfacies.server.IServerManager;
 import com.xuhao.didi.server.action.ServerActionDispatcher;
 
 import java.io.Serializable;

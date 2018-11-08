@@ -6,7 +6,7 @@ import android.os.Message;
 
 import com.xuhao.didi.libsocket.impl.exceptions.DogDeadException;
 import com.xuhao.didi.libsocket.sdk.client.bean.IPulse;
-import com.xuhao.didi.libsocket.sdk.client.bean.IPulseSendable;
+import com.xuhao.didi.core.iocore.interfaces.IPulseSendable;
 import com.xuhao.didi.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.didi.libsocket.sdk.client.connection.IConnectionManager;
 

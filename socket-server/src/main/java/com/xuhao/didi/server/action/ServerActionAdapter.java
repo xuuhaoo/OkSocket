@@ -2,10 +2,10 @@ package com.xuhao.didi.server.action;
 
 import android.content.Context;
 
-import com.xuhao.didi.common.interfacies.server.IClient;
-import com.xuhao.didi.common.interfacies.server.IClientPool;
-import com.xuhao.didi.common.interfacies.server.IServerActionListener;
-import com.xuhao.didi.common.interfacies.server.IServerShutdown;
+import com.xuhao.didi.common.common_interfacies.server.IClient;
+import com.xuhao.didi.common.common_interfacies.server.IClientPool;
+import com.xuhao.didi.common.common_interfacies.server.IServerActionListener;
+import com.xuhao.didi.common.common_interfacies.server.IServerShutdown;
 
 public abstract class ServerActionAdapter implements IServerActionListener {
     @Override

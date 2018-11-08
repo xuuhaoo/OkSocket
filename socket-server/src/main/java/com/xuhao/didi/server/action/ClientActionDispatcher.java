@@ -1,8 +1,8 @@
 package com.xuhao.didi.server.action;
 
 import com.xuhao.didi.common.basic.bean.OriginalData;
-import com.xuhao.didi.common.interfacies.client.msg.ISendable;
-import com.xuhao.didi.common.interfacies.dispatcher.IStateSender;
+import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
+import com.xuhao.didi.common.common_interfacies.dispatcher.IStateSender;
 
 import java.io.Serializable;
 

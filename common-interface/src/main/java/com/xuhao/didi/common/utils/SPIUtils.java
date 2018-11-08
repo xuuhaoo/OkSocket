@@ -1,6 +1,6 @@
 package com.xuhao.didi.common.utils;
 
-import android.util.Log;
+import com.xuhao.didi.core.utils.SLog;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
@@ -9,7 +9,7 @@ public class SPIUtils {
 
     public static <E> E load(Class<E> clz) {
         if (clz == null) {
-            Log.e("Loader", "load null clz error!");
+            SLog.e("load null clz error!");
             return null;
         }
         ServiceLoader<E> serviceLoader = ServiceLoader.load(clz, clz.getClassLoader());
@@ -20,7 +20,7 @@ public class SPIUtils {
                 return service;
             }
         } catch (Throwable throwable) {
-            Log.e("Loader", "load " + clz.getSimpleName() + " error! " + throwable.getMessage());
+            SLog.e("load " + clz.getSimpleName() + " error! " + throwable.getMessage());
         }
         return null;
     }

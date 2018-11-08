@@ -11,18 +11,17 @@ import android.os.Process;
 import android.text.TextUtils;
 
 import com.xuhao.didi.common.basic.bean.OriginalData;
-import com.xuhao.didi.common.interfacies.client.msg.ISendable;
-import com.xuhao.didi.common.interfacies.dispatcher.IRegister;
-import com.xuhao.didi.common.interfacies.dispatcher.IStateSender;
-import com.xuhao.didi.common.utils.SocketBroadcastManager;
+import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
+import com.xuhao.didi.common.common_interfacies.dispatcher.IRegister;
+import com.xuhao.didi.common.common_interfacies.dispatcher.IStateSender;
+import com.xuhao.didi.libsocket.impl.utils.SocketBroadcastManager;
 import com.xuhao.didi.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.didi.libsocket.sdk.client.OkSocketOptions;
 import com.xuhao.didi.libsocket.sdk.client.action.ISocketActionListener;
-import com.xuhao.didi.libsocket.sdk.client.bean.IPulseSendable;
+import com.xuhao.didi.core.iocore.interfaces.IPulseSendable;
 import com.xuhao.didi.libsocket.sdk.client.connection.IConnectionManager;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 

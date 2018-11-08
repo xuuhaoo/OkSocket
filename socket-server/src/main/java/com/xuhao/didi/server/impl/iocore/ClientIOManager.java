@@ -3,12 +3,12 @@ package com.xuhao.didi.server.impl.iocore;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.xuhao.didi.common.interfacies.IIOManager;
-import com.xuhao.didi.common.interfacies.IReaderProtocol;
-import com.xuhao.didi.common.interfacies.client.io.IReader;
-import com.xuhao.didi.common.interfacies.client.io.IWriter;
-import com.xuhao.didi.common.interfacies.client.msg.ISendable;
-import com.xuhao.didi.common.interfacies.dispatcher.IStateSender;
+import com.xuhao.didi.common.common_interfacies.IIOManager;
+import com.xuhao.didi.common.common_interfacies.IReaderProtocol;
+import com.xuhao.didi.common.common_interfacies.client.io.IReader;
+import com.xuhao.didi.common.common_interfacies.client.io.IWriter;
+import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
+import com.xuhao.didi.common.common_interfacies.dispatcher.IStateSender;
 import com.xuhao.didi.common.utils.SPIUtils;
 import com.xuhao.didi.server.exceptions.InitiativeDisconnectException;
 import com.xuhao.didi.server.impl.OkServerOptions;

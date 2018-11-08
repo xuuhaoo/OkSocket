@@ -3,7 +3,7 @@ package com.xuhao.didi.libsocket.impl.client;
 import android.os.Handler;
 import android.os.Message;
 
-import com.xuhao.didi.common.utils.ActivityStack;
+import com.xuhao.didi.libsocket.impl.utils.ActivityStack;
 import com.xuhao.didi.libsocket.impl.exceptions.PurifyException;
 import com.xuhao.didi.libsocket.sdk.client.connection.IConnectionManager;
 

@@ -4,16 +4,16 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.xuhao.didi.common.basic.AbsLoopThread;
-import com.xuhao.didi.common.interfacies.IIOManager;
-import com.xuhao.didi.common.interfacies.IReaderProtocol;
-import com.xuhao.didi.common.interfacies.client.io.IReader;
-import com.xuhao.didi.common.interfacies.client.io.IWriter;
-import com.xuhao.didi.common.interfacies.client.msg.ISendable;
-import com.xuhao.didi.common.interfacies.dispatcher.IStateSender;
-import com.xuhao.didi.common.utils.SLog;
+import com.xuhao.didi.common.common_interfacies.IIOManager;
+import com.xuhao.didi.common.common_interfacies.IReaderProtocol;
+import com.xuhao.didi.common.common_interfacies.client.io.IReader;
+import com.xuhao.didi.common.common_interfacies.client.io.IWriter;
+import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
+import com.xuhao.didi.common.common_interfacies.dispatcher.IStateSender;
+import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.libsocket.impl.exceptions.ManuallyDisconnectException;
-import com.xuhao.didi.libsocket.impl.iocore.ReaderImpl;
-import com.xuhao.didi.libsocket.impl.iocore.WriterImpl;
+import com.xuhao.didi.common.basic.iocore.ReaderImpl;
+import com.xuhao.didi.common.basic.iocore.WriterImpl;
 import com.xuhao.didi.libsocket.sdk.client.OkSocketOptions;
 
 import java.io.InputStream;

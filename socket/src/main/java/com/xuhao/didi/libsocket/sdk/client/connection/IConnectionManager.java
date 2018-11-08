@@ -5,9 +5,9 @@ import com.xuhao.didi.libsocket.sdk.client.ConnectionInfo;
 import com.xuhao.didi.libsocket.sdk.client.connection.abilities.IConfiguration;
 import com.xuhao.didi.libsocket.sdk.client.connection.abilities.IConnectable;
 import com.xuhao.didi.libsocket.sdk.client.action.ISocketActionListener;
-import com.xuhao.didi.common.interfacies.client.IDisConnectable;
-import com.xuhao.didi.common.interfacies.dispatcher.IRegister;
-import com.xuhao.didi.common.interfacies.client.msg.ISender;
+import com.xuhao.didi.common.common_interfacies.client.IDisConnectable;
+import com.xuhao.didi.common.common_interfacies.dispatcher.IRegister;
+import com.xuhao.didi.common.common_interfacies.client.ISender;
 
 /**
  * Created by xuhao on 2017/5/16.
