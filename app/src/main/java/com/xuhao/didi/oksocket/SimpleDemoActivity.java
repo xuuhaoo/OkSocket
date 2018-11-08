@@ -1,6 +1,5 @@
 package com.xuhao.didi.oksocket;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,6 +19,7 @@ import com.xuhao.didi.oksocket.adapter.LogAdapter;
 import com.xuhao.didi.oksocket.data.HandShake;
 import com.xuhao.didi.oksocket.data.LogBean;
 import com.xuhao.didi.oksocket.data.MsgDataBean;
+import com.xuhao.didi.socket.client.impl.client.action.ActionDispatcher;
 import com.xuhao.didi.socket.client.sdk.OkSocket;
 import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
 import com.xuhao.didi.socket.client.sdk.client.OkSocketOptions;
@@ -58,13 +58,13 @@ public class SimpleDemoActivity extends AppCompatActivity {
     private SocketActionAdapter adapter = new SocketActionAdapter() {
 
         @Override
-        public void onSocketConnectionSuccess( ConnectionInfo info, String action) {
+        public void onSocketConnectionSuccess(ConnectionInfo info, String action) {
             mManager.send(new HandShake());
             mConnect.setText("DisConnect");
         }
 
         @Override
-        public void onSocketDisconnection( ConnectionInfo info, String action, Exception e) {
+        public void onSocketDisconnection(ConnectionInfo info, String action, Exception e) {
             if (e != null) {
                 logSend("异常断开:" + e.getMessage());
             } else {
@@ -74,25 +74,25 @@ public class SimpleDemoActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onSocketConnectionFailed( ConnectionInfo info, String action, Exception e) {
+        public void onSocketConnectionFailed(ConnectionInfo info, String action, Exception e) {
             logSend("连接失败");
             mConnect.setText("Connect");
         }
 
         @Override
-        public void onSocketReadResponse( ConnectionInfo info, String action, OriginalData data) {
+        public void onSocketReadResponse(ConnectionInfo info, String action, OriginalData data) {
             String str = new String(data.getBodyBytes(), Charset.forName("utf-8"));
             logRece(str);
         }
 
         @Override
-        public void onSocketWriteResponse( ConnectionInfo info, String action, ISendable data) {
+        public void onSocketWriteResponse(ConnectionInfo info, String action, ISendable data) {
             String str = new String(data.parse(), Charset.forName("utf-8"));
             logSend(str);
         }
 
         @Override
-        public void onPulseSend( ConnectionInfo info, IPulseSendable data) {
+        public void onPulseSend(ConnectionInfo info, IPulseSendable data) {
             String str = new String(data.parse(), Charset.forName("utf-8"));
             logSend(str);
         }
@@ -137,11 +137,17 @@ public class SimpleDemoActivity extends AppCompatActivity {
     }
 
     private void initManager() {
+        final Handler handler = new Handler();
         mInfo = new ConnectionInfo(mIPET.getText().toString(), Integer.parseInt(mPortET.getText().toString()));
         mOkOptions = new OkSocketOptions.Builder()
                 .setReconnectionManager(new NoneReconnect())
-                .setWritePackageBytes(1024)
-                .setCallbackInThread(false)
+                .setWritePackageBytes(1)
+                .setCallbackThreadModeToken(new OkSocketOptions.ThreadModeToken() {
+                    @Override
+                    public void handleCallbackEvent(ActionDispatcher.ActionRunnable runnable) {
+                        handler.post(runnable);
+                    }
+                })
                 .build();
         mManager = OkSocket.open(mInfo).option(mOkOptions);
         mManager.registerReceiver(adapter);
@@ -209,10 +215,11 @@ public class SimpleDemoActivity extends AppCompatActivity {
             mSendLogAdapter.getDataList().add(0, logBean);
             mSendLogAdapter.notifyDataSetChanged();
         } else {
+            final String threadName = Thread.currentThread().getName();
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    logSend("非UI线程打印:" + log);
+                    logSend(threadName + " 线程打印:" + log);
                 }
             });
         }
@@ -224,10 +231,11 @@ public class SimpleDemoActivity extends AppCompatActivity {
             mReceLogAdapter.getDataList().add(0, logBean);
             mReceLogAdapter.notifyDataSetChanged();
         } else {
+            final String threadName = Thread.currentThread().getName();
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    logRece("非UI线程打印:" + log);
+                    logRece(threadName + " 线程打印:" + log);
                 }
             });
         }

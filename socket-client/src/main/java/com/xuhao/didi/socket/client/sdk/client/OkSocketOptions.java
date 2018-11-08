@@ -2,6 +2,7 @@ package com.xuhao.didi.socket.client.sdk.client;
 
 import com.xuhao.didi.core.iocore.interfaces.IIOCoreOptions;
 import com.xuhao.didi.core.protocol.IReaderProtocol;
+import com.xuhao.didi.socket.client.impl.client.action.ActionDispatcher;
 import com.xuhao.didi.socket.client.sdk.client.connection.AbsReconnectionManager;
 import com.xuhao.didi.socket.client.sdk.client.connection.DefaultReconnectManager;
 import com.xuhao.didi.socket.client.sdk.client.connection.abilities.IConfiguration;
@@ -87,15 +88,23 @@ public class OkSocketOptions implements IIOCoreOptions {
      */
     private OkSocketFactory mOkSocketFactory;
     /**
-     * 从线程进行回调.
+     * 从独立线程进行回调.
      */
-    private boolean isCallbackInThread;
+    private boolean isCallbackInIndependentThread;
+    /**
+     * 将分发放到handler中,外部需要传入HandlerToken并且调用Handler.post(runnable);
+     */
+    private ThreadModeToken mCallbackThreadModeToken;
 
     private OkSocketOptions() {
     }
 
     public static void setIsDebug(boolean isDebug) {
         OkSocketOptions.isDebug = isDebug;
+    }
+
+    public static abstract class ThreadModeToken {
+        public abstract void handleCallbackEvent(ActionDispatcher.ActionRunnable runnable);
     }
 
     public static class Builder {
@@ -125,7 +134,8 @@ public class OkSocketOptions implements IIOCoreOptions {
             mOptions.mReconnectionManager = okOptions.mReconnectionManager;
             mOptions.mSSLConfig = okOptions.mSSLConfig;
             mOptions.mOkSocketFactory = okOptions.mOkSocketFactory;
-            mOptions.isCallbackInThread = okOptions.isCallbackInThread;
+            mOptions.isCallbackInIndependentThread = okOptions.isCallbackInIndependentThread;
+            mOptions.mCallbackThreadModeToken = okOptions.mCallbackThreadModeToken;
         }
 
         /**
@@ -308,13 +318,25 @@ public class OkSocketOptions implements IIOCoreOptions {
         }
 
         /**
-         * 设置回调在线程中,不是在UI线程中.
+         * 设置回调在线程中,注意不是在UI线程中.
          *
-         * @param inThread true表示回调在非UI线程中,false表示回调在UI线程中
+         * @param inThread true表示回调在独立的全局事件分发线程中,false表示回调在本次Socket的IO线程中
          * @return
          */
-        public Builder setCallbackInThread(boolean inThread) {
-            mOptions.isCallbackInThread = inThread;
+        public Builder setCallbackInIndependentThread(boolean inThread) {
+            mOptions.isCallbackInIndependentThread = inThread;
+            return this;
+        }
+
+        /**
+         * 设置回调在线程中,不是在UI线程中.
+         *
+         * @param threadModeToken 针对android设计,可以使回调在android的主线程中,
+         *                        需要自己实现handleCallbackEvent方法.在方法中使用Handler.post(runnable)进行回调
+         * @return
+         */
+        public Builder setCallbackThreadModeToken(ThreadModeToken threadModeToken) {
+            mOptions.mCallbackThreadModeToken = threadModeToken;
             return this;
         }
 
@@ -390,8 +412,12 @@ public class OkSocketOptions implements IIOCoreOptions {
         return mReadByteOrder;
     }
 
-    public boolean isCallbackInThread() {
-        return isCallbackInThread;
+    public ThreadModeToken getCallbackThreadModeToken() {
+        return mCallbackThreadModeToken;
+    }
+
+    public boolean isCallbackInIndependentThread() {
+        return isCallbackInIndependentThread;
     }
 
     public static OkSocketOptions getDefault() {
@@ -410,7 +436,8 @@ public class OkSocketOptions implements IIOCoreOptions {
         okOptions.mReconnectionManager = new DefaultReconnectManager();
         okOptions.mSSLConfig = null;
         okOptions.mOkSocketFactory = null;
-        okOptions.isCallbackInThread = false;
+        okOptions.isCallbackInIndependentThread = false;
+        okOptions.mCallbackThreadModeToken = null;
         return okOptions;
     }
 

@@ -41,8 +41,10 @@ public class ManagerHolder {
         if (manager == null) {
             manager = (IServerManagerPrivate) SPIUtils.load(IServerManager.class);
             if (manager == null) {
-                SLog.e("Server load error. Server plug-in are required!" +
-                        " For details link to https://github.com/xuuhaoo/OkSocket");
+                String err = "Oksocket.Server() load error. Server plug-in are required!" +
+                        " For details link to https://github.com/xuuhaoo/OkSocket";
+                SLog.e(err);
+                throw new IllegalStateException(err);
             } else {
                 synchronized (mServerManagerMap) {
                     mServerManagerMap.put(localPort, manager);

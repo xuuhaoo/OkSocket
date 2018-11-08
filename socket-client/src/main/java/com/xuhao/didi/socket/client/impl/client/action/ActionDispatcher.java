@@ -4,13 +4,13 @@ import com.xuhao.didi.core.iocore.interfaces.ISendable;
 import com.xuhao.didi.core.iocore.interfaces.IStateSender;
 import com.xuhao.didi.core.pojo.OriginalData;
 import com.xuhao.didi.core.iocore.interfaces.IPulseSendable;
+import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
 import com.xuhao.didi.socket.client.sdk.client.OkSocketOptions;
 import com.xuhao.didi.socket.client.sdk.client.action.ISocketActionListener;
 import com.xuhao.didi.socket.client.sdk.client.connection.IConnectionManager;
 import com.xuhao.didi.socket.common.interfaces.basic.AbsLoopThread;
 import com.xuhao.didi.socket.common.interfaces.common_interfacies.dispatcher.IRegister;
-import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IServerActionListener;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -173,10 +173,14 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
     @Override
     public void sendBroadcast(String action, Serializable serializable) {
         OkSocketOptions option = mManager.getOption();
-        if (option != null && option.isCallbackInThread()) {
+        if (option == null) {
+            return;
+        }
+        OkSocketOptions.ThreadModeToken token = option.getCallbackThreadModeToken();
+        if (option.isCallbackInIndependentThread()) {
             ActionBean bean = new ActionBean(action, serializable, this);
             ACTION_QUEUE.offer(bean);
-        } else {
+        } else if (!option.isCallbackInIndependentThread() && token == null) {
             synchronized (mResponseHandlerSet) {
                 Iterator<ISocketActionListener> it = mResponseHandlerSet.iterator();
                 while (it.hasNext()) {
@@ -184,6 +188,16 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
                     this.dispatchActionToListener(action, serializable, listener);
                 }
             }
+        } else if (token != null) {
+            ActionBean bean = new ActionBean(action, serializable, this);
+            ActionRunnable runnable = new ActionRunnable(bean);
+            try {
+                token.handleCallbackEvent(runnable);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            SLog.e("ActionDispatcher error action:" + action + " is not dispatch");
         }
     }
 
@@ -228,7 +242,7 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
     /**
      * 行为Bean
      */
-    private static class ActionBean {
+    protected static class ActionBean {
         public ActionBean(String action, Serializable arg, ActionDispatcher dispatcher) {
             mAction = action;
             this.arg = arg;
@@ -238,6 +252,28 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
         String mAction = "";
         Serializable arg;
         ActionDispatcher mDispatcher;
+    }
+
+    public static class ActionRunnable implements Runnable {
+        private ActionDispatcher.ActionBean mActionBean;
+
+        ActionRunnable(ActionBean actionBean) {
+            mActionBean = actionBean;
+        }
+
+        @Override
+        public void run() {
+            if (mActionBean != null && mActionBean.mDispatcher != null) {
+                ActionDispatcher actionDispatcher = mActionBean.mDispatcher;
+                synchronized (actionDispatcher.mResponseHandlerSet) {
+                    Iterator<ISocketActionListener> it = actionDispatcher.mResponseHandlerSet.iterator();
+                    while (it.hasNext()) {
+                        ISocketActionListener listener = it.next();
+                        actionDispatcher.dispatchActionToListener(mActionBean.mAction, mActionBean.arg, listener);
+                    }
+                }
+            }
+        }
     }
 
 }
