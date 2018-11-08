@@ -1,12 +1,11 @@
-package com.xuhao.didi.libsocket.sdk.client;
+package com.xuhao.didi.socket.client.sdk.client;
 
-import com.xuhao.didi.common.default_protocol.DefaultNormalReaderProtocol;
 import com.xuhao.didi.core.iocore.interfaces.IIOCoreOptions;
 import com.xuhao.didi.core.protocol.IReaderProtocol;
-import com.xuhao.didi.libsocket.sdk.client.connection.AbsReconnectionManager;
-import com.xuhao.didi.libsocket.sdk.client.connection.DefaultReconnectManager;
-import com.xuhao.didi.libsocket.sdk.client.connection.NoneReconnect;
-import com.xuhao.didi.libsocket.sdk.client.connection.abilities.IConfiguration;
+import com.xuhao.didi.socket.client.sdk.client.connection.AbsReconnectionManager;
+import com.xuhao.didi.socket.client.sdk.client.connection.DefaultReconnectManager;
+import com.xuhao.didi.socket.client.sdk.client.connection.abilities.IConfiguration;
+import com.xuhao.didi.socket.common.interfaces.default_protocol.DefaultNormalReaderProtocol;
 
 import java.nio.ByteOrder;
 
@@ -63,7 +62,7 @@ public class OkSocketOptions implements IIOCoreOptions {
     /**
      * 脉搏丢失次数<br>
      * 大于或等于丢失次数时将断开该通道的连接<br>
-     * 抛出{@link com.xuhao.didi.libsocket.impl.exceptions.DogDeadException}
+     * 抛出{@link com.xuhao.didi.socket.client.impl.exceptions.DogDeadException}
      */
     private int mPulseFeedLoseTimes;
     /**
@@ -206,7 +205,7 @@ public class OkSocketOptions implements IIOCoreOptions {
         /**
          * 脉搏丢失次数<br>
          * 大于或等于丢失次数时将断开该通道的连接<br>
-         * 抛出{@link com.xuhao.didi.libsocket.impl.exceptions.DogDeadException}<br>
+         * 抛出{@link com.xuhao.didi.socket.client.impl.exceptions.DogDeadException}<br>
          * 默认是5次
          *
          * @param pulseFeedLoseTimes 丢失心跳ACK的次数,例如5,当丢失3次时,自动断开.
@@ -285,7 +284,7 @@ public class OkSocketOptions implements IIOCoreOptions {
         /**
          * 设置断线重连的连接管理器<br>
          * 默认的连接管理器为{@link DefaultReconnectManager}<br>
-         * 如果不需要断线重连请设置该参数为{@link NoneReconnect}
+         * 如果不需要断线重连请设置该参数为{@link com.xuhao.didi.socket.client.sdk.client.connection.NoneReconnect}
          *
          * @param reconnectionManager 断线重连管理器{@link AbsReconnectionManager}
          * @return

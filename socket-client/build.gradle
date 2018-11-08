@@ -1,0 +1,10 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(path: ':socket-common-interface')
+
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"

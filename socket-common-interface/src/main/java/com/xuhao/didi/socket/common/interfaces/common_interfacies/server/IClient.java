@@ -1,0 +1,27 @@
+package com.xuhao.didi.socket.common.interfaces.common_interfacies.server;
+
+import com.xuhao.didi.common.common_interfacies.client.IDisConnectable;
+import com.xuhao.didi.common.common_interfacies.client.ISender;
+import com.xuhao.didi.core.protocol.IReaderProtocol;
+
+import java.io.Serializable;
+
+public interface IClient extends IDisConnectable, ISender<IClient>, Serializable {
+
+    String getHostIp();
+
+    String getHostName();
+
+    void setUniqueTag(String uniqueTag);
+
+    String getUniqueTag();
+
+    void setReaderProtocol(IReaderProtocol protocol);
+
+    void addIOCallback(IClientIOCallback clientIOCallback);
+
+    void removeIOCallback(IClientIOCallback clientIOCallback);
+
+    void removeAllIOCallback();
+
+}

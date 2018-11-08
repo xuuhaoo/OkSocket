@@ -36,6 +36,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
 //    compile 'com.tonystark.android:socket:3.0.3'
 //    compile 'com.tonystark.android:socket-server:3.0.3'
-        compile project(path: ':socket')
+        compile project(path: ':socket-client')
         compile project(path: ':socket-server')
 }
