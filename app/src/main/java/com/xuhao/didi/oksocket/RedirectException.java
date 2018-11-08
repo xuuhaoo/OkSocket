@@ -1,6 +1,7 @@
 package com.xuhao.didi.oksocket;
 
-import com.xuhao.didi.libsocket.sdk.client.ConnectionInfo;
+
+import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
 
 /**
  * Created by xuhao on 2017/6/30.

@@ -1,6 +1,7 @@
 package com.xuhao.didi.oksocket.data;
 
-import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
+
+import com.xuhao.didi.core.iocore.interfaces.ISendable;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

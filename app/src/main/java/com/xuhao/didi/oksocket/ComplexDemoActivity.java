@@ -1,6 +1,5 @@
 package com.xuhao.didi.oksocket;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,31 +9,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.xuhao.didi.common.basic.bean.OriginalData;
-import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
-import com.xuhao.didi.libsocket.sdk.OkSocket;
-import com.xuhao.didi.libsocket.sdk.client.ConnectionInfo;
-import com.xuhao.didi.libsocket.sdk.client.OkSocketOptions;
-import com.xuhao.didi.libsocket.sdk.client.action.SocketActionAdapter;
+import com.xuhao.didi.core.iocore.interfaces.ISendable;
+import com.xuhao.didi.core.pojo.OriginalData;
 import com.xuhao.didi.core.iocore.interfaces.IPulseSendable;
-import com.xuhao.didi.libsocket.sdk.client.connection.IConnectionManager;
-import com.xuhao.didi.libsocket.sdk.client.connection.NoneReconnect;
 import com.xuhao.didi.oksocket.adapter.LogAdapter;
 import com.xuhao.didi.oksocket.data.DefaultSendBean;
 import com.xuhao.didi.oksocket.data.HandShake;
 import com.xuhao.didi.oksocket.data.LogBean;
 import com.xuhao.didi.oksocket.data.PulseBean;
+import com.xuhao.didi.socket.client.sdk.OkSocket;
+import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
+import com.xuhao.didi.socket.client.sdk.client.OkSocketOptions;
+import com.xuhao.didi.socket.client.sdk.client.action.SocketActionAdapter;
+import com.xuhao.didi.socket.client.sdk.client.connection.IConnectionManager;
+import com.xuhao.didi.socket.client.sdk.client.connection.NoneReconnect;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
-import static android.widget.Toast.LENGTH_SHORT;
-import static com.xuhao.didi.libsocket.sdk.OkSocket.open;
 
 public class ComplexDemoActivity extends AppCompatActivity {
 
@@ -47,13 +43,10 @@ public class ComplexDemoActivity extends AppCompatActivity {
     private EditText mPortET;
     private Button mRedirect;
     private EditText mFrequencyET;
-    private Button mLiveBgBtn;
-    private EditText mLiveBgET;
     private Button mSetFrequency;
     private Button mMenualPulse;
     private Button mClearLog;
     private SwitchCompat mReconnectSwitch;
-    private SwitchCompat mLiveBGSwitch;
 
     private RecyclerView mSendList;
     private RecyclerView mReceList;
@@ -64,7 +57,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
     private SocketActionAdapter adapter = new SocketActionAdapter() {
 
         @Override
-        public void onSocketConnectionSuccess(Context context, ConnectionInfo info, String action) {
+        public void onSocketConnectionSuccess(ConnectionInfo info, String action) {
             logRece("连接成功");
             mManager.send(new HandShake());
             mConnect.setText("DisConnect");
@@ -73,13 +66,11 @@ public class ComplexDemoActivity extends AppCompatActivity {
 
         private void initSwitch() {
             OkSocketOptions okSocketOptions = mManager.getOption();
-            long minute = OkSocket.getBackgroundSurvivalTime();
-            mLiveBGSwitch.setChecked(minute != -1);
             mReconnectSwitch.setChecked(!(okSocketOptions.getReconnectionManager() instanceof NoneReconnect));
         }
 
         @Override
-        public void onSocketDisconnection(Context context, ConnectionInfo info, String action, Exception e) {
+        public void onSocketDisconnection(ConnectionInfo info, String action, Exception e) {
             if (e != null) {
                 if (e instanceof RedirectException) {
                     logSend("正在重定向连接...");
@@ -95,15 +86,13 @@ public class ComplexDemoActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onSocketConnectionFailed(Context context, ConnectionInfo info, String action, Exception e) {
-            Toast.makeText(context, "连接失败" + e.getMessage(), LENGTH_SHORT).show();
+        public void onSocketConnectionFailed(ConnectionInfo info, String action, Exception e) {
             logSend("连接失败");
             mConnect.setText("Connect");
         }
 
         @Override
-        public void onSocketReadResponse(Context context, ConnectionInfo info, String action, OriginalData data) {
-            super.onSocketReadResponse(context, info, action, data);
+        public void onSocketReadResponse(ConnectionInfo info, String action, OriginalData data) {
             String str = new String(data.getBodyBytes(), Charset.forName("utf-8"));
             JsonObject jsonObject = new JsonParser().parse(str).getAsJsonObject();
             int cmd = jsonObject.get("cmd").getAsInt();
@@ -127,8 +116,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onSocketWriteResponse(Context context, ConnectionInfo info, String action, ISendable data) {
-            super.onSocketWriteResponse(context, info, action, data);
+        public void onSocketWriteResponse(ConnectionInfo info, String action, ISendable data) {
             byte[] bytes = data.parse();
             bytes = Arrays.copyOfRange(bytes, 4, bytes.length);
             String str = new String(bytes, Charset.forName("utf-8"));
@@ -146,8 +134,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onPulseSend(Context context, ConnectionInfo info, IPulseSendable data) {
-            super.onPulseSend(context, info, data);
+        public void onPulseSend(ConnectionInfo info, IPulseSendable data) {
             byte[] bytes = data.parse();
             bytes = Arrays.copyOfRange(bytes, 4, bytes.length);
             String str = new String(bytes, Charset.forName("utf-8"));
@@ -179,10 +166,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
         mIPET = findViewById(R.id.ip);
         mPortET = findViewById(R.id.port);
         mRedirect = findViewById(R.id.redirect);
-        mLiveBgET = findViewById(R.id.bg_live_minute);
-        mLiveBgBtn = findViewById(R.id.bg_live_minute_btn);
         mMenualPulse = findViewById(R.id.manual_pulse);
-        mLiveBGSwitch = findViewById(R.id.is_live_in_bg);
         mReconnectSwitch = findViewById(R.id.switch_reconnect);
     }
 
@@ -197,29 +181,11 @@ public class ComplexDemoActivity extends AppCompatActivity {
 
         mInfo = new ConnectionInfo("104.238.184.237", 8080);
         OkSocketOptions.Builder builder = new OkSocketOptions.Builder();
-        mManager = open(mInfo).option(builder.build());
+        mManager = OkSocket.open(mInfo).option(builder.build());
     }
 
     private void setListener() {
         mManager.registerReceiver(adapter);
-
-        mLiveBGSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (buttonView.isChecked() == isChecked) {
-                    return;
-                }
-                long value = -1;
-                if (isChecked) {
-                    value = OkSocket.getBackgroundSurvivalTime();
-                } else {
-                    value = -1;
-                }
-                OkSocket.setBackgroundSurvivalTime(value);
-                mLiveBgET.setText("");
-                mLiveBgET.setHint(value + "");
-            }
-        });
 
         mReconnectSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -271,19 +237,6 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 mSendLogAdapter.getDataList().clear();
                 mReceLogAdapter.notifyDataSetChanged();
                 mSendLogAdapter.notifyDataSetChanged();
-            }
-        });
-
-        mLiveBgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String timeStr = mLiveBgET.getText().toString();
-                long time = 0;
-                try {
-                    time = Long.parseLong(timeStr);
-                    OkSocket.setBackgroundSurvivalTime(time);
-                } catch (Exception e) {
-                }
             }
         });
 

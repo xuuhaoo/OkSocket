@@ -19,16 +19,16 @@ import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.xuhao.didi.common.basic.bean.OriginalData;
-import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
-import com.xuhao.didi.common.common_interfacies.server.IClient;
-import com.xuhao.didi.common.common_interfacies.server.IClientIOCallback;
-import com.xuhao.didi.common.common_interfacies.server.IClientPool;
-import com.xuhao.didi.common.common_interfacies.server.IServerManager;
-import com.xuhao.didi.common.common_interfacies.server.IServerShutdown;
-import com.xuhao.didi.libsocket.sdk.OkSocket;
+import com.xuhao.didi.core.iocore.interfaces.ISendable;
+import com.xuhao.didi.core.pojo.OriginalData;
 import com.xuhao.didi.oksocket.data.MsgDataBean;
-import com.xuhao.didi.server.action.ServerActionAdapter;
+import com.xuhao.didi.socket.client.sdk.OkSocket;
+import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IClient;
+import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IClientIOCallback;
+import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IClientPool;
+import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IServerManager;
+import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IServerShutdown;
+import com.xuhao.didi.socket.server.action.ServerActionAdapter;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -83,37 +83,32 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
 
         mServerManager = OkSocket.server(mPort).registerReceiver(new ServerActionAdapter() {
             @Override
-            public void onServerListening(Context context, int serverPort) {
-                super.onServerListening(context, serverPort);
+            public void onServerListening(int serverPort) {
                 Log.i("ServerCallback", "onServerListening,serverPort:" + serverPort);
                 flushServerText();
             }
 
             @Override
-            public void onClientConnected(Context context, IClient client, int serverPort, IClientPool clientPool) {
-                super.onClientConnected(context, client, serverPort, clientPool);
+            public void onClientConnected(IClient client, int serverPort, IClientPool clientPool) {
                 Log.i("ServerCallback", "onClientConnected,serverPort:" + serverPort + "--ClientNums:" + clientPool.size() + "--ClientTag:" + client.getUniqueTag());
                 client.addIOCallback(DemoActivity.this);
             }
 
             @Override
-            public void onClientDisconnected(Context context, IClient client, int serverPort, IClientPool clientPool) {
-                super.onClientDisconnected(context, client, serverPort, clientPool);
+            public void onClientDisconnected(IClient client, int serverPort, IClientPool clientPool) {
                 Log.i("ServerCallback", "onClientDisconnected,serverPort:" + serverPort + "--ClientNums:" + clientPool.size() + "--ClientTag:" + client.getUniqueTag());
                 client.removeIOCallback(DemoActivity.this);
             }
 
             @Override
-            public void onServerWillBeShutdown(Context context, int serverPort, IServerShutdown shutdown, IClientPool clientPool, Throwable throwable) {
-                super.onServerWillBeShutdown(context, serverPort, shutdown, clientPool, throwable);
+            public void onServerWillBeShutdown(int serverPort, IServerShutdown shutdown, IClientPool clientPool, Throwable throwable) {
                 Log.i("ServerCallback", "onServerWillBeShutdown,serverPort:" + serverPort + "--ClientNums:" + clientPool
                         .size());
                 shutdown.shutdown();
             }
 
             @Override
-            public void onServerAlreadyShutdown(Context context, int serverPort) {
-                super.onServerAlreadyShutdown(context, serverPort);
+            public void onServerAlreadyShutdown(int serverPort) {
                 Log.i("ServerCallback", "onServerAlreadyShutdown,serverPort:" + serverPort);
                 mServerBtn.setText(mPort + "服务器启动");
             }

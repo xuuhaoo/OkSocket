@@ -13,19 +13,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.xuhao.didi.common.basic.bean.OriginalData;
-import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
-import com.xuhao.didi.libsocket.sdk.OkSocket;
-import com.xuhao.didi.libsocket.sdk.client.ConnectionInfo;
-import com.xuhao.didi.libsocket.sdk.client.OkSocketOptions;
-import com.xuhao.didi.libsocket.sdk.client.action.SocketActionAdapter;
 import com.xuhao.didi.core.iocore.interfaces.IPulseSendable;
-import com.xuhao.didi.libsocket.sdk.client.connection.IConnectionManager;
-import com.xuhao.didi.libsocket.sdk.client.connection.NoneReconnect;
+import com.xuhao.didi.core.iocore.interfaces.ISendable;
+import com.xuhao.didi.core.pojo.OriginalData;
 import com.xuhao.didi.oksocket.adapter.LogAdapter;
 import com.xuhao.didi.oksocket.data.HandShake;
 import com.xuhao.didi.oksocket.data.LogBean;
 import com.xuhao.didi.oksocket.data.MsgDataBean;
+import com.xuhao.didi.socket.client.sdk.OkSocket;
+import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
+import com.xuhao.didi.socket.client.sdk.client.OkSocketOptions;
+import com.xuhao.didi.socket.client.sdk.client.action.SocketActionAdapter;
+import com.xuhao.didi.socket.client.sdk.client.connection.IConnectionManager;
+import com.xuhao.didi.socket.client.sdk.client.connection.NoneReconnect;
 
 import java.nio.charset.Charset;
 
@@ -58,13 +58,13 @@ public class SimpleDemoActivity extends AppCompatActivity {
     private SocketActionAdapter adapter = new SocketActionAdapter() {
 
         @Override
-        public void onSocketConnectionSuccess(Context context, ConnectionInfo info, String action) {
+        public void onSocketConnectionSuccess( ConnectionInfo info, String action) {
             mManager.send(new HandShake());
             mConnect.setText("DisConnect");
         }
 
         @Override
-        public void onSocketDisconnection(Context context, ConnectionInfo info, String action, Exception e) {
+        public void onSocketDisconnection( ConnectionInfo info, String action, Exception e) {
             if (e != null) {
                 logSend("异常断开:" + e.getMessage());
             } else {
@@ -74,28 +74,25 @@ public class SimpleDemoActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onSocketConnectionFailed(Context context, ConnectionInfo info, String action, Exception e) {
+        public void onSocketConnectionFailed( ConnectionInfo info, String action, Exception e) {
             logSend("连接失败");
             mConnect.setText("Connect");
         }
 
         @Override
-        public void onSocketReadResponse(Context context, ConnectionInfo info, String action, OriginalData data) {
-            super.onSocketReadResponse(context, info, action, data);
+        public void onSocketReadResponse( ConnectionInfo info, String action, OriginalData data) {
             String str = new String(data.getBodyBytes(), Charset.forName("utf-8"));
             logRece(str);
         }
 
         @Override
-        public void onSocketWriteResponse(Context context, ConnectionInfo info, String action, ISendable data) {
-            super.onSocketWriteResponse(context, info, action, data);
+        public void onSocketWriteResponse( ConnectionInfo info, String action, ISendable data) {
             String str = new String(data.parse(), Charset.forName("utf-8"));
             logSend(str);
         }
 
         @Override
-        public void onPulseSend(Context context, ConnectionInfo info, IPulseSendable data) {
-            super.onPulseSend(context, info, data);
+        public void onPulseSend( ConnectionInfo info, IPulseSendable data) {
             String str = new String(data.parse(), Charset.forName("utf-8"));
             logSend(str);
         }

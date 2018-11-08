@@ -1,7 +1,7 @@
 package com.xuhao.didi.socket.client.sdk.client.connection;
 
 
-import com.xuhao.didi.libsocket.sdk.client.ConnectionInfo;
+import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
 
 /**
  * 不进行重新连接的重连管理器

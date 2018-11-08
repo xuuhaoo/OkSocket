@@ -1,11 +1,7 @@
 package com.xuhao.didi.socket.client.sdk;
 
 
-import com.apple.eawt.Application;
-import com.xuhao.didi.libsocket.impl.utils.ActivityStack;
-import com.xuhao.didi.core.utils.SLog;
-import com.xuhao.didi.libsocket.impl.client.EnvironmentalManager;
-import com.xuhao.didi.libsocket.impl.client.ManagerHolder;
+import com.xuhao.didi.socket.client.impl.client.ManagerHolder;
 import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
 import com.xuhao.didi.socket.client.sdk.client.OkSocketOptions;
 import com.xuhao.didi.socket.client.sdk.client.connection.IConnectionManager;
@@ -20,25 +16,7 @@ import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IServer
  */
 public class OkSocket {
 
-
-    private static boolean isInit = false;
-
     private static ManagerHolder holder = ManagerHolder.getInstance();
-
-    /**
-     * OkSocket框架初始化方法,使用open之前,务必调用该初始化方法,该方法尽可调用一次
-     *
-     * @param application Application上下文
-     */
-    public static void initialize(@NonNull Application application, boolean isDebug) {
-        assertIsNotInit();
-        isInit = true;
-        OkSocketOptions.setIsDebug(isDebug);
-        SLog.setIsDebug(isDebug);
-        ActivityStack.init(application, isDebug);
-        OkSocket.app = (Application) application.getApplicationContext();
-        EnvironmentalManager.getIns().init(holder);
-    }
 
     /**
      * 获得一个SocketServer服务器.
@@ -47,7 +25,6 @@ public class OkSocket {
      * @return
      */
     public static IRegister<IServerActionListener, IServerManager> server(int serverPort) {
-        assertIsInit();
         return (IRegister<IServerActionListener, IServerManager>) holder.getServer(serverPort);
     }
 
@@ -58,7 +35,6 @@ public class OkSocket {
      * @return 该参数的连接管理器 {@link IConnectionManager} 连接参数仅作为配置该通道的参配,不影响全局参配
      */
     public static IConnectionManager open(ConnectionInfo connectInfo) {
-        assertIsInit();
         return holder.getConnection(connectInfo);
     }
 
@@ -70,9 +46,8 @@ public class OkSocket {
      * @return 该参数的连接管理器 {@link IConnectionManager} 连接参数仅作为配置该通道的参配,不影响全局参配
      */
     public static IConnectionManager open(String ip, int port) {
-        assertIsInit();
         ConnectionInfo info = new ConnectionInfo(ip, port);
-        return holder.getConnection(info, app);
+        return holder.getConnection(info);
     }
 
     /**
@@ -85,8 +60,7 @@ public class OkSocket {
      * @deprecated
      */
     public static IConnectionManager open(ConnectionInfo connectInfo, OkSocketOptions okOptions) {
-        assertIsInit();
-        return holder.getConnection(connectInfo, app, okOptions);
+        return holder.getConnection(connectInfo, okOptions);
     }
 
     /**
@@ -100,48 +74,7 @@ public class OkSocket {
      * @deprecated
      */
     public static IConnectionManager open(String ip, int port, OkSocketOptions okOptions) {
-        assertIsInit();
         ConnectionInfo info = new ConnectionInfo(ip, port);
-        return holder.getConnection(info, app, okOptions);
+        return holder.getConnection(info, okOptions);
     }
-
-    /**
-     * 设置OkSocket后台存活时间,为了保证耗电量,保证后台断开连接
-     * 如果为-1,表示App至于后台时不进行连接断开操作.
-     *
-     * @param mills App至于后台后的存活的毫秒数.
-     *              取值范围: -1为永久存活,取值范围[1000,Long.MAX]
-     *              小于1000毫秒按照1000毫秒计算,具体最小值定义请见{@link EnvironmentalManager#DELAY_CONNECT_MILLS}
-     */
-    public static void setBackgroundSurvivalTime(long mills) {
-        assertIsInit();
-        EnvironmentalManager.getIns().setBackgroundLiveMills(mills);
-    }
-
-    /**
-     * 获取当前框架允许的后台存活时间
-     *
-     * @return 后台存活时间
-     */
-    public static long getBackgroundSurvivalTime() {
-        assertIsInit();
-        return EnvironmentalManager.getIns().getBackgroundLiveMills();
-    }
-
-    private static void assertIsNotInit() throws RuntimeException {
-        if (app != null || isInit) {
-            throw new RuntimeException("不能初始化多次");
-        }
-    }
-
-    private static void assertIsInit() throws RuntimeException {
-        if (app == null) {
-            throw new RuntimeException("上下文不能为空");
-        }
-        if (!isInit) {
-            throw new RuntimeException("Socket需要先初始化,请先先初始化");
-        }
-    }
-
-
 }
