@@ -9,6 +9,8 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -84,33 +86,38 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
         mServerManager = OkSocket.server(mPort).registerReceiver(new ServerActionAdapter() {
             @Override
             public void onServerListening(int serverPort) {
-                Log.i("ServerCallback", "onServerListening,serverPort:" + serverPort);
+                Log.i("ServerCallback", Thread.currentThread().getName() + " onServerListening,serverPort:" + serverPort);
                 flushServerText();
             }
 
             @Override
             public void onClientConnected(IClient client, int serverPort, IClientPool clientPool) {
-                Log.i("ServerCallback", "onClientConnected,serverPort:" + serverPort + "--ClientNums:" + clientPool.size() + "--ClientTag:" + client.getUniqueTag());
+                Log.i("ServerCallback", Thread.currentThread().getName() + " onClientConnected,serverPort:" + serverPort + "--ClientNums:" + clientPool.size() + "--ClientTag:" + client.getUniqueTag());
                 client.addIOCallback(DemoActivity.this);
             }
 
             @Override
             public void onClientDisconnected(IClient client, int serverPort, IClientPool clientPool) {
-                Log.i("ServerCallback", "onClientDisconnected,serverPort:" + serverPort + "--ClientNums:" + clientPool.size() + "--ClientTag:" + client.getUniqueTag());
+                Log.i("ServerCallback", Thread.currentThread().getName() + " onClientDisconnected,serverPort:" + serverPort + "--ClientNums:" + clientPool.size() + "--ClientTag:" + client.getUniqueTag());
                 client.removeIOCallback(DemoActivity.this);
             }
 
             @Override
             public void onServerWillBeShutdown(int serverPort, IServerShutdown shutdown, IClientPool clientPool, Throwable throwable) {
-                Log.i("ServerCallback", "onServerWillBeShutdown,serverPort:" + serverPort + "--ClientNums:" + clientPool
+                Log.i("ServerCallback", Thread.currentThread().getName() + " onServerWillBeShutdown,serverPort:" + serverPort + "--ClientNums:" + clientPool
                         .size());
                 shutdown.shutdown();
             }
 
             @Override
             public void onServerAlreadyShutdown(int serverPort) {
-                Log.i("ServerCallback", "onServerAlreadyShutdown,serverPort:" + serverPort);
-                mServerBtn.setText(mPort + "服务器启动");
+                Log.i("ServerCallback", Thread.currentThread().getName() + " onServerAlreadyShutdown,serverPort:" + serverPort);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mServerBtn.setText(mPort + "服务器启动");
+                    }
+                });
             }
         });
 
@@ -145,9 +152,19 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
 
     private void flushServerText() {
         if (mServerManager.isLive()) {
-            mServerBtn.setText(mPort + "服务器关闭");
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    mServerBtn.setText(mPort + "服务器关闭");
+                }
+            });
         } else {
-            mServerBtn.setText(mPort + "服务器启动");
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    mServerBtn.setText(mPort + "服务器启动");
+                }
+            });
         }
     }
 
@@ -160,14 +177,14 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
             int cmd = jsonObject.get("cmd").getAsInt();
             if (cmd == 54) {//登陆成功
                 String handshake = jsonObject.get("handshake").getAsString();
-                Log.i("onClientIOServer", "接收到:" + client.getHostIp() + " 握手信息:" + handshake);
+                Log.i("onClientIOServer", Thread.currentThread().getName() + " 接收到:" + client.getHostIp() + " 握手信息:" + handshake);
             } else if (cmd == 14) {//心跳
-                Log.i("onClientIOServer", "接收到:" + client.getHostIp() + " 收到心跳");
+                Log.i("onClientIOServer", Thread.currentThread().getName() + " 接收到:" + client.getHostIp() + " 收到心跳");
             } else {
-                Log.i("onClientIOServer", "接收到:" + client.getHostIp() + " " + str);
+                Log.i("onClientIOServer", Thread.currentThread().getName() + " 接收到:" + client.getHostIp() + " " + str);
             }
         } catch (Exception e) {
-            Log.i("onClientIOServer", "接收到:" + client.getHostIp() + " " + str);
+            Log.i("onClientIOServer", Thread.currentThread().getName() + " 接收到:" + client.getHostIp() + " " + str);
         }
         MsgDataBean msgDataBean = new MsgDataBean(str);
         clientPool.sendToAll(msgDataBean);
@@ -185,14 +202,14 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
             switch (cmd) {
                 case 54: {
                     String handshake = jsonObject.get("handshake").getAsString();
-                    Log.i("onClientIOServer", "发送给:" + client.getHostIp() + " 握手数据:" + handshake);
+                    Log.i("onClientIOServer", Thread.currentThread().getName() + " 发送给:" + client.getHostIp() + " 握手数据:" + handshake);
                     break;
                 }
                 default:
-                    Log.i("onClientIOServer", "发送给:" + client.getHostIp() + " " + str);
+                    Log.i("onClientIOServer", Thread.currentThread().getName() + " 发送给:" + client.getHostIp() + " " + str);
             }
         } catch (Exception e) {
-            Log.i("onClientIOServer", "发送给:" + client.getHostIp() + " " + str);
+            Log.i("onClientIOServer", Thread.currentThread().getName() + " 发送给:" + client.getHostIp() + " " + str);
         }
     }
 
