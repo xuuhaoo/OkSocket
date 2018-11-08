@@ -19,7 +19,7 @@ public class ClientReadThread extends AbsLoopThread {
     private IReader mReader;
 
     public ClientReadThread(IReader reader, IStateSender clientStateSender) {
-        super("client_read_thread");
+        super("server_client_read_thread");
         this.mClientStateSender = clientStateSender;
         this.mReader = reader;
     }

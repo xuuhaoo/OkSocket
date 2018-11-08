@@ -26,7 +26,7 @@ public class SimplexIOThread extends AbsLoopThread {
 
     public SimplexIOThread(IReader reader,
                            IWriter writer, IStateSender stateSender) {
-        super("simplex_io_thread");
+        super("client_simplex_io_thread");
         this.mStateSender = stateSender;
         this.mReader = reader;
         this.mWriter = writer;

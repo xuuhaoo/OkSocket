@@ -20,7 +20,7 @@ public class DuplexReadThread extends AbsLoopThread {
     private IReader mReader;
 
     public DuplexReadThread(IReader reader, IStateSender stateSender) {
-        super("duplex_read_thread");
+        super("client_duplex_read_thread");
         this.mStateSender = stateSender;
         this.mReader = reader;
     }

@@ -50,7 +50,7 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
     }
 
     /**
-     * 除了广播还支持回调
+     * 行为回调集合
      */
     private Vector<ISocketActionListener> mResponseHandlerSet = new Vector<>();
     /**
@@ -215,7 +215,7 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
      */
     private static class DispatchThread extends AbsLoopThread {
         public DispatchThread() {
-            super("dispatch_thread");
+            super("client_action_dispatch_thread");
         }
 
         @Override
@@ -240,7 +240,7 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
     }
 
     /**
-     * 行为Bean
+     * 行为封装
      */
     protected static class ActionBean {
         public ActionBean(String action, Serializable arg, ActionDispatcher dispatcher) {
@@ -254,6 +254,9 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
         ActionDispatcher mDispatcher;
     }
 
+    /**
+     * 行为分发抽象
+     */
     public static class ActionRunnable implements Runnable {
         private ActionDispatcher.ActionBean mActionBean;
 

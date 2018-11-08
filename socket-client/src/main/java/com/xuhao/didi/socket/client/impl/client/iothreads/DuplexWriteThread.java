@@ -20,7 +20,7 @@ public class DuplexWriteThread extends AbsLoopThread {
 
     public DuplexWriteThread(IWriter writer,
                              IStateSender stateSender) {
-        super("duplex_write_thread");
+        super("client_duplex_write_thread");
         this.mStateSender = stateSender;
         this.mWriter = writer;
     }

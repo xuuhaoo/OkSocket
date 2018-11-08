@@ -19,7 +19,7 @@ public class ClientWriteThread extends AbsLoopThread {
     private IWriter mWriter;
 
     public ClientWriteThread(IWriter writer, IStateSender clientStateSender) {
-        super("client_write_thread");
+        super("server_client_write_thread");
         this.mClientStateSender = clientStateSender;
         this.mWriter = writer;
     }

@@ -1,5 +1,7 @@
 package com.xuhao.didi.socket.server.impl.iocore;
 
+import com.xuhao.didi.core.iocore.ReaderImpl;
+import com.xuhao.didi.core.iocore.WriterImpl;
 import com.xuhao.didi.core.iocore.interfaces.IReader;
 import com.xuhao.didi.core.iocore.interfaces.ISendable;
 import com.xuhao.didi.core.iocore.interfaces.IStateSender;
@@ -44,12 +46,9 @@ public class ClientIOManager implements IIOManager<OkServerOptions> {
 
     private void initIO() {
         assertHeaderProtocolNotEmpty();
-        mReader = SPIUtils.load(IReader.class);
-        mWriter = SPIUtils.load(IWriter.class);
+        mReader = new ReaderImpl();
+        mWriter = new WriterImpl();
 
-        if (mReader == null || mWriter == null) {
-            throw new IllegalStateException("this library depends on <com.tonystark.android:socket:3.X>");
-        }
         setOkOptions(mOptions);
 
         mReader.initialize(mInputStream, mClientStateSender);
