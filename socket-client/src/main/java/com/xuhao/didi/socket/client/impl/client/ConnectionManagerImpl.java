@@ -14,6 +14,7 @@ import com.xuhao.didi.socket.client.sdk.client.connection.AbsReconnectionManager
 import com.xuhao.didi.socket.client.sdk.client.connection.IConnectionManager;
 import com.xuhao.didi.socket.common.interfaces.common_interfacies.IIOManager;
 import com.xuhao.didi.socket.common.interfaces.default_protocol.DefaultX509ProtocolTrustManager;
+import com.xuhao.didi.socket.common.interfaces.utils.TextUtils;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -161,7 +162,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         SSLSocketFactory factory = config.getCustomSSLFactory();
         if (factory == null) {
             String protocol = "SSL";
-            if (!isEmpty(config.getProtocol())) {
+            if (!TextUtils.isEmpty(config.getProtocol())) {
                 protocol = config.getProtocol();
             }
 
@@ -188,10 +189,6 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
                 return new Socket();
             }
         }
-    }
-
-    private boolean isEmpty(String str) {
-        return str == null || str.trim().length() == 0;
     }
 
     private class ConnectionThread extends Thread {

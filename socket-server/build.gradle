@@ -1,7 +1,9 @@
-apply from: '../lib_configuration.gradle'
+apply plugin: 'java-library'
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':common-interface')
-    compile 'com.android.support:support-annotations:26.1.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(path: ':socket-common-interface')
 }
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"

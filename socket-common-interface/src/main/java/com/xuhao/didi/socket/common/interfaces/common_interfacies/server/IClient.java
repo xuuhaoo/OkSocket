@@ -1,8 +1,8 @@
 package com.xuhao.didi.socket.common.interfaces.common_interfacies.server;
 
-import com.xuhao.didi.common.common_interfacies.client.IDisConnectable;
-import com.xuhao.didi.common.common_interfacies.client.ISender;
 import com.xuhao.didi.core.protocol.IReaderProtocol;
+import com.xuhao.didi.socket.common.interfaces.common_interfacies.client.IDisConnectable;
+import com.xuhao.didi.socket.common.interfaces.common_interfacies.client.ISender;
 
 import java.io.Serializable;
 
