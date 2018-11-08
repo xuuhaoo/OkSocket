@@ -65,7 +65,7 @@ public abstract class AbsLoopThread implements Runnable {
     }
 
     protected void beforeLoop() throws Exception {
-        //TODO need set process level in android sys
+
     }
 
     protected abstract void runInLoopThread() throws Exception;

@@ -1,6 +1,8 @@
 package com.xuhao.didi.common.common_interfacies;
 
-import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
+
+import com.xuhao.didi.core.iocore.interfaces.IIOCoreOptions;
+import com.xuhao.didi.core.iocore.interfaces.ISendable;
 
 /**
  * Created by xuhao on 2017/5/16.

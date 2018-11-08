@@ -1,7 +1,8 @@
-package com.xuhao.didi.common.protocol;
+package com.xuhao.didi.common.default_protocol;
 
 
-import com.xuhao.didi.common.common_interfacies.IReaderProtocol;
+
+import com.xuhao.didi.core.protocol.IReaderProtocol;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

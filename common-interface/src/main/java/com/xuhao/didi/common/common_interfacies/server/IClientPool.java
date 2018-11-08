@@ -1,6 +1,7 @@
 package com.xuhao.didi.common.common_interfacies.server;
 
-import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
+
+import com.xuhao.didi.core.iocore.interfaces.ISendable;
 
 public interface IClientPool<T, K> {
 

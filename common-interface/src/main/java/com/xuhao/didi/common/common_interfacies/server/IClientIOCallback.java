@@ -1,7 +1,8 @@
 package com.xuhao.didi.common.common_interfacies.server;
 
-import com.xuhao.didi.common.basic.bean.OriginalData;
-import com.xuhao.didi.common.common_interfacies.client.msg.ISendable;
+
+import com.xuhao.didi.core.iocore.interfaces.ISendable;
+import com.xuhao.didi.core.pojo.OriginalData;
 
 public interface IClientIOCallback {
 
