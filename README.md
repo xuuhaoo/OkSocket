@@ -10,7 +10,7 @@ Read this in other languages: [简体中文](https://github.com/xuuhaoo/OkSocket
 
 ### OkSocket Introduce
 <font size=2>
-Oksocket Library is socket client solution base on java blocking socket. You can use it to develop line chat  or data transmission etc.
+Oksocket Library is socket client solution base on java blocking socket. You can use it to develop line chat or data transmission etc.
 </font>
 
 
