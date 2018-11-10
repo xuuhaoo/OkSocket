@@ -11,10 +11,6 @@ An blocking socket client for Java application or Andorid.
 OkSocket is a Java library project designed to solve lightweight Socket communication, in order to enable developers to focus more on business logic, rather than TCP communication principles and some protocols. Make Socket communication more beautiful, suitable for large, medium and small Project, the rapid development of stable, maintainable, reliable Socket connection.
 </font>
 
-### Feature
-- [x] 
-- [ ]
-- [x]
 ### The instructions
 
 * Oksocket instruction manual [WIKI](https://github.com/xuuhaoo/OkSocket/wiki)
