@@ -11,14 +11,46 @@ An blocking socket client for Java application or Andorid.
 OkSocket is a Java library project designed to solve lightweight Socket communication, in order to enable developers to focus more on business logic, rather than TCP communication principles and some protocols. Make Socket communication more beautiful, suitable for large, medium and small Project, the rapid development of stable, maintainable, reliable Socket connection.
 </font>
 
-### The instructions
+### Feature
+- SocketClient Tcp IPV4 Connect
+- Socket Standard Protocol 
+- SocketClient Reconnect
+- SocketClient Heartbeat 
+- Socket Sticky Unpacking
+- Socket SSL Socket Support
+- Client Callback In Thread / Main Thread
+- Socket Client Redirect
+- SocketServer Support
 
-* Oksocket instruction manual [WIKI](https://github.com/xuuhaoo/OkSocket/wiki)
+
+### Instructions
+
+* OkSocket instruction manual [WIKI](https://github.com/xuuhaoo/OkSocket/wiki/What-Is-OkSocket-Is)
+
+* <font size=2>Add the following configuration to the build.gradle file under the project project.</font>
+    
+```groovy
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+```
+* <font size=2>Make sure you have already done with put JCenter into repositories blocking in project Gradle files than you need add the following configuration to the module's build.gradle file.</font>
+
+```groovy
+dependencies {
+	//Basic Socket client functionality
+	compile 'com.tonystark.android:socket:4.0.1'
+	//If you want to use server functionality, you need to compile the following libraries
+	compile 'com.tonystark.android:socket-server:4.0.1'
+}
+```
 
 ### Policy
 
 ```
-   Copyright [2017] [徐昊]
+   Copyright [2018] [徐昊]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
