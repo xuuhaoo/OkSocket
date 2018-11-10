@@ -3,10 +3,14 @@ apply plugin: 'com.jfrog.bintray'
 
 //./gradlew clean ./gradlew build ./gradlew bintrayUpload
 
+
+group = project.GROUP_ID
+version = project.VERSION
+
 publishing {
     publications {
         Production(MavenPublication) {
-            artifact("$buildDir/outputs/aar/$project.name-release.aar")
+            artifact("$buildDir/libs/$project.name-${version}.jar")
             groupId project.GROUP_ID
             artifactId project.ARTIFACT_ID
             version project.VERSION
@@ -31,33 +35,12 @@ publishing {
 
 
 task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
-}
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
+    from sourceSets.main.allJava
 }
 
-tasks.withType(Javadoc) {
-    options{
-        encoding "UTF-8"
-        charSet 'UTF-8'
-        links "http://docs.oracle.com/javase/7/docs/api"
-    }
-    options.addStringOption('Xdoclint:none', '-quiet')
-
-}
-
-group = project.GROUP_ID
-version = project.VERSION
 
 artifacts {
-    archives javadocJar
     archives sourcesJar
 }
 
@@ -77,13 +60,13 @@ bintray {
         name = project.NAME
         licenses = ["Apache-2.0"]
         publish = true
-        description = "Android socket library"
+        description = "Java socket library"
         publicDownloadNumbers = true
         vcsUrl = 'https://github.com/xuuhaoo/OkSocket.git'
         dryRun = false
         version {
             name = project.VERSION
-            desc = "Android socket library"
+            desc = "Java socket library"
             released = new Date()
             vcsTag = project.VERSION
         }

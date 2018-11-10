@@ -5,5 +5,7 @@ dependencies {
     compile project(path: ':socket-core')
 }
 
+apply from: '../publish.gradle'
+
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
