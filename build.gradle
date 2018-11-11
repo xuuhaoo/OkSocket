@@ -2,9 +2,9 @@
 
 buildscript {
     repositories {
-        maven {
-            url 'https://dl.bintray.com/xuuhaoo/maven'
-        }
+//        maven {
+//            url 'https://dl.bintray.com/xuuhaoo/maven'
+//        }
         jcenter()
         google()
 
@@ -21,9 +21,9 @@ buildscript {
 
 allprojects {
     repositories {
-        maven {
-            url 'https://dl.bintray.com/xuuhaoo/maven'
-        }
+//        maven {
+//            url 'https://dl.bintray.com/xuuhaoo/maven'
+//        }
         jcenter()
         google()
     }
