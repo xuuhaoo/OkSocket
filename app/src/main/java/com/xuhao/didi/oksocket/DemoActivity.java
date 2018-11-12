@@ -172,6 +172,7 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
     public void onClientRead(OriginalData originalData, IClient client, IClientPool<IClient, String> clientPool) {
         String str = new String(originalData.getBodyBytes(), Charset.forName("utf-8"));
         JsonObject jsonObject = null;
+        client.disconnect(new IllegalStateException("exception msg"));
         try {
             jsonObject = new JsonParser().parse(str).getAsJsonObject();
             int cmd = jsonObject.get("cmd").getAsInt();

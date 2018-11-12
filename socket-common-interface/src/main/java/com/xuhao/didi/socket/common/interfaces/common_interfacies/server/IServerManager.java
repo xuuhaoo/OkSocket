@@ -10,4 +10,5 @@ public interface IServerManager<E extends IIOCoreOptions> extends IServerShutdow
 
     boolean isLive();
 
+    IClientPool<String, IClient> getClientPool();
 }

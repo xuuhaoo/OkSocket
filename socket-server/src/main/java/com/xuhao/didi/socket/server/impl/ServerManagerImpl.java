@@ -2,6 +2,8 @@ package com.xuhao.didi.socket.server.impl;
 
 import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.socket.common.interfaces.basic.AbsLoopThread;
+import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IClient;
+import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IClientPool;
 import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IServerManagerPrivate;
 import com.xuhao.didi.socket.server.action.IAction;
 import com.xuhao.didi.socket.server.exceptions.IllegalAccessException;
@@ -88,6 +90,11 @@ public class ServerManagerImpl extends AbsServerRegisterProxy implements IServer
                 && !mServerSocket.isClosed()
                 && mAcceptThread != null
                 && !mAcceptThread.isShutdown();
+    }
+
+    @Override
+    public IClientPool<String, IClient> getClientPool() {
+        return (IClientPool)mClientPoolImpl;
     }
 
     private class AcceptThread extends AbsLoopThread {
