@@ -25,12 +25,14 @@ import com.xuhao.didi.core.iocore.interfaces.ISendable;
 import com.xuhao.didi.core.pojo.OriginalData;
 import com.xuhao.didi.oksocket.data.MsgDataBean;
 import com.xuhao.didi.socket.client.sdk.OkSocket;
+import com.xuhao.didi.socket.client.sdk.client.OkSocketOptions;
 import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IClient;
 import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IClientIOCallback;
 import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IClientPool;
 import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IServerManager;
 import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IServerShutdown;
 import com.xuhao.didi.socket.server.action.ServerActionAdapter;
+import com.xuhao.didi.socket.server.impl.OkServerOptions;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -66,6 +68,9 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
         mComplexBtn = findViewById(R.id.btn2);
         mServerBtn = findViewById(R.id.btn3);
         mIPTv = findViewById(R.id.ip);
+
+        OkServerOptions.setIsDebug(true);
+        OkSocketOptions.setIsDebug(true);
 
         mIPTv.setText("当前IP:" + getIPAddress());
         mSimpleBtn.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +177,6 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
     public void onClientRead(OriginalData originalData, IClient client, IClientPool<IClient, String> clientPool) {
         String str = new String(originalData.getBodyBytes(), Charset.forName("utf-8"));
         JsonObject jsonObject = null;
-        client.disconnect(new IllegalStateException("exception msg"));
         try {
             jsonObject = new JsonParser().parse(str).getAsJsonObject();
             int cmd = jsonObject.get("cmd").getAsInt();
