@@ -32,6 +32,9 @@ OkSocket is a Java library project designed to solve lightweight Socket communic
 ```groovy
 allprojects {
     repositories {
+        maven {
+            url 'https://dl.bintray.com/xuuhaoo/maven'
+        }
         jcenter()
     }
 }
