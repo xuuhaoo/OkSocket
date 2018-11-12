@@ -42,7 +42,9 @@ public abstract class AbsReconnectionManager implements ISocketActionListener {
      * @param manager 当前连接管理器
      */
     public synchronized void attach(IConnectionManager manager) {
-        detach();
+        if (mDetach) {
+            detach();
+        }
         mDetach = false;
         mConnectionManager = manager;
         mPulseManager = manager.getPulseManager();

@@ -2,7 +2,7 @@ package com.xuhao.didi.socket.client.sdk.client.connection;
 
 
 import com.xuhao.didi.core.utils.SLog;
-import com.xuhao.didi.socket.client.impl.exceptions.PurifyException;
+import com.xuhao.didi.socket.client.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
 import com.xuhao.didi.socket.common.interfaces.basic.AbsLoopThread;
 
@@ -22,10 +22,6 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
      */
     private static final int MAX_CONNECTION_FAILED_TIMES = 12;
     /**
-     * 延时连接时间
-     */
-    private volatile long mReconnectTimeDelay = DEFAULT;
-    /**
      * 连接失败次数,不包括断开异常
      */
     private int mConnectionFailedTimes = 0;
@@ -38,14 +34,12 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
             reconnectDelay();
         } else {
             resetThread();
-            resetTimes();
         }
     }
 
     @Override
     public void onSocketConnectionSuccess(ConnectionInfo info, String action) {
         resetThread();
-        resetTimes();
     }
 
     @Override
@@ -54,7 +48,6 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
             mConnectionFailedTimes++;
             if (mConnectionFailedTimes > MAX_CONNECTION_FAILED_TIMES) {
                 resetThread();
-                resetTimes();
                 //连接失败达到阈值,需要切换备用线路.
                 ConnectionInfo originInfo = mConnectionManager.getConnectionInfo();
                 ConnectionInfo backupInfo = originInfo.getBackupInfo();
@@ -85,7 +78,7 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
      */
     private boolean isNeedReconnect(Exception e) {
         synchronized (mIgnoreDisconnectExceptionList) {
-            if (e != null && !(e instanceof PurifyException)) {//break with exception
+            if (e != null && !(e instanceof ManuallyDisconnectException)) {//break with exception
                 Iterator<Class<? extends Exception>> it = mIgnoreDisconnectExceptionList.iterator();
                 while (it.hasNext()) {
                     Class<? extends Exception> classException = it.next();
@@ -99,13 +92,6 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
         }
     }
 
-    /**
-     * 重置重连次数和延迟时间
-     */
-    private synchronized void resetTimes() {
-        mReconnectTimeDelay = DEFAULT;
-        mConnectionFailedTimes = 0;
-    }
 
     /**
      * 重置重连线程,关闭线程
@@ -123,27 +109,46 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
     private synchronized void reconnectDelay() {
         if (mReconnectTestingThread == null) {
             mReconnectTestingThread = new ReconnectTestingThread();
-        }
-        SLog.i("Reconnect after " + mReconnectTimeDelay + " mills ...");
-        mReconnectTimeDelay = mReconnectTimeDelay * 2;//5+10+20+40 = 75 4次
-        if (mReconnectTimeDelay >= DEFAULT * 10) {//DEFAULT * 10 = 50
-            mReconnectTimeDelay = DEFAULT;
+            mReconnectTestingThread.start();
+        } else if (mReconnectTestingThread.isShutdown()) {
+            mReconnectTestingThread.start();
         }
     }
 
     @Override
     public void detach() {
-        resetThread();
-        resetTimes();
         super.detach();
     }
 
     private class ReconnectTestingThread extends AbsLoopThread {
+        /**
+         * 延时连接时间
+         */
+        private volatile long mReconnectTimeDelay = DEFAULT;
 
         @Override
         protected void runInLoopThread() throws Exception {
             if (mDetach) {
                 SLog.i("ReconnectionManager already detached by framework.We decide gave up this reconnection mission!");
+                shutdown();
+                return;
+            }
+
+            //延迟执行
+            SLog.i("Reconnect after " + mReconnectTimeDelay + " mills ...");
+            sleep(mReconnectTimeDelay);
+            mReconnectTimeDelay = mReconnectTimeDelay * 2;//5+10+20+40 = 75 4次
+            if (mReconnectTimeDelay >= DEFAULT * 10) {//DEFAULT * 10 = 50
+                mReconnectTimeDelay = DEFAULT;
+            }
+
+            if (mDetach) {
+                SLog.i("ReconnectionManager already detached by framework.We decide gave up this reconnection mission!");
+                shutdown();
+                return;
+            }
+
+            if (mConnectionManager.isConnect()) {
                 shutdown();
                 return;
             }
@@ -154,19 +159,18 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
                 shutdown();
                 return;
             }
-            synchronized (mConnectionManager) {
-                ConnectionInfo info = mConnectionManager.getConnectionInfo();
-                SLog.i("Reconnect the server " + info.getIp() + ":" + info.getPort() + " ...");
-                if (!mConnectionManager.isConnect()) {
-                    mConnectionManager.connect();
-                } else {
-                    shutdown();
-                }
+            ConnectionInfo info = mConnectionManager.getConnectionInfo();
+            SLog.i("Reconnect the server " + info.getIp() + ":" + info.getPort() + " ...");
+            if (!mConnectionManager.isConnect()) {
+                mConnectionManager.connect();
+            } else {
+                shutdown();
             }
+        }
 
-            //延迟执行
+        private void sleep(long time) {
             try {
-                Thread.sleep(mReconnectTimeDelay);
+                Thread.sleep(time);
             } catch (InterruptedException e) {
             }
         }

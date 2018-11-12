@@ -5,7 +5,7 @@ import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.socket.client.impl.client.action.SocketActionHandler;
 import com.xuhao.didi.socket.client.impl.client.iothreads.IOThreadManager;
 import com.xuhao.didi.socket.client.impl.exceptions.ManuallyDisconnectException;
-import com.xuhao.didi.socket.client.impl.exceptions.UnconnectException;
+import com.xuhao.didi.socket.client.impl.exceptions.UnConnectException;
 import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
 import com.xuhao.didi.socket.client.sdk.client.OkSocketOptions;
 import com.xuhao.didi.socket.client.sdk.client.OkSocketSSLConfig;
@@ -70,34 +70,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
      */
     private volatile boolean isConnectTimeout = false;
 
-    /**
-     * 连接超时处理Task
-     */
-//    private Handler mConnectionTimeout = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            if (msg.what == 0) {
-//                isConnectTimeout = true;
-//                removeCallbacksAndMessages(null);
-//                if (mSocket != null && mSocket.isConnected()) {
-//                    isConnectTimeout = false;
-//                    return;
-//                }
-//                try {
-//                    if (mSocket != null) {
-//                        mSocket.close();
-//                    }
-//                } catch (IOException e) {
-//                    //ignore
-//                }
-//
-//                SLog.e(mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + "连接超时,终止连接");
-//                Exception exception = new UnconnectException(mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort
-//                        () + "连接超时,终止连接");
-//                sendBroadcast(IAction.ACTION_CONNECTION_FAILED, exception);
-//            }
-//        }
-//    };
+
     protected ConnectionManagerImpl(ConnectionInfo info) {
         super(info);
         String ip = "";
@@ -119,7 +92,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         }
         isDisconnecting = false;
         if (mConnectionInfo == null) {
-            throw new UnconnectException("连接参数为空,检查连接参数");
+            throw new UnConnectException("连接参数为空,检查连接参数");
         }
         if (mActionHandler != null) {
             mActionHandler.detach(this);
@@ -138,7 +111,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         try {
             mSocket = getSocketByConfig();
         } catch (Exception e) {
-            throw new UnconnectException("创建Socket失败.", e);
+            throw new UnConnectException("创建Socket失败.", e);
         }
 
         String info = mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort();
@@ -219,7 +192,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
                     return;
                 }
                 SLog.e("Socket server " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " connect failed! error msg:" + e.getMessage());
-                sendBroadcast(IAction.ACTION_CONNECTION_FAILED, new UnconnectException(e));
+                sendBroadcast(IAction.ACTION_CONNECTION_FAILED, new UnConnectException(e));
                 canConnect = true;
             }
         }
@@ -292,7 +265,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
 
             isDisconnecting = false;
             canConnect = true;
-            if (!(mException instanceof UnconnectException) && mSocket != null) {
+            if (!(mException instanceof UnConnectException) && mSocket != null) {
                 mException = mException instanceof ManuallyDisconnectException ? null : mException;
                 sendBroadcast(IAction.ACTION_DISCONNECTION, mException);
             }
@@ -327,8 +300,17 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         if (mManager != null) {
             mManager.setOkOptions(mOptions);
         }
+
         if (mPulseManager != null) {
             mPulseManager.setOkOptions(mOptions);
+        }
+        if (mReconnectionManager != mOptions.getReconnectionManager()) {
+            if (mReconnectionManager != null) {
+                mReconnectionManager.detach();
+            }
+            SLog.i("reconnection manager is replaced");
+            mReconnectionManager = mOptions.getReconnectionManager();
+            mReconnectionManager.attach(this);
         }
         return this;
     }

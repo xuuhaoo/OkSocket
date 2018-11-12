@@ -2,6 +2,7 @@ package com.xuhao.didi.socket.client.sdk.client;
 
 import com.xuhao.didi.core.iocore.interfaces.IIOCoreOptions;
 import com.xuhao.didi.core.protocol.IReaderProtocol;
+import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.socket.client.impl.client.action.ActionDispatcher;
 import com.xuhao.didi.socket.client.sdk.client.connection.AbsReconnectionManager;
 import com.xuhao.didi.socket.client.sdk.client.connection.DefaultReconnectManager;
@@ -101,6 +102,7 @@ public class OkSocketOptions implements IIOCoreOptions {
 
     public static void setIsDebug(boolean isDebug) {
         OkSocketOptions.isDebug = isDebug;
+        SLog.setIsDebug(isDebug);
     }
 
     public static abstract class ThreadModeToken {
@@ -119,23 +121,7 @@ public class OkSocketOptions implements IIOCoreOptions {
         }
 
         public Builder(OkSocketOptions okOptions) {
-            mOptions = new OkSocketOptions();
-            mOptions.mIOThreadMode = okOptions.mIOThreadMode;
-            mOptions.mPulseFrequency = okOptions.mPulseFrequency;
-            mOptions.mMaxReadDataMB = okOptions.mMaxReadDataMB;
-            mOptions.mReaderProtocol = okOptions.mReaderProtocol;
-            mOptions.mConnectTimeoutSecond = okOptions.mConnectTimeoutSecond;
-            mOptions.mWritePackageBytes = okOptions.mWritePackageBytes;
-            mOptions.mReadPackageBytes = okOptions.mReadPackageBytes;
-            mOptions.mWriteOrder = okOptions.mWriteOrder;
-            mOptions.mReadByteOrder = okOptions.mReadByteOrder;
-            mOptions.isConnectionHolden = okOptions.isConnectionHolden;
-            mOptions.mPulseFeedLoseTimes = okOptions.mPulseFeedLoseTimes;
-            mOptions.mReconnectionManager = okOptions.mReconnectionManager;
-            mOptions.mSSLConfig = okOptions.mSSLConfig;
-            mOptions.mOkSocketFactory = okOptions.mOkSocketFactory;
-            mOptions.isCallbackInIndependentThread = okOptions.isCallbackInIndependentThread;
-            mOptions.mCallbackThreadModeToken = okOptions.mCallbackThreadModeToken;
+            mOptions = okOptions;
         }
 
         /**
