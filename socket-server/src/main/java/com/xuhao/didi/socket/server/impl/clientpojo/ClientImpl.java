@@ -31,6 +31,8 @@ public class ClientImpl extends AbsClient {
 
     private IStateSender mServerStateSender;
 
+    private volatile boolean isReadThreadStarted;
+
     private List<IClientIOCallback> mCallbackList = new ArrayList<>();
 
     public ClientImpl(Socket socket,
@@ -61,7 +63,9 @@ public class ClientImpl extends AbsClient {
 
     public void startIOEngine() {
         if (mIOManager != null) {
-            mIOManager.startEngine();
+            synchronized (mIOManager) {
+                mIOManager.startWriteEngine();
+            }
         }
     }
 
@@ -81,6 +85,7 @@ public class ClientImpl extends AbsClient {
         } catch (IOException e1) {
         }
         removeAllIOCallback();
+        isReadThreadStarted = false;
     }
 
     @Override
@@ -99,6 +104,7 @@ public class ClientImpl extends AbsClient {
         } catch (IOException e1) {
         }
         removeAllIOCallback();
+        isReadThreadStarted = false;
     }
 
     @Override
@@ -127,7 +133,7 @@ public class ClientImpl extends AbsClient {
             mClientPool.unCache(this);
         }
         if (e != null) {
-            if(mOkServerOptions.isDebug()){
+            if (mOkServerOptions.isDebug()) {
                 e.printStackTrace();
             }
         }
@@ -154,6 +160,12 @@ public class ClientImpl extends AbsClient {
     public void addIOCallback(IClientIOCallback clientIOCallback) {
         synchronized (mCallbackList) {
             mCallbackList.add(clientIOCallback);
+            synchronized (mIOManager) {
+                if (!isReadThreadStarted) {
+                    isReadThreadStarted = true;
+                    mIOManager.startReadEngine();
+                }
+            }
         }
     }
 

@@ -56,13 +56,10 @@ public class ClientIOManager implements IIOManager<OkServerOptions> {
 
     @Override
     public void startEngine() {
-        shutdownAllThread(null);
-
-        startReadEngine();
-        startWriteEngine();
+        // do nothing
     }
 
-    protected void startReadEngine() {
+    public void startReadEngine() {
         if (mClientReadThread != null) {
             mClientReadThread.shutdown();
             mClientReadThread = null;
@@ -71,7 +68,7 @@ public class ClientIOManager implements IIOManager<OkServerOptions> {
         mClientReadThread.start();
     }
 
-    protected void startWriteEngine() {
+    public void startWriteEngine() {
         if (mClientWriteThread != null) {
             mClientWriteThread.shutdown();
             mClientWriteThread = null;

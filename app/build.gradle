@@ -34,8 +34,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:design:26.1.0'
     compile 'com.google.code.gson:gson:2.8.0'
-//    api 'com.tonystark.android:socket:4.0.2'
-//    api 'com.tonystark.android:socket-server:4.0.2'
+//    api 'com.tonystark.android:socket:+'
+//    api 'com.tonystark.android:socket-server:+'
     api project(path: ':socket-client')
     api project(path: ':socket-server')
 }
