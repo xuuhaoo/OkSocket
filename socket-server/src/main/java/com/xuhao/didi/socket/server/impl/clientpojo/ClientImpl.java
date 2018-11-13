@@ -27,7 +27,7 @@ public class ClientImpl extends AbsClient {
 
     private IStateSender mActionDispatcher;
 
-    private ClientPoolImpl mClientPool;
+    private volatile ClientPoolImpl mClientPool;
 
     private IStateSender mServerStateSender;
 
@@ -127,7 +127,9 @@ public class ClientImpl extends AbsClient {
             mClientPool.unCache(this);
         }
         if (e != null) {
-            e.printStackTrace();
+            if(mOkServerOptions.isDebug()){
+                e.printStackTrace();
+            }
         }
         disconnect(e);
         mServerStateSender.sendBroadcast(IAction.Server.ACTION_CLIENT_DISCONNECTED, this);

@@ -18,7 +18,7 @@ public abstract class AbsReconnectionManager implements ISocketActionListener {
     /**
      * 连接管理器
      */
-    protected IConnectionManager mConnectionManager;
+    protected volatile IConnectionManager mConnectionManager;
     /**
      * 心跳管理器
      */

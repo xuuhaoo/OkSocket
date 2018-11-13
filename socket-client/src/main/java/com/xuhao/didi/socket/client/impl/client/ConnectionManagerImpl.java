@@ -2,7 +2,7 @@ package com.xuhao.didi.socket.client.impl.client;
 
 import com.xuhao.didi.core.iocore.interfaces.ISendable;
 import com.xuhao.didi.core.utils.SLog;
-import com.xuhao.didi.socket.client.impl.client.action.SocketActionHandler;
+import com.xuhao.didi.socket.client.impl.client.action.ActionHandler;
 import com.xuhao.didi.socket.client.impl.client.iothreads.IOThreadManager;
 import com.xuhao.didi.socket.client.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.didi.socket.client.impl.exceptions.UnConnectException;
@@ -32,11 +32,11 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
     /**
      * 套接字
      */
-    private Socket mSocket;
+    private volatile Socket mSocket;
     /**
      * socket参配项
      */
-    private OkSocketOptions mOptions;
+    private volatile OkSocketOptions mOptions;
     /**
      * IO通讯管理器
      */
@@ -48,15 +48,15 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
     /**
      * Socket行为监听器
      */
-    private SocketActionHandler mActionHandler;
+    private ActionHandler mActionHandler;
     /**
      * 脉搏管理器
      */
-    private PulseManager mPulseManager;
+    private volatile PulseManager mPulseManager;
     /**
      * 重新连接管理器
      */
-    private AbsReconnectionManager mReconnectionManager;
+    private volatile AbsReconnectionManager mReconnectionManager;
     /**
      * 能否连接
      */
@@ -97,7 +97,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         if (mActionHandler != null) {
             mActionHandler.detach(this);
         }
-        mActionHandler = new SocketActionHandler();
+        mActionHandler = new ActionHandler();
         mActionHandler.attach(this, this);
 
         if (mReconnectionManager != null) {
@@ -111,6 +111,9 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         try {
             mSocket = getSocketByConfig();
         } catch (Exception e) {
+            if(mOptions.isDebug()){
+                e.printStackTrace();
+            }
             throw new UnConnectException("创建Socket失败.", e);
         }
 
@@ -150,6 +153,9 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
                 sslContext.init(config.getKeyManagers(), trustManagers, new SecureRandom());
                 return sslContext.getSocketFactory().createSocket();
             } catch (Exception e) {
+                if(mOptions.isDebug()){
+                    e.printStackTrace();
+                }
                 SLog.e(e.getMessage());
                 return new Socket();
             }
@@ -158,6 +164,9 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
             try {
                 return factory.createSocket();
             } catch (IOException e) {
+                if(mOptions.isDebug()){
+                    e.printStackTrace();
+                }
                 SLog.e(e.getMessage());
                 return new Socket();
             }
@@ -190,6 +199,9 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
             } catch (Exception e) {
                 if (isConnectTimeout) {//超时后不处理Socket异常
                     return;
+                }
+                if(mOptions.isDebug()){
+                    e.printStackTrace();
                 }
                 SLog.e("Socket server " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " connect failed! error msg:" + e.getMessage());
                 sendBroadcast(IAction.ACTION_CONNECTION_FAILED, new UnConnectException(e));
@@ -273,6 +285,9 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
 
             if (mException != null) {
                 SLog.e("socket is disconnecting because: " + mException.getMessage());
+                if(mOptions.isDebug()){
+                    mException.printStackTrace();
+                }
             }
         }
     }

@@ -36,6 +36,7 @@ public abstract class AbsClient implements IClient, ClientActionDispatcher.Clien
         this.mSocket = socket;
         this.mInetAddress = mSocket.getInetAddress();
         this.mReaderProtocol = mOkServerOptions.getReaderProtocol();
+        mUniqueTag = getHostIp() + "-" + System.currentTimeMillis() + "-" + System.nanoTime() +"-" + mSocket.getPort();
     }
 
     @Override
@@ -46,13 +47,6 @@ public abstract class AbsClient implements IClient, ClientActionDispatcher.Clien
     @Override
     public String getHostName() {
         return mInetAddress.getCanonicalHostName();
-    }
-
-    @Override
-    public void setUniqueTag(String uniqueTag) {
-        synchronized (this) {
-            mUniqueTag = uniqueTag;
-        }
     }
 
     @Override

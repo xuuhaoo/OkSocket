@@ -34,7 +34,7 @@ public abstract class AbsClientPool<K, V> {
         mHashMap.put(key, value);
     }
 
-    synchronized V get(K key) {
+     V get(K key) {
         return mHashMap.get(key);
     }
 
@@ -53,7 +53,7 @@ public abstract class AbsClientPool<K, V> {
         return mHashMap.size();
     }
 
-    void echoRun(Echo echo) {
+    synchronized void echoRun(Echo echo) {
         if (echo == null) {
             return;
         }

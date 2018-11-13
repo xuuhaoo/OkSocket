@@ -22,7 +22,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class WriterImpl implements IWriter<IIOCoreOptions> {
 
-    private IIOCoreOptions mOkOptions;
+    private volatile IIOCoreOptions mOkOptions;
 
     private IStateSender mStateSender;
 
@@ -64,7 +64,7 @@ public class WriterImpl implements IWriter<IIOCoreOptions> {
                     mOutputStream.write(writeArr);
                     mOutputStream.flush();
 
-                    if (mOkOptions.isDebug()) {
+                    if (SLog.isDebug()) {
                         byte[] forLogBytes = Arrays.copyOfRange(sendBytes, index, index + realWriteLength);
                         SLog.i("write bytes: " + BytesUtils.toHexStringForLog(forLogBytes));
                         SLog.i("bytes write length:" + realWriteLength);

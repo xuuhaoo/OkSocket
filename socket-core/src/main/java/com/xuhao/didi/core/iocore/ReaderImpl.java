@@ -40,11 +40,11 @@ public class ReaderImpl extends AbsReader {
                 readHeaderFromChannel(headBuf, headBuf.capacity());
             }
             originalData.setHeadBytes(headBuf.array());
-            if (mOkOptions.isDebug()) {
-                System.out.println("read head: " + BytesUtils.toHexStringForLog(headBuf.array()));
+            if (SLog.isDebug()) {
+                SLog.i("read head: " + BytesUtils.toHexStringForLog(headBuf.array()));
             }
             int bodyLength = headerProtocol.getBodyLength(originalData.getHeadBytes(), mOkOptions.getReadByteOrder());
-            if (mOkOptions.isDebug()) {
+            if (SLog.isDebug()) {
                 SLog.i("need read body length: " + bodyLength);
             }
             if (bodyLength > 0) {
@@ -137,7 +137,7 @@ public class ReaderImpl extends AbsReader {
                 throw e;
             }
         }
-        if (mOkOptions.isDebug()) {
+        if (SLog.isDebug()) {
             SLog.i("read total bytes: " + BytesUtils.toHexStringForLog(byteBuffer.array()));
             SLog.i("read total length:" + (byteBuffer.capacity() - byteBuffer.remaining()));
         }

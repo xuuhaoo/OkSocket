@@ -12,8 +12,6 @@ public interface IClient extends IDisConnectable, ISender<IClient>, Serializable
 
     String getHostName();
 
-    void setUniqueTag(String uniqueTag);
-
     String getUniqueTag();
 
     void setReaderProtocol(IReaderProtocol protocol);

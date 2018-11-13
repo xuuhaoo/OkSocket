@@ -27,7 +27,7 @@ public class IOThreadManager implements IIOManager<OkSocketOptions> {
 
     private OutputStream mOutputStream;
 
-    private OkSocketOptions mOkOptions;
+    private volatile OkSocketOptions mOkOptions;
 
     private IStateSender mSender;
 

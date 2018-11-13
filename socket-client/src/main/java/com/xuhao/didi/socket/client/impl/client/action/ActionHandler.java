@@ -13,14 +13,14 @@ import com.xuhao.didi.socket.common.interfaces.common_interfacies.dispatcher.IRe
  * Created by xuhao on 2017/5/18.
  */
 
-public class SocketActionHandler extends SocketActionAdapter {
+public class ActionHandler extends SocketActionAdapter {
     private IConnectionManager mManager;
 
     private OkSocketOptions.IOThreadMode mCurrentThreadMode;
 
     private boolean iOThreadIsCalledDisconnect = false;
 
-    public SocketActionHandler() {
+    public ActionHandler() {
 
     }
 

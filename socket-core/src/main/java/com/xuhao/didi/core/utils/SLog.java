@@ -12,6 +12,10 @@ public class SLog {
         SLog.isDebug = isDebug;
     }
 
+    public static boolean isDebug() {
+        return isDebug;
+    }
+
     public static void e(String msg) {
         if (isDebug) {
             System.err.println("OkSocket, " + msg);

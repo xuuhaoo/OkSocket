@@ -23,7 +23,7 @@ public class PulseManager implements IPulse {
     /**
      * 连接参数
      */
-    private OkSocketOptions mOkOptions;
+    private volatile OkSocketOptions mOkOptions;
     /**
      * 当前频率
      */

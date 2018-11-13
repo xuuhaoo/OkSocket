@@ -14,7 +14,7 @@ import java.io.InputStream;
 
 public abstract class AbsReader implements IReader<IIOCoreOptions> {
 
-    protected IIOCoreOptions mOkOptions;
+    protected volatile IIOCoreOptions mOkOptions;
 
     protected IStateSender mStateSender;
 

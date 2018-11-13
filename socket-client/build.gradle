@@ -6,7 +6,7 @@ dependencies {
 
 }
 
-apply from: '../publish.gradle'
+//apply from: '../publish.gradle'
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"

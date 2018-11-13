@@ -46,7 +46,6 @@ public abstract class AbsLoopThread implements Runnable {
             }
         } catch (Exception e) {
             if (ioException == null) {
-                e.printStackTrace();
                 ioException = e;
             }
         } finally {
