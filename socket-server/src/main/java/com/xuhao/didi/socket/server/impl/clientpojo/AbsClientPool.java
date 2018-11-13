@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 public abstract class AbsClientPool<K, V> {
-    private ConcurrentSkipListMap<K, V> mHashMap = new ConcurrentSkipListMap<>();
+    private volatile ConcurrentSkipListMap<K, V> mHashMap = new ConcurrentSkipListMap<>();
 
     private int mCapacity;
 
@@ -14,7 +14,7 @@ public abstract class AbsClientPool<K, V> {
         mCapacity = capacity;
     }
 
-    void set(K key, V value) {
+    synchronized void set(K key, V value) {
         V old = mHashMap.get(key);
         if (old != null) {
             onCacheDuplicate(key, old);
@@ -34,18 +34,18 @@ public abstract class AbsClientPool<K, V> {
         mHashMap.put(key, value);
     }
 
-    V get(K key) {
+    synchronized V get(K key) {
         return mHashMap.get(key);
     }
 
-    void remove(K key) {
+    synchronized void remove(K key) {
         mHashMap.remove(key);
         if (mHashMap.isEmpty()) {
             onCacheEmpty();
         }
     }
 
-    void removeAll() {
+    synchronized void removeAll() {
         mHashMap.clear();
     }
 
