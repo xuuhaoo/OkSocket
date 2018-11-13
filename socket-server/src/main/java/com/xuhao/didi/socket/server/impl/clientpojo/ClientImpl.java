@@ -23,8 +23,6 @@ public class ClientImpl extends AbsClient {
 
     private volatile boolean isDead;
 
-    private volatile boolean isReadEngineStarted;
-
     private ClientIOManager mIOManager;
 
     private IStateSender mActionDispatcher;
@@ -63,9 +61,7 @@ public class ClientImpl extends AbsClient {
 
     public void startIOEngine() {
         if (mIOManager != null) {
-            synchronized (mIOManager) {
-                mIOManager.startWriteEngin();
-            }
+            mIOManager.startEngine();
         }
     }
 
@@ -85,7 +81,6 @@ public class ClientImpl extends AbsClient {
         } catch (IOException e1) {
         }
         removeAllIOCallback();
-        isReadEngineStarted = false;
     }
 
     @Override
@@ -104,7 +99,6 @@ public class ClientImpl extends AbsClient {
         } catch (IOException e1) {
         }
         removeAllIOCallback();
-        isReadEngineStarted = false;
     }
 
     @Override
@@ -158,10 +152,6 @@ public class ClientImpl extends AbsClient {
     public void addIOCallback(IClientIOCallback clientIOCallback) {
         synchronized (mCallbackList) {
             mCallbackList.add(clientIOCallback);
-            if (!isReadEngineStarted) {
-                isReadEngineStarted = true;
-                startRead();
-            }
         }
     }
 
@@ -176,15 +166,6 @@ public class ClientImpl extends AbsClient {
     public void removeAllIOCallback() {
         synchronized (mCallbackList) {
             mCallbackList.clear();
-        }
-    }
-
-    private void startRead() {
-        if (isDead) {
-            return;
-        }
-        if (mIOManager != null) {
-            mIOManager.startReadEngine();
         }
     }
 

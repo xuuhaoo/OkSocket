@@ -8,7 +8,6 @@ import com.xuhao.didi.core.iocore.interfaces.IStateSender;
 import com.xuhao.didi.core.iocore.interfaces.IWriter;
 import com.xuhao.didi.core.protocol.IReaderProtocol;
 import com.xuhao.didi.socket.common.interfaces.common_interfacies.IIOManager;
-import com.xuhao.didi.socket.common.interfaces.utils.SPIUtils;
 import com.xuhao.didi.socket.server.exceptions.InitiativeDisconnectException;
 import com.xuhao.didi.socket.server.impl.OkServerOptions;
 
@@ -59,14 +58,11 @@ public class ClientIOManager implements IIOManager<OkServerOptions> {
     public void startEngine() {
         shutdownAllThread(null);
 
-        mClientWriteThread = new ClientWriteThread(mWriter, mClientStateSender);
-        mClientReadThread = new ClientReadThread(mReader, mClientStateSender);
-
-        mClientWriteThread.start();
-        mClientReadThread.start();
+        startReadEngine();
+        startWriteEngine();
     }
 
-    public void startReadEngine() {
+    protected void startReadEngine() {
         if (mClientReadThread != null) {
             mClientReadThread.shutdown();
             mClientReadThread = null;
@@ -75,7 +71,7 @@ public class ClientIOManager implements IIOManager<OkServerOptions> {
         mClientReadThread.start();
     }
 
-    public void startWriteEngin() {
+    protected void startWriteEngine() {
         if (mClientWriteThread != null) {
             mClientWriteThread.shutdown();
             mClientWriteThread = null;

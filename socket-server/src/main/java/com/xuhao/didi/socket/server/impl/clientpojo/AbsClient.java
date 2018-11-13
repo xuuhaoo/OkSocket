@@ -25,7 +25,9 @@ public abstract class AbsClient implements IClient, ClientActionDispatcher.Clien
 
     private volatile boolean isCallDead;
 
-    private volatile boolean isCallReady;
+    private volatile boolean mReadReady;
+
+    private volatile boolean mWriteReady;
 
     private List<OriginalData> mCacheForNotPrepare = new ArrayList<>();
 
@@ -64,10 +66,10 @@ public abstract class AbsClient implements IClient, ClientActionDispatcher.Clien
     @Override
     public final void onClientReadReady() {
         synchronized (this) {
-            if (!isCallReady) {
+            mReadReady = true;
+            if (mReadReady && mWriteReady) {
                 onClientReady();
                 isCallDead = false;
-                isCallReady = true;
             }
         }
     }
@@ -75,10 +77,10 @@ public abstract class AbsClient implements IClient, ClientActionDispatcher.Clien
     @Override
     public void onClientWriteReady() {
         synchronized (this) {
-            if (!isCallReady) {
+            mWriteReady = true;
+            if (mReadReady && mWriteReady) {
                 onClientReady();
                 isCallDead = false;
-                isCallReady = true;
             }
         }
     }
@@ -89,7 +91,7 @@ public abstract class AbsClient implements IClient, ClientActionDispatcher.Clien
             if (!isCallDead) {
                 onClientDead(e);
                 isCallDead = true;
-                isCallReady = false;
+                mReadReady = false;
             }
         }
     }
@@ -100,7 +102,7 @@ public abstract class AbsClient implements IClient, ClientActionDispatcher.Clien
             if (!isCallDead) {
                 onClientDead(e);
                 isCallDead = true;
-                isCallReady = false;
+                mReadReady = false;
             }
         }
     }
