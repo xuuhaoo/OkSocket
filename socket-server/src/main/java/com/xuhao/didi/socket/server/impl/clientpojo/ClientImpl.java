@@ -158,6 +158,9 @@ public class ClientImpl extends AbsClient {
 
     @Override
     public void addIOCallback(IClientIOCallback clientIOCallback) {
+        if (isDead) {
+            return;
+        }
         synchronized (mCallbackList) {
             mCallbackList.add(clientIOCallback);
             synchronized (mIOManager) {
