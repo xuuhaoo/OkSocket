@@ -141,6 +141,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
         mInfo = new ConnectionInfo(mIPET.getText().toString(), Integer.parseInt(mPortET.getText().toString()));
         mOkOptions = new OkSocketOptions.Builder()
                 .setReconnectionManager(new NoneReconnect())
+                .setConnectTimeoutSecond(10)
                 .setCallbackThreadModeToken(new OkSocketOptions.ThreadModeToken() {
                     @Override
                     public void handleCallbackEvent(ActionDispatcher.ActionRunnable runnable) {
