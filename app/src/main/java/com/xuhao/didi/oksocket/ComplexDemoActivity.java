@@ -1,6 +1,8 @@
 package com.xuhao.didi.oksocket;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,14 +15,15 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.xuhao.didi.core.iocore.interfaces.IPulseSendable;
 import com.xuhao.didi.core.iocore.interfaces.ISendable;
 import com.xuhao.didi.core.pojo.OriginalData;
-import com.xuhao.didi.core.iocore.interfaces.IPulseSendable;
 import com.xuhao.didi.oksocket.adapter.LogAdapter;
 import com.xuhao.didi.oksocket.data.DefaultSendBean;
 import com.xuhao.didi.oksocket.data.HandShake;
 import com.xuhao.didi.oksocket.data.LogBean;
 import com.xuhao.didi.oksocket.data.PulseBean;
+import com.xuhao.didi.socket.client.impl.client.action.ActionDispatcher;
 import com.xuhao.didi.socket.client.sdk.OkSocket;
 import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
 import com.xuhao.didi.socket.client.sdk.client.OkSocketOptions;
@@ -62,6 +65,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
             mManager.send(new HandShake());
             mConnect.setText("DisConnect");
             initSwitch();
+            mManager.getPulseManager().setPulseSendable(new PulseBean());
         }
 
         private void initSwitch() {
@@ -99,7 +103,6 @@ public class ComplexDemoActivity extends AppCompatActivity {
             if (cmd == 54) {//登陆成功
                 String handshake = jsonObject.get("handshake").getAsString();
                 logRece("握手成功! 握手信息:" + handshake + ". 开始心跳..");
-                mManager.getPulseManager().setPulseSendable(new PulseBean()).pulse();
             } else if (cmd == 57) {//切换,重定向.(暂时无法演示,如有疑问请咨询github)
                 String ip = jsonObject.get("data").getAsString().split(":")[0];
                 int port = Integer.parseInt(jsonObject.get("data").getAsString().split(":")[1]);
@@ -126,6 +129,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 case 54: {
                     String handshake = jsonObject.get("handshake").getAsString();
                     logSend("发送握手数据:" + handshake);
+                    mManager.getPulseManager().pulse();
                     break;
                 }
                 default:
@@ -180,7 +184,15 @@ public class ComplexDemoActivity extends AppCompatActivity {
         mReceList.setAdapter(mReceLogAdapter);
 
         mInfo = new ConnectionInfo("104.238.184.237", 8080);
+
+        final Handler handler = new Handler(Looper.getMainLooper());
         OkSocketOptions.Builder builder = new OkSocketOptions.Builder();
+        builder.setCallbackThreadModeToken(new OkSocketOptions.ThreadModeToken() {
+            @Override
+            public void handleCallbackEvent(ActionDispatcher.ActionRunnable runnable) {
+                handler.post(runnable);
+            }
+        });
         mManager = OkSocket.open(mInfo).option(builder.build());
     }
 
