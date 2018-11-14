@@ -84,9 +84,11 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
 
     @Override
     public synchronized void connect() {
+        SLog.i("Thread name:" + Thread.currentThread().getName() + " id:" + Thread.currentThread().getId());
         if (!canConnect) {
             return;
         }
+        canConnect = false;
         if (isConnect()) {
             return;
         }
@@ -96,12 +98,15 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         }
         if (mActionHandler != null) {
             mActionHandler.detach(this);
+            SLog.i("mActionHandler is detached.");
         }
         mActionHandler = new ActionHandler();
         mActionHandler.attach(this, this);
+        SLog.i("mActionHandler is attached.");
 
         if (mReconnectionManager != null) {
             mReconnectionManager.detach();
+            SLog.i("ReconnectionManager is detached.");
         }
         mReconnectionManager = mOptions.getReconnectionManager();
         if (mReconnectionManager != null) {
@@ -111,7 +116,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         try {
             mSocket = getSocketByConfig();
         } catch (Exception e) {
-            if(mOptions.isDebug()){
+            if (mOptions.isDebug()) {
                 e.printStackTrace();
             }
             throw new UnConnectException("创建Socket失败.", e);
@@ -153,7 +158,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
                 sslContext.init(config.getKeyManagers(), trustManagers, new SecureRandom());
                 return sslContext.getSocketFactory().createSocket();
             } catch (Exception e) {
-                if(mOptions.isDebug()){
+                if (mOptions.isDebug()) {
                     e.printStackTrace();
                 }
                 SLog.e(e.getMessage());
@@ -164,7 +169,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
             try {
                 return factory.createSocket();
             } catch (IOException e) {
-                if(mOptions.isDebug()){
+                if (mOptions.isDebug()) {
                     e.printStackTrace();
                 }
                 SLog.e(e.getMessage());
@@ -181,13 +186,6 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         @Override
         public void run() {
             try {
-                if (mSocket.isClosed() || mSocket.isConnected()) {
-                    return;
-                }
-                if (!canConnect) {
-                    return;
-                }
-                canConnect = false;
                 isConnectTimeout = false;
                 SLog.i("Start connect: " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " socket server...");
                 mSocket.connect(new InetSocketAddress(mConnectionInfo.getIp(), mConnectionInfo.getPort()), mOptions.getConnectTimeoutSecond() * 1000);
@@ -200,11 +198,12 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
                 if (isConnectTimeout) {//超时后不处理Socket异常
                     return;
                 }
-                if(mOptions.isDebug()){
+                if (mOptions.isDebug()) {
                     e.printStackTrace();
                 }
+                Exception exception = new UnConnectException(e);
                 SLog.e("Socket server " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " connect failed! error msg:" + e.getMessage());
-                sendBroadcast(IAction.ACTION_CONNECTION_FAILED, new UnConnectException(e));
+                sendBroadcast(IAction.ACTION_CONNECTION_FAILED, exception);
                 canConnect = true;
             }
         }
@@ -222,18 +221,21 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
     }
 
     @Override
-    public synchronized void disconnect(Exception exception) {
-        if (isDisconnecting) {
-            return;
-        }
-        isDisconnecting = true;
-        if (mConnectThread != null && mConnectThread.isAlive()) {
-            mConnectThread.interrupt();
-            mConnectThread = null;
-        }
-        if (mPulseManager != null) {
-            mPulseManager.dead();
-            mPulseManager = null;
+    public void disconnect(Exception exception) {
+        synchronized (this) {
+            if (isDisconnecting) {
+                return;
+            }
+            isDisconnecting = true;
+            if (mConnectThread != null && mConnectThread.isAlive()) {
+                mConnectThread.interrupt();
+                mConnectThread = null;
+            }
+
+            if (mPulseManager != null) {
+                mPulseManager.dead();
+                mPulseManager = null;
+            }
         }
 
         if (exception instanceof ManuallyDisconnectException) {
@@ -243,10 +245,12 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
             }
         }
 
-        String info = mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort();
-        DisconnectThread thread = new DisconnectThread(exception, "Disconnect Thread for " + info);
-        thread.setDaemon(true);
-        thread.start();
+        synchronized (this) {
+            String info = mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort();
+            DisconnectThread thread = new DisconnectThread(exception, "Disconnect Thread for " + info);
+            thread.setDaemon(true);
+            thread.start();
+        }
     }
 
     private class DisconnectThread extends Thread {
@@ -272,6 +276,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
 
             if (mActionHandler != null) {
                 mActionHandler.detach(ConnectionManagerImpl.this);
+                SLog.i("mActionHandler is detached.");
                 mActionHandler = null;
             }
 
@@ -285,7 +290,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
 
             if (mException != null) {
                 SLog.e("socket is disconnecting because: " + mException.getMessage());
-                if(mOptions.isDebug()){
+                if (mOptions.isDebug()) {
                     mException.printStackTrace();
                 }
             }
@@ -319,7 +324,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         if (mPulseManager != null) {
             mPulseManager.setOkOptions(mOptions);
         }
-        if (mReconnectionManager != mOptions.getReconnectionManager()) {
+        if (mReconnectionManager != null && mReconnectionManager.equals(mOptions.getReconnectionManager())) {
             if (mReconnectionManager != null) {
                 mReconnectionManager.detach();
             }

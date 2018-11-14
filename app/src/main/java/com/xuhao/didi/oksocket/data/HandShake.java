@@ -13,7 +13,7 @@ public class HandShake extends DefaultSendBean {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("cmd", 54);
-            jsonObject.put("handshake", "Hello I'm a OkSocket demo");
+            jsonObject.put("handshake", "admin");
             content = jsonObject.toString();
         } catch (JSONException e) {
             e.printStackTrace();

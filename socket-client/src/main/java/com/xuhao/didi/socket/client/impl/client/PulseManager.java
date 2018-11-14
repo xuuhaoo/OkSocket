@@ -49,7 +49,7 @@ public class PulseManager implements IPulse {
         mCurrentThreadMode = mOkOptions.getIOThreadMode();
     }
 
-    public IPulse setPulseSendable(IPulseSendable sendable) {
+    public synchronized IPulse setPulseSendable(IPulseSendable sendable) {
         if (sendable != null) {
             mSendable = sendable;
         }
@@ -61,7 +61,7 @@ public class PulseManager implements IPulse {
     }
 
     @Override
-    public void pulse() {
+    public synchronized void pulse() {
         privateDead();
         if (mCurrentThreadMode != OkSocketOptions.IOThreadMode.SIMPLEX) {
             mCurrentFrequency = mOkOptions.getPulseFrequency();
@@ -73,7 +73,7 @@ public class PulseManager implements IPulse {
     }
 
     @Override
-    public void trigger() {
+    public synchronized void trigger() {
         if (isDead) {
             return;
         }
@@ -82,14 +82,14 @@ public class PulseManager implements IPulse {
         }
     }
 
-    public void dead() {
+    public synchronized void dead() {
         mLoseTimes = 0;
         isDead = true;
         privateDead();
     }
 
     @Override
-    public void feed() {
+    public synchronized void feed() {
         mLoseTimes = -1;
     }
 
@@ -103,7 +103,7 @@ public class PulseManager implements IPulse {
         return mLoseTimes;
     }
 
-    protected void setOkOptions(OkSocketOptions okOptions) {
+    protected synchronized void setOkOptions(OkSocketOptions okOptions) {
         mOkOptions = okOptions;
         mCurrentThreadMode = mOkOptions.getIOThreadMode();
         if (mCurrentFrequency != mOkOptions.getPulseFrequency()) {

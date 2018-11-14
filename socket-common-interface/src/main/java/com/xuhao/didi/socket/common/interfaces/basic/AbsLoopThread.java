@@ -6,15 +6,17 @@ import com.xuhao.didi.core.utils.SLog;
  * Created by xuhao on 15/6/18.
  */
 public abstract class AbsLoopThread implements Runnable {
-    public Thread thread = null;
+    public volatile Thread thread = null;
 
-    protected String threadName = "";
+    protected volatile String threadName = "";
 
-    private boolean isStop = false;
+    private volatile boolean isStop = false;
 
-    private Exception ioException = null;
+    private volatile boolean isShutdown = true;
 
-    private long loopTimes = 0;
+    private volatile Exception ioException = null;
+
+    private volatile long loopTimes = 0;
 
     public AbsLoopThread() {
         isStop = true;
@@ -39,6 +41,7 @@ public abstract class AbsLoopThread implements Runnable {
     @Override
     public final void run() {
         try {
+            isShutdown = false;
             beforeLoop();
             while (!isStop) {
                 this.runInLoopThread();
@@ -49,6 +52,7 @@ public abstract class AbsLoopThread implements Runnable {
                 ioException = e;
             }
         } finally {
+            isShutdown = true;
             this.loopFinish(ioException);
             ioException = null;
             SLog.w(threadName + " is shutting down");
@@ -85,7 +89,7 @@ public abstract class AbsLoopThread implements Runnable {
     }
 
     public boolean isShutdown() {
-        return isStop;
+        return isShutdown;
     }
 
 }
