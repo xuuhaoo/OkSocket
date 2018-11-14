@@ -25,6 +25,7 @@ import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
 import com.xuhao.didi.socket.client.sdk.client.OkSocketOptions;
 import com.xuhao.didi.socket.client.sdk.client.action.SocketActionAdapter;
 import com.xuhao.didi.socket.client.sdk.client.connection.IConnectionManager;
+import com.xuhao.didi.socket.client.sdk.client.connection.NoneReconnect;
 
 import java.nio.charset.Charset;
 
@@ -139,7 +140,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
         final Handler handler = new Handler();
         mInfo = new ConnectionInfo(mIPET.getText().toString(), Integer.parseInt(mPortET.getText().toString()));
         mOkOptions = new OkSocketOptions.Builder()
-//                .setReconnectionManager(new NoneReconnect())
+                .setReconnectionManager(new NoneReconnect())
                 .setCallbackThreadModeToken(new OkSocketOptions.ThreadModeToken() {
                     @Override
                     public void handleCallbackEvent(ActionDispatcher.ActionRunnable runnable) {
