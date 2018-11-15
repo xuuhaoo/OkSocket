@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.xuhao.didi.socket.server.action.IAction.Server.ACTION_CLIENT_CONNECTED;
@@ -186,7 +185,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener, 
             if (actionBean != null && actionBean.mDispatcher != null) {
                 ServerActionDispatcher actionDispatcher = actionBean.mDispatcher;
                 synchronized (actionDispatcher.mResponseHandlerList) {
-                    Vector<IServerActionListener> list = new Vector<>(actionDispatcher.mResponseHandlerList);
+                    List<IServerActionListener> list = new ArrayList<>(actionDispatcher.mResponseHandlerList);
                     Iterator<IServerActionListener> it = list.iterator();
                     while (it.hasNext()) {
                         IServerActionListener listener = it.next();

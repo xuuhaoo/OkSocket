@@ -6,6 +6,9 @@ import com.xuhao.didi.socket.client.sdk.client.OkSocketOptions;
 import com.xuhao.didi.socket.client.sdk.client.bean.IPulse;
 import com.xuhao.didi.socket.client.sdk.client.connection.IConnectionManager;
 import com.xuhao.didi.socket.common.interfaces.basic.AbsLoopThread;
+import com.xuhao.didi.socket.common.interfaces.utils.ThreadUtils;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by xuhao on 2017/5/18.
@@ -39,7 +42,7 @@ public class PulseManager implements IPulse {
     /**
      * 允许遗漏的次数
      */
-    private volatile int mLoseTimes = -1;
+    private volatile AtomicInteger mLoseTimes = new AtomicInteger(-1);
 
     private PulseThread mPulseThread = new PulseThread();
 
@@ -83,14 +86,14 @@ public class PulseManager implements IPulse {
     }
 
     public synchronized void dead() {
-        mLoseTimes = 0;
+        mLoseTimes.set(0);
         isDead = true;
         privateDead();
     }
 
     @Override
     public synchronized void feed() {
-        mLoseTimes = -1;
+        mLoseTimes.set(-1);
     }
 
     private void privateDead() {
@@ -100,7 +103,7 @@ public class PulseManager implements IPulse {
     }
 
     public int getLoseTimes() {
-        return mLoseTimes;
+        return mLoseTimes.get();
     }
 
     protected synchronized void setOkOptions(OkSocketOptions okOptions) {
@@ -120,14 +123,14 @@ public class PulseManager implements IPulse {
                 return;
             }
             if (mManager != null && mSendable != null) {
-                if (mOkOptions.getPulseFeedLoseTimes() != -1 && ++mLoseTimes >= mOkOptions.getPulseFeedLoseTimes()) {
+                if (mOkOptions.getPulseFeedLoseTimes() != -1 && mLoseTimes.incrementAndGet() >= mOkOptions.getPulseFeedLoseTimes()) {
                     mManager.disconnect(new DogDeadException("you need feed dog on time,otherwise he will die"));
                 } else {
                     mManager.send(mSendable);
                 }
             }
 
-            Thread.sleep(mCurrentFrequency);
+            ThreadUtils.sleep(mCurrentFrequency);
         }
 
         @Override

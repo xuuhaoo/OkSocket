@@ -20,9 +20,9 @@ import java.util.Map;
  */
 public class ManagerHolder {
 
-    private Map<ConnectionInfo, IConnectionManager> mConnectionManagerMap = new HashMap<>();
+    private volatile Map<ConnectionInfo, IConnectionManager> mConnectionManagerMap = new HashMap<>();
 
-    private Map<Integer, IServerManagerPrivate> mServerManagerMap = new HashMap<>();
+    private volatile Map<Integer, IServerManagerPrivate> mServerManagerMap = new HashMap<>();
 
     private static class InstanceHolder {
         private static final ManagerHolder INSTANCE = new ManagerHolder();
@@ -103,14 +103,14 @@ public class ManagerHolder {
 
     protected List<IConnectionManager> getList() {
         List<IConnectionManager> list = new ArrayList<>();
-        Iterator<ConnectionInfo> it = mConnectionManagerMap.keySet().iterator();
+
+        Map<ConnectionInfo, IConnectionManager> map = new HashMap<>(mConnectionManagerMap);
+        Iterator<ConnectionInfo> it = map.keySet().iterator();
         while (it.hasNext()) {
             ConnectionInfo info = it.next();
-            IConnectionManager manager = mConnectionManagerMap.get(info);
+            IConnectionManager manager = map.get(info);
             if (!manager.getOption().isConnectionHolden()) {
-                synchronized (mConnectionManagerMap) {
-                    it.remove();
-                }
+                it.remove();
                 continue;
             }
             list.add(manager);

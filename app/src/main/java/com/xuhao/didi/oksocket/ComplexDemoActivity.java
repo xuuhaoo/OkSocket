@@ -40,7 +40,6 @@ public class ComplexDemoActivity extends AppCompatActivity {
     private ConnectionInfo mInfo;
 
     private Button mConnect;
-    private Button mDisConnect;
     private IConnectionManager mManager;
     private EditText mIPET;
     private EditText mPortET;
@@ -66,6 +65,8 @@ public class ComplexDemoActivity extends AppCompatActivity {
             mConnect.setText("DisConnect");
             initSwitch();
             mManager.getPulseManager().setPulseSendable(new PulseBean());
+            mIPET.setEnabled(true);
+            mPortET.setEnabled(true);
         }
 
         private void initSwitch() {
@@ -80,19 +81,28 @@ public class ComplexDemoActivity extends AppCompatActivity {
                     logSend("正在重定向连接...");
                     mManager.switchConnectionInfo(((RedirectException) e).redirectInfo);
                     mManager.connect();
+                    mIPET.setEnabled(true);
+                    mPortET.setEnabled(true);
                 } else {
                     logSend("异常断开:" + e.getMessage());
+                    mIPET.setEnabled(false);
+                    mPortET.setEnabled(false);
                 }
             } else {
                 logSend("正常断开");
+                mIPET.setEnabled(false);
+                mPortET.setEnabled(false);
             }
             mConnect.setText("Connect");
+
         }
 
         @Override
         public void onSocketConnectionFailed(ConnectionInfo info, String action, Exception e) {
             logSend("连接失败");
             mConnect.setText("Connect");
+            mIPET.setEnabled(false);
+            mPortET.setEnabled(false);
         }
 
         @Override
@@ -161,7 +171,6 @@ public class ComplexDemoActivity extends AppCompatActivity {
 
     private void findViews() {
         mSendList = findViewById(R.id.send_list);
-        mDisConnect = findViewById(R.id.disconnect);
         mReceList = findViewById(R.id.rece_list);
         mClearLog = findViewById(R.id.clear_log);
         mSetFrequency = findViewById(R.id.set_pulse_frequency);
@@ -202,17 +211,12 @@ public class ComplexDemoActivity extends AppCompatActivity {
         mReconnectSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (mManager != null && !mManager.isConnect()) {
-                    buttonView.setChecked(!isChecked);
-                    return;
-                }
-                if (buttonView.isChecked() == isChecked) {
-                    return;
-                }
                 if (!isChecked) {
                     mManager.option(new OkSocketOptions.Builder(mManager.getOption()).setReconnectionManager(new NoneReconnect()).build());
+                    logSend("关闭重连管理器");
                 } else {
                     mManager.option(new OkSocketOptions.Builder(mManager.getOption()).setReconnectionManager(OkSocketOptions.getDefault().getReconnectionManager()).build());
+                    logSend("打开重连管理器");
                 }
             }
         });
@@ -229,16 +233,6 @@ public class ComplexDemoActivity extends AppCompatActivity {
                     mConnect.setText("DisConnecting");
                     mManager.disconnect();
                 }
-            }
-        });
-
-        mDisConnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mManager == null) {
-                    return;
-                }
-                mManager.disconnect();
             }
         });
 

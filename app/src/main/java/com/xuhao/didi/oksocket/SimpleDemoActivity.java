@@ -39,7 +39,6 @@ public class SimpleDemoActivity extends AppCompatActivity {
     private ConnectionInfo mInfo;
 
     private Button mConnect;
-    private Button mDisconnect;
 
     private EditText mIPET;
     private EditText mPortET;
@@ -61,6 +60,8 @@ public class SimpleDemoActivity extends AppCompatActivity {
         public void onSocketConnectionSuccess(ConnectionInfo info, String action) {
             mManager.send(new HandShakeBean());
             mConnect.setText("DisConnect");
+            mIPET.setEnabled(false);
+            mPortET.setEnabled(false);
         }
 
         @Override
@@ -71,12 +72,16 @@ public class SimpleDemoActivity extends AppCompatActivity {
                 logSend("正常断开");
             }
             mConnect.setText("Connect");
+            mIPET.setEnabled(true);
+            mPortET.setEnabled(true);
         }
 
         @Override
         public void onSocketConnectionFailed(ConnectionInfo info, String action, Exception e) {
             logSend("连接失败");
             mConnect.setText("Connect");
+            mIPET.setEnabled(true);
+            mPortET.setEnabled(true);
         }
 
         @Override
@@ -114,7 +119,6 @@ public class SimpleDemoActivity extends AppCompatActivity {
 
     private void findViews() {
         mSendList = findViewById(R.id.send_list);
-        mDisconnect = findViewById(R.id.disconnect);
         mReceList = findViewById(R.id.rece_list);
         mIPET = findViewById(R.id.ip);
         mPortET = findViewById(R.id.port);
@@ -164,19 +168,12 @@ public class SimpleDemoActivity extends AppCompatActivity {
                 if (!mManager.isConnect()) {
                     initManager();
                     mManager.connect();
+                    mIPET.setEnabled(false);
+                    mPortET.setEnabled(false);
                 } else {
                     mConnect.setText("DisConnecting");
                     mManager.disconnect();
                 }
-            }
-        });
-        mDisconnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mManager == null) {
-                    return;
-                }
-                mManager.disconnect();
             }
         });
         mSendBtn.setOnClickListener(new View.OnClickListener() {

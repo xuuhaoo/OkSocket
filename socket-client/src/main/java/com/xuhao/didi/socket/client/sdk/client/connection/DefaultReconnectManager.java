@@ -5,6 +5,7 @@ import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.socket.client.impl.exceptions.ManuallyDisconnectException;
 import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
 import com.xuhao.didi.socket.common.interfaces.basic.AbsLoopThread;
+import com.xuhao.didi.socket.common.interfaces.utils.ThreadUtils;
 
 import java.util.Iterator;
 
@@ -144,7 +145,7 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
 
             //延迟执行
             SLog.i("Reconnect after " + mReconnectTimeDelay + " mills ...");
-            sleep(mReconnectTimeDelay);
+            ThreadUtils.sleep(mReconnectTimeDelay);
 
             if (mDetach) {
                 SLog.i("ReconnectionManager already detached by framework.We decide gave up this reconnection mission!");
@@ -174,24 +175,6 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
             }
         }
 
-        private void sleep(long time) {
-            long weakTime = 0;
-            long startTime = 0;
-            while (true) {
-                try {
-                    if (weakTime - startTime < time) {
-                        time = time - (weakTime - startTime);
-                    } else {
-                        break;
-                    }
-                    startTime = System.currentTimeMillis();
-                    Thread.sleep(time);
-                    weakTime = System.currentTimeMillis();
-                } catch (InterruptedException e) {
-                    weakTime = System.currentTimeMillis();
-                }
-            }
-        }
 
         @Override
         protected void loopFinish(Exception e) {

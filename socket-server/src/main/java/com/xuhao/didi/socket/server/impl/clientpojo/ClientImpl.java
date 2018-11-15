@@ -33,7 +33,7 @@ public class ClientImpl extends AbsClient {
 
     private volatile boolean isReadThreadStarted;
 
-    private List<IClientIOCallback> mCallbackList = new ArrayList<>();
+    private volatile List<IClientIOCallback> mCallbackList = new ArrayList<>();
 
     public ClientImpl(Socket socket,
                       OkServerOptions okServerOptions) {
