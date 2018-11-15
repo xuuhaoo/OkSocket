@@ -18,7 +18,7 @@ public class PulseManager implements IPulse {
     /**
      * 数据包发送器
      */
-    private IConnectionManager mManager;
+    private volatile IConnectionManager mManager;
     /**
      * 心跳数据包
      */
@@ -34,7 +34,7 @@ public class PulseManager implements IPulse {
     /**
      * 当前的线程模式
      */
-    private OkSocketOptions.IOThreadMode mCurrentThreadMode;
+    private volatile OkSocketOptions.IOThreadMode mCurrentThreadMode;
     /**
      * 是否死掉
      */
@@ -66,9 +66,8 @@ public class PulseManager implements IPulse {
     @Override
     public synchronized void pulse() {
         privateDead();
+        updateFrequency();
         if (mCurrentThreadMode != OkSocketOptions.IOThreadMode.SIMPLEX) {
-            mCurrentFrequency = mOkOptions.getPulseFrequency();
-            mCurrentFrequency = mCurrentFrequency < 1000 ? 1000 : mCurrentFrequency;//间隔最小为一秒
             if (mPulseThread.isShutdown()) {
                 mPulseThread.start();
             }
@@ -91,6 +90,15 @@ public class PulseManager implements IPulse {
         privateDead();
     }
 
+    private synchronized void updateFrequency() {
+        if (mCurrentThreadMode != OkSocketOptions.IOThreadMode.SIMPLEX) {
+            mCurrentFrequency = mOkOptions.getPulseFrequency();
+            mCurrentFrequency = mCurrentFrequency < 1000 ? 1000 : mCurrentFrequency;//间隔最小为一秒
+        } else {
+            privateDead();
+        }
+    }
+
     @Override
     public synchronized void feed() {
         mLoseTimes.set(-1);
@@ -109,9 +117,7 @@ public class PulseManager implements IPulse {
     protected synchronized void setOkOptions(OkSocketOptions okOptions) {
         mOkOptions = okOptions;
         mCurrentThreadMode = mOkOptions.getIOThreadMode();
-        if (mCurrentFrequency != mOkOptions.getPulseFrequency()) {
-            pulse();
-        }
+        updateFrequency();
     }
 
     private class PulseThread extends AbsLoopThread {
