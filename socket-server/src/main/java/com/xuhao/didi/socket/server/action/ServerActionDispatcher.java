@@ -10,7 +10,9 @@ import com.xuhao.didi.socket.common.interfaces.common_interfacies.server.IServer
 import com.xuhao.didi.socket.server.impl.OkServerOptions;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -44,7 +46,7 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener, 
     /**
      * 回调列表
      */
-    private volatile Vector<IServerActionListener> mResponseHandlerList = new Vector<>();
+    private volatile List<IServerActionListener> mResponseHandlerList = new ArrayList<>();
     /**
      * 服务器端口
      */
@@ -84,7 +86,9 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener, 
 
     @Override
     public IServerManager<OkServerOptions> unRegisterReceiver(IServerActionListener socketResponseHandler) {
-        mResponseHandlerList.remove(socketResponseHandler);
+        synchronized (mResponseHandlerList) {
+            mResponseHandlerList.remove(socketResponseHandler);
+        }
         return mServerManager;
     }
 

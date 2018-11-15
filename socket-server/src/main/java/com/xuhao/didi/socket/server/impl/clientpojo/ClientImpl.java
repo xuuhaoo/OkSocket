@@ -163,11 +163,11 @@ public class ClientImpl extends AbsClient {
         }
         synchronized (mCallbackList) {
             mCallbackList.add(clientIOCallback);
-            synchronized (mIOManager) {
-                if (!isReadThreadStarted) {
-                    isReadThreadStarted = true;
-                    mIOManager.startReadEngine();
-                }
+        }
+        synchronized (mIOManager) {
+            if (!isReadThreadStarted) {
+                isReadThreadStarted = true;
+                mIOManager.startReadEngine();
             }
         }
     }
