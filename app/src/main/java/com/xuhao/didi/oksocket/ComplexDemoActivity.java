@@ -20,7 +20,7 @@ import com.xuhao.didi.core.iocore.interfaces.ISendable;
 import com.xuhao.didi.core.pojo.OriginalData;
 import com.xuhao.didi.oksocket.adapter.LogAdapter;
 import com.xuhao.didi.oksocket.data.DefaultSendBean;
-import com.xuhao.didi.oksocket.data.HandShake;
+import com.xuhao.didi.oksocket.data.HandShakeBean;
 import com.xuhao.didi.oksocket.data.LogBean;
 import com.xuhao.didi.oksocket.data.PulseBean;
 import com.xuhao.didi.socket.client.impl.client.action.ActionDispatcher;
@@ -62,7 +62,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
         @Override
         public void onSocketConnectionSuccess(ConnectionInfo info, String action) {
             logRece("连接成功");
-            mManager.send(new HandShake());
+            mManager.send(new HandShakeBean());
             mConnect.setText("DisConnect");
             initSwitch();
             mManager.getPulseManager().setPulseSendable(new PulseBean());

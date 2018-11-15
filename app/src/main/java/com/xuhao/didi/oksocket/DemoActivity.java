@@ -55,6 +55,8 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
 
     private Button mServerBtn;
 
+    private Button mAdminBtn;
+
     private IServerManager mServerManager;
 
     private TextView mIPTv;
@@ -68,6 +70,7 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
         mSimpleBtn = findViewById(R.id.btn1);
         mComplexBtn = findViewById(R.id.btn2);
         mServerBtn = findViewById(R.id.btn3);
+        mAdminBtn = findViewById(R.id.admin);
         mIPTv = findViewById(R.id.ip);
 
         OkServerOptions.setIsDebug(true);
@@ -86,6 +89,14 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DemoActivity.this, ComplexDemoActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mAdminBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DemoActivity.this, ServerAdminActivity.class);
                 startActivity(intent);
             }
         });

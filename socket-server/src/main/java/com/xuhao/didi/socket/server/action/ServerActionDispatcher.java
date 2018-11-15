@@ -44,19 +44,19 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener, 
     /**
      * 回调列表
      */
-    private Vector<IServerActionListener> mResponseHandlerList = new Vector<>();
+    private volatile Vector<IServerActionListener> mResponseHandlerList = new Vector<>();
     /**
      * 服务器端口
      */
-    private int mServerPort;
+    private volatile int mServerPort;
     /**
      * 客户端池子
      */
-    private IClientPool<IClient, String> mClientPool;
+    private volatile IClientPool<IClient, String> mClientPool;
     /**
      * 服务器管理器实例
      */
-    private IServerManager<OkServerOptions> mServerManager;
+    private volatile IServerManager<OkServerOptions> mServerManager;
 
     public ServerActionDispatcher(IServerManager<OkServerOptions> manager) {
         this.mServerManager = manager;
@@ -73,8 +73,10 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener, 
     @Override
     public IServerManager<OkServerOptions> registerReceiver(final IServerActionListener socketResponseHandler) {
         if (socketResponseHandler != null) {
-            if (!mResponseHandlerList.contains(socketResponseHandler)) {
-                mResponseHandlerList.add(socketResponseHandler);
+            synchronized (mResponseHandlerList) {
+                if (!mResponseHandlerList.contains(socketResponseHandler)) {
+                    mResponseHandlerList.add(socketResponseHandler);
+                }
             }
         }
         return mServerManager;
@@ -180,7 +182,8 @@ public class ServerActionDispatcher implements IRegister<IServerActionListener, 
             if (actionBean != null && actionBean.mDispatcher != null) {
                 ServerActionDispatcher actionDispatcher = actionBean.mDispatcher;
                 synchronized (actionDispatcher.mResponseHandlerList) {
-                    Iterator<IServerActionListener> it = actionDispatcher.mResponseHandlerList.iterator();
+                    Vector<IServerActionListener> list = new Vector<>(actionDispatcher.mResponseHandlerList);
+                    Iterator<IServerActionListener> it = list.iterator();
                     while (it.hasNext()) {
                         IServerActionListener listener = it.next();
                         actionDispatcher.dispatchActionToListener(actionBean.mAction, actionBean.arg, listener);

@@ -11,17 +11,23 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".ComplexDemoActivity">
+        android:supportsRtl="true">
+        <activity
+            android:name=".ComplexDemoActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
 
-        </activity>
+        <activity
+            android:name=".SimpleDemoActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
 
-        <activity android:name=".SimpleDemoActivity">
+        <activity
+            android:name=".ServerAdminActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
 
-        </activity>
 
-        <activity android:name=".DemoActivity">
+        <activity
+            android:name=".DemoActivity"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

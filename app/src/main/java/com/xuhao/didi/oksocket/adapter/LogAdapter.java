@@ -37,7 +37,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ItemHolder> {
             public boolean onLongClick(View v) {
                 ClipboardManager cmb = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 LogBean log = mDataList.get(holder.getAdapterPosition());
-                String msg = log.mTime + " " + log.mLog;
+                String msg = log.mWho;
                 cmb.setPrimaryClip(ClipData.newPlainText(null, msg));
                 Toast.makeText(v.getContext(), "已复制到剪贴板", Toast.LENGTH_LONG).show();
                 return true;
