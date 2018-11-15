@@ -184,6 +184,9 @@ public class ComplexDemoActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        mIPET.setEnabled(false);
+        mPortET.setEnabled(false);
+
         LinearLayoutManager manager1 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mSendList.setLayoutManager(manager1);
         mSendList.setAdapter(mSendLogAdapter);
@@ -196,6 +199,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
 
         final Handler handler = new Handler(Looper.getMainLooper());
         OkSocketOptions.Builder builder = new OkSocketOptions.Builder();
+        builder.setReconnectionManager(new NoneReconnect());
         builder.setCallbackThreadModeToken(new OkSocketOptions.ThreadModeToken() {
             @Override
             public void handleCallbackEvent(ActionDispatcher.ActionRunnable runnable) {
@@ -212,11 +216,15 @@ public class ComplexDemoActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
-                    mManager.option(new OkSocketOptions.Builder(mManager.getOption()).setReconnectionManager(new NoneReconnect()).build());
-                    logSend("关闭重连管理器");
+                    if (!(mManager.getReconnectionManager() instanceof NoneReconnect)) {
+                        mManager.option(new OkSocketOptions.Builder(mManager.getOption()).setReconnectionManager(new NoneReconnect()).build());
+                        logSend("关闭重连管理器");
+                    }
                 } else {
-                    mManager.option(new OkSocketOptions.Builder(mManager.getOption()).setReconnectionManager(OkSocketOptions.getDefault().getReconnectionManager()).build());
-                    logSend("打开重连管理器");
+                    if (mManager.getReconnectionManager() instanceof NoneReconnect) {
+                        mManager.option(new OkSocketOptions.Builder(mManager.getOption()).setReconnectionManager(OkSocketOptions.getDefault().getReconnectionManager()).build());
+                        logSend("打开重连管理器");
+                    }
                 }
             }
         });

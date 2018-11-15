@@ -6,7 +6,6 @@ import com.xuhao.didi.socket.client.sdk.client.OkSocketOptions;
 import com.xuhao.didi.socket.client.sdk.client.bean.IPulse;
 import com.xuhao.didi.socket.client.sdk.client.connection.IConnectionManager;
 import com.xuhao.didi.socket.common.interfaces.basic.AbsLoopThread;
-import com.xuhao.didi.socket.common.interfaces.utils.ThreadUtils;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -136,7 +135,8 @@ public class PulseManager implements IPulse {
                 }
             }
 
-            ThreadUtils.sleep(mCurrentFrequency);
+            //not safety sleep.
+            Thread.sleep(mCurrentFrequency);
         }
 
         @Override
