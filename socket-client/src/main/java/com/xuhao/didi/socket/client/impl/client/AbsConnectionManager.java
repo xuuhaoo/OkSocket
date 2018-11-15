@@ -60,7 +60,7 @@ public abstract class AbsConnectionManager implements IConnectionManager {
     }
 
     @Override
-    public void switchConnectionInfo(ConnectionInfo info) {
+    public synchronized void switchConnectionInfo(ConnectionInfo info) {
         if (info != null) {
             ConnectionInfo tempOldInfo = mConnectionInfo;
             mConnectionInfo = info.clone();

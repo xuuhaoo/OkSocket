@@ -60,15 +60,11 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
     /**
      * 能否连接
      */
-    private volatile boolean canConnect = true;
+    private volatile boolean isConnectionPermitted = true;
     /**
      * 是否正在断开
      */
     private volatile boolean isDisconnecting = false;
-    /**
-     * 是否连接超时
-     */
-    private volatile boolean isConnectTimeout = false;
 
 
     protected ConnectionManagerImpl(ConnectionInfo info) {
@@ -85,15 +81,16 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
     @Override
     public synchronized void connect() {
         SLog.i("Thread name:" + Thread.currentThread().getName() + " id:" + Thread.currentThread().getId());
-        if (!canConnect) {
+        if (!isConnectionPermitted) {
             return;
         }
-        canConnect = false;
+        isConnectionPermitted = false;
         if (isConnect()) {
             return;
         }
         isDisconnecting = false;
         if (mConnectionInfo == null) {
+            isConnectionPermitted = true;
             throw new UnConnectException("连接参数为空,检查连接参数");
         }
         if (mActionHandler != null) {
@@ -119,6 +116,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
             if (mOptions.isDebug()) {
                 e.printStackTrace();
             }
+            isConnectionPermitted = true;
             throw new UnConnectException("创建Socket失败.", e);
         }
 
@@ -186,7 +184,6 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         @Override
         public void run() {
             try {
-                isConnectTimeout = false;
                 SLog.i("Start connect: " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " socket server...");
                 mSocket.connect(new InetSocketAddress(mConnectionInfo.getIp(), mConnectionInfo.getPort()), mOptions.getConnectTimeoutSecond() * 1000);
                 //关闭Nagle算法,无论TCP数据报大小,立即发送
@@ -195,16 +192,14 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
                 sendBroadcast(IAction.ACTION_CONNECTION_SUCCESS);
                 SLog.i("Socket server: " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " connect successful!");
             } catch (Exception e) {
-                if (isConnectTimeout) {//超时后不处理Socket异常
-                    return;
-                }
                 if (mOptions.isDebug()) {
                     e.printStackTrace();
                 }
                 Exception exception = new UnConnectException(e);
                 SLog.e("Socket server " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " connect failed! error msg:" + e.getMessage());
                 sendBroadcast(IAction.ACTION_CONNECTION_FAILED, exception);
-                canConnect = true;
+            } finally {
+                isConnectionPermitted = true;
             }
         }
     }
@@ -227,10 +222,6 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
                 return;
             }
             isDisconnecting = true;
-            if (mConnectThread != null && mConnectThread.isAlive()) {
-                mConnectThread.interrupt();
-                mConnectThread = null;
-            }
 
             if (mPulseManager != null) {
                 mPulseManager.dead();
@@ -263,35 +254,49 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
 
         @Override
         public void run() {
-            if (mManager != null) {
-                mManager.close(mException);
-            }
-
-            if (mSocket != null) {
-                try {
-                    mSocket.close();
-                } catch (IOException e) {
+            try {
+                if (mManager != null) {
+                    mManager.close(mException);
                 }
-            }
 
-            if (mActionHandler != null) {
-                mActionHandler.detach(ConnectionManagerImpl.this);
-                SLog.i("mActionHandler is detached.");
-                mActionHandler = null;
-            }
+                if (mConnectThread != null && mConnectThread.isAlive()) {
+                    mConnectThread.interrupt();
+                    try {
+                        SLog.i("disconnect thread need waiting for connection thread done.");
+                        mConnectThread.join();
+                    } catch (InterruptedException e) {
+                    }
+                    SLog.i("connection thread is done. disconnection thread going on");
+                    mConnectThread = null;
+                }
 
-            isDisconnecting = false;
-            canConnect = true;
-            if (!(mException instanceof UnConnectException) && mSocket != null) {
-                mException = mException instanceof ManuallyDisconnectException ? null : mException;
-                sendBroadcast(IAction.ACTION_DISCONNECTION, mException);
-            }
-            mSocket = null;
+                if (mSocket != null) {
+                    try {
+                        mSocket.close();
+                    } catch (IOException e) {
+                    }
+                }
 
-            if (mException != null) {
-                SLog.e("socket is disconnecting because: " + mException.getMessage());
-                if (mOptions.isDebug()) {
-                    mException.printStackTrace();
+                if (mActionHandler != null) {
+                    mActionHandler.detach(ConnectionManagerImpl.this);
+                    SLog.i("mActionHandler is detached.");
+                    mActionHandler = null;
+                }
+
+            } finally {
+                isDisconnecting = false;
+                isConnectionPermitted = true;
+                if (!(mException instanceof UnConnectException) && mSocket != null) {
+                    mException = mException instanceof ManuallyDisconnectException ? null : mException;
+                    sendBroadcast(IAction.ACTION_DISCONNECTION, mException);
+                }
+                mSocket = null;
+
+                if (mException != null) {
+                    SLog.e("socket is disconnecting because: " + mException.getMessage());
+                    if (mOptions.isDebug()) {
+                        mException.printStackTrace();
+                    }
                 }
             }
         }
@@ -324,7 +329,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         if (mPulseManager != null) {
             mPulseManager.setOkOptions(mOptions);
         }
-        if (mReconnectionManager != null && mReconnectionManager.equals(mOptions.getReconnectionManager())) {
+        if (mReconnectionManager != null && !mReconnectionManager.equals(mOptions.getReconnectionManager())) {
             if (mReconnectionManager != null) {
                 mReconnectionManager.detach();
             }

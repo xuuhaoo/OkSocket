@@ -302,17 +302,6 @@ public class OkSocketOptions implements IIOCoreOptions {
         }
 
         /**
-         * 设置回调在线程中,注意不是在UI线程中.
-         *
-         * @param inThread true表示回调在独立的全局事件分发线程中,false表示回调在本次Socket的IO线程中
-         * @return
-         */
-        public Builder setCallbackInIndependentThread(boolean inThread) {
-            mOptions.isCallbackInIndependentThread = inThread;
-            return this;
-        }
-
-        /**
          * 设置回调在线程中,不是在UI线程中.
          *
          * @param threadModeToken 针对android设计,可以使回调在android的主线程中,
@@ -420,7 +409,7 @@ public class OkSocketOptions implements IIOCoreOptions {
         okOptions.mReconnectionManager = new DefaultReconnectManager();
         okOptions.mSSLConfig = null;
         okOptions.mOkSocketFactory = null;
-        okOptions.isCallbackInIndependentThread = false;
+        okOptions.isCallbackInIndependentThread = true;
         okOptions.mCallbackThreadModeToken = null;
         return okOptions;
     }
