@@ -2,7 +2,6 @@ package com.xuhao.didi.socket.client.sdk.client;
 
 import com.xuhao.didi.core.iocore.interfaces.IIOCoreOptions;
 import com.xuhao.didi.core.protocol.IReaderProtocol;
-import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.socket.client.impl.client.action.ActionDispatcher;
 import com.xuhao.didi.socket.client.sdk.client.connection.AbsReconnectionManager;
 import com.xuhao.didi.socket.client.sdk.client.connection.DefaultReconnectManager;
@@ -102,7 +101,6 @@ public class OkSocketOptions implements IIOCoreOptions {
 
     public static void setIsDebug(boolean isDebug) {
         OkSocketOptions.isDebug = isDebug;
-        SLog.setIsDebug(isDebug);
     }
 
     public static abstract class ThreadModeToken {

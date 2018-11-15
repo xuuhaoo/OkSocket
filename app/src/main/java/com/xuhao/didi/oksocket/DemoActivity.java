@@ -23,6 +23,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xuhao.didi.core.iocore.interfaces.ISendable;
 import com.xuhao.didi.core.pojo.OriginalData;
+import com.xuhao.didi.core.utils.SLog;
 import com.xuhao.didi.oksocket.data.MsgDataBean;
 import com.xuhao.didi.socket.client.sdk.OkSocket;
 import com.xuhao.didi.socket.client.sdk.client.OkSocketOptions;
@@ -71,6 +72,7 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
 
         OkServerOptions.setIsDebug(true);
         OkSocketOptions.setIsDebug(true);
+        SLog.setIsDebug(true);
 
         mIPTv.setText("当前IP:" + getIPAddress());
         mSimpleBtn.setOnClickListener(new View.OnClickListener() {
