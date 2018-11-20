@@ -51,7 +51,7 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
             if (mConnectionFailedTimes > MAX_CONNECTION_FAILED_TIMES) {
                 resetThread();
                 //连接失败达到阈值,需要切换备用线路.
-                ConnectionInfo originInfo = mConnectionManager.getConnectionInfo();
+                ConnectionInfo originInfo = mConnectionManager.getRemoteConnectionInfo();
                 ConnectionInfo backupInfo = originInfo.getBackupInfo();
                 if (backupInfo != null) {
                     ConnectionInfo bbInfo = new ConnectionInfo(originInfo.getIp(), originInfo.getPort());
@@ -164,7 +164,7 @@ public class DefaultReconnectManager extends AbsReconnectionManager {
                 shutdown();
                 return;
             }
-            ConnectionInfo info = mConnectionManager.getConnectionInfo();
+            ConnectionInfo info = mConnectionManager.getRemoteConnectionInfo();
             SLog.i("Reconnect the server " + info.getIp() + ":" + info.getPort() + " ...");
             synchronized (mConnectionManager) {
                 if (!mConnectionManager.isConnect()) {

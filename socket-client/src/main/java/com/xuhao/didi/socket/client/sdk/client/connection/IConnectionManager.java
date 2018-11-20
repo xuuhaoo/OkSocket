@@ -52,7 +52,14 @@ public interface IConnectionManager extends
      *
      * @return 连接信息
      */
-    ConnectionInfo getConnectionInfo();
+    ConnectionInfo getRemoteConnectionInfo();
+
+    /**
+     * 获得本地连接信息
+     *
+     * @return 本地绑定信息
+     */
+    ConnectionInfo getLocalConnectionInfo();
 
     /**
      * 将当前的连接管理器中的连接信息进行切换.

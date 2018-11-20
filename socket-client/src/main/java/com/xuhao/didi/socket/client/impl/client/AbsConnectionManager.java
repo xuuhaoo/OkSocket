@@ -1,6 +1,8 @@
 package com.xuhao.didi.socket.client.impl.client;
 
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import com.xuhao.didi.socket.client.impl.client.abilities.IConnectionSwitchListener;
 import com.xuhao.didi.socket.client.impl.client.action.ActionDispatcher;
 import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
@@ -18,7 +20,13 @@ public abstract class AbsConnectionManager implements IConnectionManager {
     /**
      * 连接信息
      */
-    protected ConnectionInfo mConnectionInfo;
+    @NotNull
+    protected ConnectionInfo mRemoteConnectionInfo;
+    /**
+     * 本地绑定信息
+     */
+    @Nullable
+    protected ConnectionInfo mLocalConnectionInfo;
     /**
      * 连接信息switch监听器
      */
@@ -29,8 +37,13 @@ public abstract class AbsConnectionManager implements IConnectionManager {
     protected ActionDispatcher mActionDispatcher;
 
     public AbsConnectionManager(ConnectionInfo info) {
-        mConnectionInfo = info;
-        mActionDispatcher = new ActionDispatcher(info, this);
+        this(info, null);
+    }
+
+    public AbsConnectionManager(@NotNull ConnectionInfo remoteInfo, @Nullable ConnectionInfo localInfo) {
+        mRemoteConnectionInfo = remoteInfo;
+        mLocalConnectionInfo = localInfo;
+        mActionDispatcher = new ActionDispatcher(remoteInfo, this);
     }
 
     public IConnectionManager registerReceiver(final ISocketActionListener socketResponseHandler) {
@@ -52,9 +65,17 @@ public abstract class AbsConnectionManager implements IConnectionManager {
     }
 
     @Override
-    public ConnectionInfo getConnectionInfo() {
-        if (mConnectionInfo != null) {
-            return mConnectionInfo.clone();
+    public ConnectionInfo getRemoteConnectionInfo() {
+        if (mRemoteConnectionInfo != null) {
+            return mRemoteConnectionInfo.clone();
+        }
+        return null;
+    }
+
+    @Override
+    public ConnectionInfo getLocalConnectionInfo() {
+        if (mLocalConnectionInfo != null) {
+            return mLocalConnectionInfo;
         }
         return null;
     }
@@ -62,13 +83,13 @@ public abstract class AbsConnectionManager implements IConnectionManager {
     @Override
     public synchronized void switchConnectionInfo(ConnectionInfo info) {
         if (info != null) {
-            ConnectionInfo tempOldInfo = mConnectionInfo;
-            mConnectionInfo = info.clone();
+            ConnectionInfo tempOldInfo = mRemoteConnectionInfo;
+            mRemoteConnectionInfo = info.clone();
             if (mActionDispatcher != null) {
-                mActionDispatcher.setConnectionInfo(mConnectionInfo);
+                mActionDispatcher.setConnectionInfo(mRemoteConnectionInfo);
             }
             if (mConnectionSwitchListener != null) {
-                mConnectionSwitchListener.onSwitchConnectionInfo(this, tempOldInfo, mConnectionInfo);
+                mConnectionSwitchListener.onSwitchConnectionInfo(this, tempOldInfo, mRemoteConnectionInfo);
             }
         }
     }

@@ -68,14 +68,22 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
 
 
     protected ConnectionManagerImpl(ConnectionInfo info) {
-        super(info);
+        this(info, null);
+    }
+
+    public ConnectionManagerImpl(ConnectionInfo remoteInfo, ConnectionInfo localInfo) {
+        super(remoteInfo, localInfo);
         String ip = "";
         String port = "";
-        if (info != null) {
-            ip = info.getIp();
-            port = info.getPort() + "";
+        if (remoteInfo != null) {
+            ip = remoteInfo.getIp();
+            port = remoteInfo.getPort() + "";
         }
         SLog.i("block connection init with:" + ip + ":" + port);
+
+        if (localInfo != null) {
+            SLog.i("binding local addr:" + localInfo.getIp() + " port:" + localInfo.getPort());
+        }
     }
 
     @Override
@@ -89,7 +97,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
             return;
         }
         isDisconnecting = false;
-        if (mConnectionInfo == null) {
+        if (mRemoteConnectionInfo == null) {
             isConnectionPermitted = true;
             throw new UnConnectException("连接参数为空,检查连接参数");
         }
@@ -110,26 +118,17 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
             mReconnectionManager.attach(this);
             SLog.i("ReconnectionManager is attached.");
         }
-        try {
-            mSocket = getSocketByConfig();
-        } catch (Exception e) {
-            if (mOptions.isDebug()) {
-                e.printStackTrace();
-            }
-            isConnectionPermitted = true;
-            throw new UnConnectException("创建Socket失败.", e);
-        }
 
-        String info = mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort();
+        String info = mRemoteConnectionInfo.getIp() + ":" + mRemoteConnectionInfo.getPort();
         mConnectThread = new ConnectionThread(" Connect thread for " + info);
         mConnectThread.setDaemon(true);
         mConnectThread.start();
     }
 
-    private Socket getSocketByConfig() throws Exception {
+    private synchronized Socket getSocketByConfig() throws Exception {
         //自定义socket操作
         if (mOptions.getOkSocketFactory() != null) {
-            return mOptions.getOkSocketFactory().createSocket(mConnectionInfo, mOptions);
+            return mOptions.getOkSocketFactory().createSocket(mRemoteConnectionInfo, mOptions);
         }
 
         //默认操作
@@ -184,19 +183,32 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         @Override
         public void run() {
             try {
-                SLog.i("Start connect: " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " socket server...");
-                mSocket.connect(new InetSocketAddress(mConnectionInfo.getIp(), mConnectionInfo.getPort()), mOptions.getConnectTimeoutSecond() * 1000);
+                try {
+                    mSocket = getSocketByConfig();
+                } catch (Exception e) {
+                    if (mOptions.isDebug()) {
+                        e.printStackTrace();
+                    }
+                    throw new UnConnectException("Create socket failed.", e);
+                }
+                if (mLocalConnectionInfo != null) {
+                    SLog.i("try bind: " + mLocalConnectionInfo.getIp() + " port:" + mLocalConnectionInfo.getPort());
+                    mSocket.bind(new InetSocketAddress(mLocalConnectionInfo.getIp(), mLocalConnectionInfo.getPort()));
+                }
+
+                SLog.i("Start connect: " + mRemoteConnectionInfo.getIp() + ":" + mRemoteConnectionInfo.getPort() + " socket server...");
+                mSocket.connect(new InetSocketAddress(mRemoteConnectionInfo.getIp(), mRemoteConnectionInfo.getPort()), mOptions.getConnectTimeoutSecond() * 1000);
                 //关闭Nagle算法,无论TCP数据报大小,立即发送
                 mSocket.setTcpNoDelay(true);
                 resolveManager();
                 sendBroadcast(IAction.ACTION_CONNECTION_SUCCESS);
-                SLog.i("Socket server: " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " connect successful!");
+                SLog.i("Socket server: " + mRemoteConnectionInfo.getIp() + ":" + mRemoteConnectionInfo.getPort() + " connect successful!");
             } catch (Exception e) {
                 if (mOptions.isDebug()) {
                     e.printStackTrace();
                 }
                 Exception exception = new UnConnectException(e);
-                SLog.e("Socket server " + mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort() + " connect failed! error msg:" + e.getMessage());
+                SLog.e("Socket server " + mRemoteConnectionInfo.getIp() + ":" + mRemoteConnectionInfo.getPort() + " connect failed! error msg:" + e.getMessage());
                 sendBroadcast(IAction.ACTION_CONNECTION_FAILED, exception);
             } finally {
                 isConnectionPermitted = true;
@@ -237,7 +249,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         }
 
         synchronized (this) {
-            String info = mConnectionInfo.getIp() + ":" + mConnectionInfo.getPort();
+            String info = mRemoteConnectionInfo.getIp() + ":" + mRemoteConnectionInfo.getPort();
             DisconnectThread thread = new DisconnectThread(exception, "Disconnect Thread for " + info);
             thread.setDaemon(true);
             thread.start();
@@ -372,5 +384,19 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
     @Override
     public AbsReconnectionManager getReconnectionManager() {
         return mOptions.getReconnectionManager();
+    }
+
+    @Override
+    public ConnectionInfo getLocalConnectionInfo() {
+        ConnectionInfo local = super.getLocalConnectionInfo();
+        if (local == null) {
+            if (isConnect()) {
+                InetSocketAddress address = (InetSocketAddress) mSocket.getLocalSocketAddress();
+                if (address != null) {
+                    local = new ConnectionInfo(address.getHostName(), address.getPort());
+                }
+            }
+        }
+        return local;
     }
 }

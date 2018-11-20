@@ -313,7 +313,6 @@ public class OkSocketOptions implements IIOCoreOptions {
             return this;
         }
 
-
         public OkSocketOptions build() {
             return mOptions;
         }
