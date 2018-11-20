@@ -97,4 +97,5 @@ public abstract class AbsConnectionManager implements IConnectionManager {
     protected void setOnConnectionSwitchListener(IConnectionSwitchListener listener) {
         mConnectionSwitchListener = listener;
     }
+
 }

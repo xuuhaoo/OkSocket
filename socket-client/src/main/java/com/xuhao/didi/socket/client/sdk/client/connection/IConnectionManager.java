@@ -62,6 +62,13 @@ public interface IConnectionManager extends
     ConnectionInfo getLocalConnectionInfo();
 
     /**
+     * 设置本地端口信息
+     *
+     * @param localConnectionInfo 本地绑定端口信息
+     */
+    void setLocalConnectionInfo(ConnectionInfo localConnectionInfo);
+
+    /**
      * 将当前的连接管理器中的连接信息进行切换.
      *
      * @param info 新的连接信息

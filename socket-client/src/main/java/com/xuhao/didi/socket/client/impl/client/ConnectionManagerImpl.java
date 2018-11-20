@@ -399,4 +399,12 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         }
         return local;
     }
+
+    @Override
+    public void setLocalConnectionInfo(ConnectionInfo localConnectionInfo) {
+        if (isConnect()) {
+            throw new IllegalStateException("Socket is connected, can't set local info after connect.");
+        }
+        mLocalConnectionInfo = localConnectionInfo;
+    }
 }
