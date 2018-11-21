@@ -19,7 +19,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="发送" />
+                android:text="发送(Sending)" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/send_list"
@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="10dp"
-                android:text="接收" />
+                android:text="接收(Receiving)" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rece_list"
@@ -117,7 +117,7 @@
                     android:layout_height="100dp"
                     android:layout_weight="1"
                     android:gravity="top"
-                    android:hint="输入要发送的文字"
+                    android:hint="输入要发送的文字(Input the word what you want to sending)"
                     android:maxLines="100"
                     android:padding="5dp" />
 

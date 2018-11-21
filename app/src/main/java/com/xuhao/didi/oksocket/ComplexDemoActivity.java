@@ -60,7 +60,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
 
         @Override
         public void onSocketConnectionSuccess(ConnectionInfo info, String action) {
-            logRece("连接成功");
+            logRece("连接成功(Connecting Successful)");
             mManager.send(new HandShakeBean());
             mConnect.setText("DisConnect");
             initSwitch();
@@ -78,18 +78,18 @@ public class ComplexDemoActivity extends AppCompatActivity {
         public void onSocketDisconnection(ConnectionInfo info, String action, Exception e) {
             if (e != null) {
                 if (e instanceof RedirectException) {
-                    logSend("正在重定向连接...");
+                    logSend("正在重定向连接(Redirect Connecting)...");
                     mManager.switchConnectionInfo(((RedirectException) e).redirectInfo);
                     mManager.connect();
                     mIPET.setEnabled(true);
                     mPortET.setEnabled(true);
                 } else {
-                    logSend("异常断开:" + e.getMessage());
+                    logSend("异常断开(Disconnected with exception):" + e.getMessage());
                     mIPET.setEnabled(false);
                     mPortET.setEnabled(false);
                 }
             } else {
-                logSend("正常断开");
+                logSend("正常断开(Disconnect Manually)");
                 mIPET.setEnabled(false);
                 mPortET.setEnabled(false);
             }
@@ -99,7 +99,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
 
         @Override
         public void onSocketConnectionFailed(ConnectionInfo info, String action, Exception e) {
-            logSend("连接失败");
+            logSend("连接失败(Connecting Failed)");
             mConnect.setText("Connect");
             mIPET.setEnabled(false);
             mPortET.setEnabled(false);
@@ -112,7 +112,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
             int cmd = jsonObject.get("cmd").getAsInt();
             if (cmd == 54) {//登陆成功
                 String handshake = jsonObject.get("handshake").getAsString();
-                logRece("握手成功! 握手信息:" + handshake + ". 开始心跳..");
+                logRece("握手成功! 握手信息(Handshake Success):" + handshake + ". 开始心跳(Start Heartbeat)..");
             } else if (cmd == 57) {//切换,重定向.(暂时无法演示,如有疑问请咨询github)
                 String ip = jsonObject.get("data").getAsString().split(":")[0];
                 int port = Integer.parseInt(jsonObject.get("data").getAsString().split(":")[1]);
@@ -121,7 +121,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 mManager.getReconnectionManager().addIgnoreException(RedirectException.class);
                 mManager.disconnect(new RedirectException(redirectInfo));
             } else if (cmd == 14) {//心跳
-                logRece("收到心跳,喂狗成功");
+                logRece("收到心跳,喂狗成功(Heartbeat Received,Feed the Dog)");
                 mManager.getPulseManager().feed();
             } else {
                 logRece(str);
@@ -138,7 +138,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
             switch (cmd) {
                 case 54: {
                     String handshake = jsonObject.get("handshake").getAsString();
-                    logSend("发送握手数据:" + handshake);
+                    logSend("发送握手数据(Handshake Sending):" + handshake);
                     mManager.getPulseManager().pulse();
                     break;
                 }
@@ -155,7 +155,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
             JsonObject jsonObject = new JsonParser().parse(str).getAsJsonObject();
             int cmd = jsonObject.get("cmd").getAsInt();
             if (cmd == 14) {
-                logSend("发送心跳包");
+                logSend("发送心跳包(Heartbeat Sending)");
             }
         }
     };
@@ -218,12 +218,12 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 if (!isChecked) {
                     if (!(mManager.getReconnectionManager() instanceof NoneReconnect)) {
                         mManager.option(new OkSocketOptions.Builder(mManager.getOption()).setReconnectionManager(new NoneReconnect()).build());
-                        logSend("关闭重连管理器");
+                        logSend("关闭重连管理器(Turn Off The Reconnection Manager)");
                     }
                 } else {
                     if (mManager.getReconnectionManager() instanceof NoneReconnect) {
                         mManager.option(new OkSocketOptions.Builder(mManager.getOption()).setReconnectionManager(OkSocketOptions.getDefault().getReconnectionManager()).build());
-                        logSend("打开重连管理器");
+                        logSend("打开重连管理器(Turn On The Reconnection Manager)");
                     }
                 }
             }

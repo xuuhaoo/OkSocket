@@ -67,9 +67,9 @@ public class SimpleDemoActivity extends AppCompatActivity {
         @Override
         public void onSocketDisconnection(ConnectionInfo info, String action, Exception e) {
             if (e != null) {
-                logSend("异常断开:" + e.getMessage());
+                logSend("异常断开(Disconnected with exception):" + e.getMessage());
             } else {
-                logSend("正常断开");
+                logSend("正常断开(Disconnect Manually)");
             }
             mConnect.setText("Connect");
             mIPET.setEnabled(true);
@@ -78,7 +78,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
 
         @Override
         public void onSocketConnectionFailed(ConnectionInfo info, String action, Exception e) {
-            logSend("连接失败");
+            logSend("连接失败(Connecting Failed)");
             mConnect.setText("Connect");
             mIPET.setEnabled(true);
             mPortET.setEnabled(true);
@@ -171,7 +171,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
                     mIPET.setEnabled(false);
                     mPortET.setEnabled(false);
                 } else {
-                    mConnect.setText("DisConnecting");
+                    mConnect.setText("Disconnecting");
                     mManager.disconnect();
                 }
             }
@@ -183,7 +183,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
                     return;
                 }
                 if (!mManager.isConnect()) {
-                    Toast.makeText(getApplicationContext(), "未连接,请先连接", LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Unconnected", LENGTH_SHORT).show();
                 } else {
                     String msg = mSendET.getText().toString();
                     if (TextUtils.isEmpty(msg.trim())) {
@@ -216,7 +216,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    logSend(threadName + " 线程打印:" + log);
+                    logSend(threadName + " 线程打印(In Thread):" + log);
                 }
             });
         }
@@ -232,7 +232,7 @@ public class SimpleDemoActivity extends AppCompatActivity {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    logRece(threadName + " 线程打印:" + log);
+                    logRece(threadName + " 线程打印(In Thread):" + log);
                 }
             });
         }
