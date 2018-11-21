@@ -6,6 +6,10 @@ An blocking socket client for Java application or Andorid.
 | `Open source licenses` | `Basic Socket Library` | `Socket Server Plugin Library` |
 
 
+### 中文在线文档
+* 为了照顾中国同学的使用,提供了中文的说明文档:
+https://www.jianshu.com/p/8ee3ee766265
+
 ### OkSocket Introduce
 <font size=2>
 OkSocket is a Java library project designed to solve lightweight Socket communication, in order to enable developers to focus more on business logic, rather than TCP communication principles and some protocols. Make Socket communication more beautiful, suitable for large, medium and small Project, the rapid development of stable, maintainable, reliable Socket connection.
