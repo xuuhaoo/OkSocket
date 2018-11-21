@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
-        android:text="当前IP:"
+        android:text="当前IP(Local Device IP):"
         android:textSize="15sp" />
 
 
@@ -36,7 +36,7 @@
         android:id="@+id/btn3"
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:text="8080服务器启动"
+        android:text="8080服务器启动(Local Server Demo on 8080 Start)"
         android:textAllCaps="false" />
 
     <RelativeLayout

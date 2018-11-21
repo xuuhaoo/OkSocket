@@ -77,7 +77,7 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
         OkSocketOptions.setIsDebug(true);
         SLog.setIsDebug(true);
 
-        mIPTv.setText("当前IP:" + getIPAddress());
+        mIPTv.setText("当前IP(Local Device IP):" + getIPAddress());
         mSimpleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,12 +130,7 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
             @Override
             public void onServerAlreadyShutdown(int serverPort) {
                 Log.i("ServerCallback", Thread.currentThread().getName() + " onServerAlreadyShutdown,serverPort:" + serverPort);
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mServerBtn.setText(mPort + "服务器启动");
-                    }
-                });
+                flushServerText();
             }
         });
 
@@ -165,7 +160,7 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
     protected void onResume() {
         super.onResume();
         flushServerText();
-        mIPTv.setText("当前IP:" + getIPAddress());
+        mIPTv.setText("当前IP(Local Device IP):" + getIPAddress());
     }
 
     private void flushServerText() {
@@ -173,14 +168,14 @@ public class DemoActivity extends AppCompatActivity implements IClientIOCallback
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    mServerBtn.setText(mPort + "服务器关闭");
+                    mServerBtn.setText(mPort + "服务器关闭(Local Server Demo in " + mPort + " Stop)");
                 }
             });
         } else {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    mServerBtn.setText(mPort + "服务器启动");
+                    mServerBtn.setText(mPort + "服务器启动(Local Server Demo in " + mPort + " Start)");
                 }
             });
         }
