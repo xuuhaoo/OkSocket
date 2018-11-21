@@ -1,8 +1,6 @@
 package com.xuhao.didi.socket.client.impl.client;
 
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import com.xuhao.didi.socket.client.impl.client.abilities.IConnectionSwitchListener;
 import com.xuhao.didi.socket.client.impl.client.action.ActionDispatcher;
 import com.xuhao.didi.socket.client.sdk.client.ConnectionInfo;
@@ -20,12 +18,10 @@ public abstract class AbsConnectionManager implements IConnectionManager {
     /**
      * 连接信息
      */
-    @NotNull
     protected ConnectionInfo mRemoteConnectionInfo;
     /**
      * 本地绑定信息
      */
-    @Nullable
     protected ConnectionInfo mLocalConnectionInfo;
     /**
      * 连接信息switch监听器
@@ -40,7 +36,7 @@ public abstract class AbsConnectionManager implements IConnectionManager {
         this(info, null);
     }
 
-    public AbsConnectionManager(@NotNull ConnectionInfo remoteInfo, @Nullable ConnectionInfo localInfo) {
+    public AbsConnectionManager(ConnectionInfo remoteInfo, ConnectionInfo localInfo) {
         mRemoteConnectionInfo = remoteInfo;
         mLocalConnectionInfo = localInfo;
         mActionDispatcher = new ActionDispatcher(remoteInfo, this);
