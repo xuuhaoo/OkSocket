@@ -22,19 +22,20 @@ public class ReaderImpl extends AbsReader {
     public void read() throws RuntimeException {
         OriginalData originalData = new OriginalData();
         IReaderProtocol headerProtocol = mOkOptions.getReaderProtocol();
-        ByteBuffer headBuf = ByteBuffer.allocate(headerProtocol.getHeaderLength());
+        int headerLength = headerProtocol.getHeaderLength();
+        ByteBuffer headBuf = ByteBuffer.allocate(headerLength);
         headBuf.order(mOkOptions.getReadByteOrder());
         try {
             if (mRemainingBuf != null) {
                 mRemainingBuf.flip();
-                int length = Math.min(mRemainingBuf.remaining(), headerProtocol.getHeaderLength());
+                int length = Math.min(mRemainingBuf.remaining(), headerLength);
                 headBuf.put(mRemainingBuf.array(), 0, length);
-                if (length < headerProtocol.getHeaderLength()) {
+                if (length < headerLength) {
                     //there are no data left
                     mRemainingBuf = null;
-                    readHeaderFromChannel(headBuf, headerProtocol.getHeaderLength() - length);
+                    readHeaderFromChannel(headBuf, headerLength - length);
                 } else {
-                    mRemainingBuf.position(headerProtocol.getHeaderLength());
+                    mRemainingBuf.position(headerLength);
                 }
             } else {
                 readHeaderFromChannel(headBuf, headBuf.capacity());
