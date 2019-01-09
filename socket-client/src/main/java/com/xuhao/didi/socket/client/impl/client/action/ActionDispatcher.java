@@ -16,7 +16,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.xuhao.didi.core.iocore.interfaces.IOAction.ACTION_PULSE_REQUEST;
@@ -54,7 +53,7 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
     /**
      * 行为回调集合
      */
-    private volatile Vector<ISocketActionListener> mResponseHandlerList = new Vector<>();
+    private volatile List<ISocketActionListener> mResponseHandlerList = new ArrayList<>();
     /**
      * 连接信息
      */
@@ -84,7 +83,11 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
 
     @Override
     public IConnectionManager unRegisterReceiver(ISocketActionListener socketResponseHandler) {
-        mResponseHandlerList.remove(socketResponseHandler);
+        if (socketResponseHandler != null) {
+            synchronized (mResponseHandlerList) {
+                mResponseHandlerList.remove(socketResponseHandler);
+            }
+        }
         return mManager;
     }
 
