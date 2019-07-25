@@ -63,7 +63,7 @@ public class IOThreadManager implements IIOManager<OkSocketOptions> {
     }
 
     @Override
-    public void startEngine() {
+    public synchronized void startEngine() {
         mCurrentThreadMode = mOkOptions.getIOThreadMode();
         //初始化读写工具类
         mReader.setOption(mOkOptions);
@@ -112,7 +112,7 @@ public class IOThreadManager implements IIOManager<OkSocketOptions> {
     }
 
     @Override
-    public void setOkOptions(OkSocketOptions options) {
+    public synchronized void setOkOptions(OkSocketOptions options) {
         mOkOptions = options;
         if (mCurrentThreadMode == null) {
             mCurrentThreadMode = mOkOptions.getIOThreadMode();
@@ -135,7 +135,7 @@ public class IOThreadManager implements IIOManager<OkSocketOptions> {
     }
 
     @Override
-    public void close(Exception e) {
+    public synchronized void close(Exception e) {
         shutdownAllThread(e);
         mCurrentThreadMode = null;
     }
