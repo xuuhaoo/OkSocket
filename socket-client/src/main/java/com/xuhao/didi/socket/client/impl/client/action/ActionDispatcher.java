@@ -33,6 +33,7 @@ import static com.xuhao.didi.socket.client.sdk.client.action.IAction.ACTION_WRIT
 /**
  * 状态机
  * Created by didi on 2018/4/19.
+ * test
  */
 public class ActionDispatcher implements IRegister<ISocketActionListener, IConnectionManager>, IStateSender {
     /**

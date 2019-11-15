@@ -27,6 +27,7 @@ import javax.net.ssl.TrustManager;
 
 /**
  * Created by xuhao on 2017/5/16.
+ * test
  */
 public class ConnectionManagerImpl extends AbsConnectionManager {
     /**
