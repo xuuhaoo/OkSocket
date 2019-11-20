@@ -248,12 +248,10 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
             }
         }
 
-        synchronized (this) {
-            String info = mRemoteConnectionInfo.getIp() + ":" + mRemoteConnectionInfo.getPort();
-            DisconnectThread thread = new DisconnectThread(exception, "Disconnect Thread for " + info);
-            thread.setDaemon(true);
-            thread.start();
-        }
+        String info = mRemoteConnectionInfo.getIp() + ":" + mRemoteConnectionInfo.getPort();
+        DisconnectThread thread = new DisconnectThread(exception, "Disconnect Thread for " + info);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     private class DisconnectThread extends Thread {

@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static com.xuhao.didi.core.iocore.interfaces.IOAction.ACTION_PULSE_REQUEST;
 import static com.xuhao.didi.core.iocore.interfaces.IOAction.ACTION_READ_COMPLETE;
@@ -62,6 +64,10 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
      * 连接管理器
      */
     private volatile IConnectionManager mManager;
+    /**
+     * 公平锁,虽然没啥卵用公平,因为使用了tryLock
+     */
+    private ReentrantLock mLock = new ReentrantLock(true);
 
 
     public ActionDispatcher(ConnectionInfo info, IConnectionManager manager) {
@@ -72,10 +78,19 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
     @Override
     public IConnectionManager registerReceiver(final ISocketActionListener socketResponseHandler) {
         if (socketResponseHandler != null) {
-            synchronized (mResponseHandlerList) {
-                if (!mResponseHandlerList.contains(socketResponseHandler)) {
-                    mResponseHandlerList.add(socketResponseHandler);
+            try {
+                while (true) {
+                    if (mLock.tryLock(1, TimeUnit.SECONDS)) {
+                        if (!mResponseHandlerList.contains(socketResponseHandler)) {
+                            mResponseHandlerList.add(socketResponseHandler);
+                        }
+                        break;
+                    }
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                mLock.unlock();
             }
         }
         return mManager;
@@ -84,8 +99,17 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
     @Override
     public IConnectionManager unRegisterReceiver(ISocketActionListener socketResponseHandler) {
         if (socketResponseHandler != null) {
-            synchronized (mResponseHandlerList) {
-                mResponseHandlerList.remove(socketResponseHandler);
+            try {
+                while (true) {
+                    if (mLock.tryLock(1, TimeUnit.SECONDS)) {
+                        mResponseHandlerList.remove(socketResponseHandler);
+                        break;
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                mLock.unlock();
             }
         }
         return mManager;
@@ -194,13 +218,22 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
             ActionBean bean = new ActionBean(action, serializable, this);
             ACTION_QUEUE.offer(bean);
         } else if (!option.isCallbackInIndependentThread()) {//IO线程里进行回调
-            synchronized (mResponseHandlerList) {
-                List<ISocketActionListener> copyData = new ArrayList<>(mResponseHandlerList);
-                Iterator<ISocketActionListener> it = copyData.iterator();
-                while (it.hasNext()) {
-                    ISocketActionListener listener = it.next();
-                    this.dispatchActionToListener(action, serializable, listener);
+            try {
+                while (true) {
+                    if (mLock.tryLock(1, TimeUnit.SECONDS)) {
+                        List<ISocketActionListener> copyData = new ArrayList<>(mResponseHandlerList);
+                        Iterator<ISocketActionListener> it = copyData.iterator();
+                        while (it.hasNext()) {
+                            ISocketActionListener listener = it.next();
+                            this.dispatchActionToListener(action, serializable, listener);
+                        }
+                        break;
+                    }
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                mLock.unlock();
             }
         } else {
             SLog.e("ActionDispatcher error action:" + action + " is not dispatch");
