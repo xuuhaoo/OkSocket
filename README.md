@@ -11,7 +11,7 @@ An blocking socket client for Java application or Andorid.
 https://www.jianshu.com/p/8ee3ee766265
 
 ### OkEchoServer Open Source
-* Because the echo server is not being renewed and is not working properly, we decided to open it up, hoping to help more people who need point-to-point, mobile-to-mobile communication to get more help.
+* Because the echo server is not being renewed and is not working properly, we decided to open it up, hoping let more people who need point-to-point, mobile-to-mobile communication to get more help.
 
 [OkEchoServer Source](https://github.com/xuuhaoo/OkEchoServer)
 
